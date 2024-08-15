@@ -44,10 +44,15 @@
   };
 
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+  services.xserver = {
+    enable = true;
+    displayManager.startx.enable = true;
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
   };
+  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.riley = {
@@ -76,13 +81,11 @@
     direnv
     zoxide
     tmux
-    xorg.xorgserver
-    xorg.xf86inputevdev
-    xorg.xf86inputsynaptics
-    xorg.xf86inputlibinput
-    xorg.xf86videonouveau
     i3
     i3status
+    alacritty
+    rofi
+    librewolf
   ];
   programs.zsh.enable = true;
 
