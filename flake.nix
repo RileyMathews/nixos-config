@@ -21,7 +21,7 @@
         nixosConfigurations = {
           nixVm = nixpkgs.lib.nixosSystem {
             specialArgs = {inherit system;};
-            modules = [./nixVm/configuration.nix];
+            modules = [./hosts/nixVm/configuration.nix];
           };
         };    
       };
