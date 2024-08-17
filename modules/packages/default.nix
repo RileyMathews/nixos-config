@@ -18,5 +18,7 @@
     rofi
     librewolf
     brightnessctl
+    awesome
+    unzip
   ];
 }
