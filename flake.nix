@@ -23,6 +23,11 @@
             specialArgs = {inherit system;};
             modules = [./hosts/nixVm/configuration.nix];
           };
+
+          scotty = nixpkgs.lib.nixosSystem {
+            specialArgs = {inherit system;};
+            modules = [./hosts/scotty/configuration.nix];
+          };
         };    
       };
 }
