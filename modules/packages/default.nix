@@ -17,5 +17,6 @@
     alacritty
     rofi
     librewolf
+    brightnessctl
   ];
 }
