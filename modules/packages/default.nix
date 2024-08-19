@@ -20,5 +20,6 @@
     brightnessctl
     awesome
     unzip
+    fzf
   ];
 }
