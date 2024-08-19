@@ -3,9 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.05";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, nixos-hardware }:
     let
       system = "x86_64-linux";
 
@@ -26,7 +27,10 @@
 
           scotty = nixpkgs.lib.nixosSystem {
             specialArgs = {inherit system;};
-            modules = [./hosts/scotty/configuration.nix];
+            modules = [
+              ./hosts/scotty/configuration.nix
+              nixos-hardware.nixosModules.framework-16-7040-amd
+            ];
           };
         };    
       };
