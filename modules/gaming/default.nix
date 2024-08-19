@@ -5,4 +5,6 @@
         driSupport = true;
         driSupport32Bit = true;
     };
+
+    programs.steam.enable = true;
 }
