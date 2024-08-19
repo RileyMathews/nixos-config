@@ -2,7 +2,9 @@
 {
   environment.systemPackages = with pkgs; [
     acpi
+    glxinfo
     neovim
+    fastfetch
     git
     tailscale
     stow
