@@ -12,6 +12,8 @@
       ../../modules/xorg/default.nix
       ../../modules/fonts/default.nix
       ../../modules/packages/default.nix
+      ../../modules/gaming/default.nix
+      ../../modules/amdgpu/default.nix
     ];
 
   # Bootloader.
