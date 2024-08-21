@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, unstablePkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
     acpi
     glxinfo
-    neovim
+    unstablePkgs.neovim
     fastfetch
     git
     tailscale
