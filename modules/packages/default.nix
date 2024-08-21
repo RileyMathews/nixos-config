@@ -24,5 +24,6 @@
     awesome
     unzip
     fzf
+    qtile
   ];
 }
