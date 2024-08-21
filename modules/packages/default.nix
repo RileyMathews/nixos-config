@@ -13,6 +13,7 @@
     sxhkd
     starship
     direnv
+    nix-direnv
     zoxide
     tmux
     i3
@@ -25,5 +26,6 @@
     unzip
     fzf
     qtile
+    ripgrep
   ];
 }
