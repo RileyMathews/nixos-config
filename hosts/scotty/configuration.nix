@@ -14,6 +14,7 @@
       ../../modules/packages/default.nix
       ../../modules/gaming/default.nix
       ../../modules/amdgpu/default.nix
+      ../../modules/work/default.nix
     ];
 
   # Bootloader.
