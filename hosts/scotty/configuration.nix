@@ -15,6 +15,7 @@
       ../../modules/gaming/default.nix
       ../../modules/amdgpu/default.nix
       ../../modules/work/default.nix
+      ../../modules/base/default.nix
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
