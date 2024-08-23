@@ -27,5 +27,6 @@
     fzf
     qtile
     ripgrep
+    arandr
   ];
 }
