@@ -2,4 +2,8 @@
 {
     hardware.bluetooth.enable = true;
     hardware.bluetooth.powerOnBoot = true;
+
+    virtualisation.docker = {
+        enable = true;
+    };
 }
