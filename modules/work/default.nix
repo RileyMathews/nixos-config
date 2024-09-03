@@ -5,7 +5,6 @@
     zoom-us
   ];
   sops.secrets."kolide_enrollment_secret" = {};
-  # sops.secrets."work_internal_ssl_certificate" = {};
 
   services.kolide-launcher.enable = true;
   environment.etc."kolide-k2/secret" = {
@@ -14,5 +13,6 @@
   };
   
   # TODO: figure out a way to get this working through sops or other secrets method?
+  # sops.secrets."work_internal_ssl_certificate" = {};
   security.pki.certificateFiles = [/home/riley/.secrets/work_ssl_cert];
 }
