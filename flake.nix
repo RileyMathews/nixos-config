@@ -13,10 +13,9 @@
       url = "github:kolide/nix-agent/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mercury.url = "git+ssh://git@github.com/mercurytechnologies/nixos-configuration.git?ref=main";
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, kolide, mercury, sops-nix }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, kolide, sops-nix }:
     let
       system = "x86_64-linux";
 
@@ -44,7 +43,6 @@
             modules = [
               ./hosts/scotty/configuration.nix
               nixos-hardware.nixosModules.framework-16-7040-amd
-              mercury.nixosModules
               kolide.nixosModules.kolide-launcher
               sops-nix.nixosModules.sops
             ];

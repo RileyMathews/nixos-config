@@ -14,8 +14,9 @@
       ../../modules/packages/default.nix
       ../../modules/gaming/default.nix
       ../../modules/amdgpu/default.nix
-      ../../modules/work/default.nix
+      # ../../modules/work
       ../../modules/base/default.nix
+      ../../modules/postgres
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -26,6 +27,10 @@
   boot.initrd.luks.devices."luks-e6d2872b-7b99-4b39-a09c-9fde3b29a581".device = "/dev/disk/by-uuid/e6d2872b-7b99-4b39-a09c-9fde3b29a581";
   networking.hostName = "scotty"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  sops.defaultSopsFile = ../../secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "/home/riley/.config/sops/age/keys.txt";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -81,35 +86,4 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
 
-  # sops.defaultSopsFile = ../../secrets/secrets.yaml;
-  # sops.defaultSopsFormat = "yaml";
-  # sops.age.keyFile = "/home/riley/.config/sops/age/keys.txt";
-  # sops.secrets."kolide_enrollment_secret" = { 
-  #   # owner = config.users.users.riley.name;
-  # };
-
-  services.kolide-launcher.enable = true;
-  environment.etc."kolide-k2/secret" = {
-    mode = "0600";
-    text = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbml6YXRpb24iOiJuYWtvbmUiLCJraWQiOiJiODoxZDowNjo5NzpjYjo3OTpjMDo3MTpjNDoxNTpjZDo5Yzo4Mjo0MDo4NjpjYSIsImNyZWF0ZWRBdCI6IjE3MDUxMTgwMzYiLCJjcmVhdGVkQnkiOiJrd29ya2VyIn0.vCMoj_pnDjEG3Ji9y8elRzN10QfFOwGxZrJAQcJWP41SmDN1PsLQusKucX7lwUTlfgm6-9mKLnaJ9uhA-2j0G2_J2TCP9KxyvZ2M2jH4x_5muf1kV99RgwJhhjlFbZU_9ri8ZZc-fOlaaFZi6hKg5GwaaLSNTex2HKzfcx3PVdDjaXoAKc-THHgtQ9-j_4P_co7JkxxCgnsqpMw13qm2nNZ5PAE2wOuU1_MdVeNam4MnLt1BBgxbeclCHfKjrcg-H9UDcQtwiYxllsfDSpmgfNDr2b69Y064UqKAjqWyvE33c-7hBx_R2HC9glXulmdijgPgGABT1Ad6zhA6QS8xTg";
-    # source = config.sops.secrets."kolide_enrollment_secret".path
-  };
-
-
-  mercury = {
-    # Enable the CA cert used for internal resources
-    internalCertificateAuthority.enable = true;
-
-    # Enable services required for MWB development (Postgres)
-    mwbDevelopment.enable = true;
-
-    # Enable the internal Nix cache
-    nixCache.enable = true;
-
-    # Create openvpn-mercury.service systemd service
-    vpn = {
-      enable = true;
-      # configurationPath = ./config.ovpn;
-    };
-  };
 }
