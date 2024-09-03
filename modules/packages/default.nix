@@ -29,5 +29,6 @@
     ripgrep
     arandr
     pavucontrol
+    playerctl
   ];
 }
