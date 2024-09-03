@@ -30,5 +30,6 @@
     arandr
     pavucontrol
     playerctl
+    sops
   ];
 }
