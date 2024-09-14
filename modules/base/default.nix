@@ -38,6 +38,7 @@
 
     virtualisation.docker = {
         enable = true;
+        enableOnBoot = false;
     };
 
     services.avahi = {

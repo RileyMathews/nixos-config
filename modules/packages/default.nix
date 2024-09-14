@@ -5,6 +5,7 @@
     glxinfo
     unstablePkgs.neovim
     fastfetch
+    docker
     git
     tailscale
     stow
