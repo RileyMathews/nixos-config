@@ -16,7 +16,7 @@
       ../../modules/amdgpu/default.nix
       # ../../modules/work
       ../../modules/base/default.nix
-      ../../modules/postgres
+      # ../../modules/postgres
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
