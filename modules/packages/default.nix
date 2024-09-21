@@ -4,6 +4,7 @@
     acpi
     glxinfo
     unstablePkgs.neovim
+    btop
     fastfetch
     docker
     git
