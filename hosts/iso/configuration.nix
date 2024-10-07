@@ -12,6 +12,7 @@
     efiInstallAsRemovable = true;
   };
   services.openssh.enable = true;
+  services.qemuGuest.enable = true;
 
   environment.systemPackages = map lib.lowPrio [
     pkgs.curl
