@@ -13,9 +13,13 @@
       url = "github:kolide/nix-agent/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, kolide, sops-nix }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, kolide, sops-nix, nixos-generators }:
     let
       system = "x86_64-linux";
 
@@ -48,5 +52,14 @@
             ];
           };
         };    
+        packages.x86_64-linux = {
+          iso = nixos-generators.nixosGenerate {
+            system = "x86_64-linux";
+            format = "iso";
+            modules = [
+              ./hosts/iso/configuration.nix
+            ];
+          };
+        };
       };
 }
