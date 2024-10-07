@@ -17,9 +17,13 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, kolide, sops-nix, nixos-generators }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, kolide, sops-nix, nixos-generators, disko }:
     let
       system = "x86_64-linux";
 
@@ -51,7 +55,17 @@
               sops-nix.nixosModules.sops
             ];
           };
+
+          # nixos-anywhere --flake .#generic --generate-hardware-config <hostname>
+          nixosConfigurations.generic = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/test-vm/configuration.nix
+            ];
+          };
         };    
+
         packages.x86_64-linux = {
           iso = nixos-generators.nixosGenerate {
             system = "x86_64-linux";
