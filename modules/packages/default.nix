@@ -33,5 +33,6 @@
     pavucontrol
     playerctl
     sops
+    ansible
   ];
 }
