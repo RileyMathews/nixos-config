@@ -72,6 +72,14 @@
             ];
           };
 
+          rpgweave-production = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/rpgweave-production-vm/configuration.nix
+            ];
+          };
+
           # nixos-anywhere --flake .#generic --generate-hardware-config <hostname>
           generic = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
