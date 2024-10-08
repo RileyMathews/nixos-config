@@ -56,8 +56,16 @@
             ];
           };
 
+          redis = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/redis-vm/configuration.nix
+            ];
+          };
+
           # nixos-anywhere --flake .#generic --generate-hardware-config <hostname>
-          nixosConfigurations.generic = nixpkgs.lib.nixosSystem {
+          generic = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko
