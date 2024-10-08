@@ -22,6 +22,8 @@
 
   programs.zsh.enable = true;
 
+  services.rabbitmq.enable = true;
+
   services.tailscale.enable = true;
 
   networking.hostName = "rabbitmq";
