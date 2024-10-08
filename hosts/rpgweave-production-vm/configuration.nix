@@ -20,7 +20,7 @@
     openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"];
   };
 
-  environment.systemPackages = with pkgs; [bash];
+  environment.systemPackages = with pkgs; [bash awscli2 fzf];
 
   programs.zsh.enable = true;
 
