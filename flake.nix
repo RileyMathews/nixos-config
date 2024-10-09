@@ -96,6 +96,14 @@
               ./hosts/test-vm/configuration.nix
             ];
           };
+
+          ntfy = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/ntfy/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
