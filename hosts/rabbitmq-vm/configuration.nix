@@ -23,8 +23,10 @@
   programs.zsh.enable = true;
 
   services.rabbitmq.enable = true;
+  services.rabbitmq.listenAddress = "0.0.0.0";
 
   services.tailscale.enable = true;
+  networking.firewall.allowedTCPPorts = [5672];
 
   networking.hostName = "rabbitmq";
 }
