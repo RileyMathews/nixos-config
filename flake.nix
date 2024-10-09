@@ -89,7 +89,7 @@
           };
 
           # nixos-anywhere --flake .#generic --generate-hardware-config <hostname>
-          generic = nixpkgs.lib.nixosSystem {
+          test-vm = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko
