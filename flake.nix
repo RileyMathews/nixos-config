@@ -104,6 +104,14 @@
               ./hosts/ntfy/configuration.nix
             ];
           };
+
+          vaultwarden = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/vaultwarden/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
