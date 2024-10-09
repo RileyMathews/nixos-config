@@ -10,6 +10,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/caddy-single-proxy
+    ./../../modules/backup
   ];
 
   services.tailscale.enable = true;
@@ -39,4 +40,8 @@
   };
 
   programs.zsh.enable = true;
+
+  services.backup = {
+    enable = true;
+  };
 }
