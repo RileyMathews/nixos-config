@@ -42,6 +42,31 @@
     reverseProxyAddress = "127.0.0.1:8000";
   };
 
+  environment.systemPackages = with pkgs; [
+    restic
+  ];
+
   programs.zsh.enable = true;
   networking.hostName = "vaultwarden";
+
+  systemd.services.restic-backup = {
+    description = "Restic Backup Service";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    path = with pkgs; [ restic bash curl];
+    serviceConfig = {
+      Type = "oneshot";
+      EnvironmentFile = "/var/lib/restic/env";
+      ExecStart = "bash /var/lib/restic/backup.sh";
+    };
+  };
+
+  systemd.timers.restic-backup = {
+    description = "Restic Backup Timer";
+    wants = [ "restic-backup.service" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 03:00:00"; # Runs daily at 3 AM
+      Persistent = true;
+    };
+  };
 }
