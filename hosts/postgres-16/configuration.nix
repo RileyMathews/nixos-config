@@ -10,7 +10,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/caddy-single-proxy
-    ./../../modules/pgBackupJobs
+    ./../../modules/pgBackup
   ];
 
   services.tailscale.enable = true;
@@ -49,8 +49,10 @@
 
   programs.zsh.enable = true;
 
-  pgBackupJobs = {
-    testBackup.command = "test-backup";
-    fooBackup.command = "bar-backup";
+  pgBackup = {
+    jobs = {
+      testBackup.command = "test-backup";
+      fooBackup.command = "bar-backup";
+    };
   };
 }
