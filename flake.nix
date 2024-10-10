@@ -112,6 +112,22 @@
               ./hosts/vaultwarden/configuration.nix
             ];
           };
+
+          postgres-16 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/postgres-16/configuration.nix
+            ];
+          };
+
+          pgadmin = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/pgadmin/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
