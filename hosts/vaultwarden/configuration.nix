@@ -10,6 +10,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/caddy-single-proxy
+    ./../../modules/backup
   ];
 
   services.tailscale.enable = true;
@@ -49,24 +50,9 @@
   programs.zsh.enable = true;
   networking.hostName = "vaultwarden";
 
-  systemd.services.restic-backup = {
-    description = "Restic Backup Service";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    path = with pkgs; [ restic bash curl];
-    serviceConfig = {
-      Type = "oneshot";
-      EnvironmentFile = "/var/lib/restic/env";
-      ExecStart = "bash /var/lib/restic/backup.sh";
-    };
-  };
-
-  systemd.timers.restic-backup = {
-    description = "Restic Backup Timer";
-    wants = [ "restic-backup.service" ];
-    timerConfig = {
-      OnCalendar = "*-*-* 03:00:00"; # Runs daily at 3 AM
-      Persistent = true;
-    };
+  services.backup = {
+    enable = true;
+    resticRepository = "s3:https://37a8e358fee81bf1f20e08b6ffe72c1d.r2.cloudflarestorage.com:/vaultwarden-restic-repository-v2";
+    backupDir = "/var/lib/bitwarden_rs";
   };
 }

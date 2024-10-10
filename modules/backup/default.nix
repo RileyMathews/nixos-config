@@ -5,7 +5,7 @@ with lib;
 
 let
   cfg = config.services.backup;
-  backupScriptPath = pkgs.writeScript "backup-script.sh" cfg.backupScript;
+  backupScriptPath = pkgs.writeShellScript "backup-script.sh" cfg.backupScript;
 in
 {
   #### Define Options ####
@@ -21,32 +21,58 @@ in
       default = builtins.readFile(./backup.sh);
       description = "The backup script content.";
     };
+
+    resticRepository = mkOption {
+      type = types.string;
+      default = null;
+      description = "The restic repository location";
+    };
+
+    backupDir = mkOption {
+      type = types.string;
+      default = null;
+      description = "The directory to backup";
+    };
   };
 
   #### Configure the Service and Timer ####
   config = mkIf cfg.enable ({
-    # Write the backup script to the Nix store
+    assertions = [
+      {
+        assertion = cfg.resticRepository != null;
+        message = "The option 'resticRepository' must be set";
+      }
+      {
+        assertion = cfg.backupDir != null;
+        message = "The option 'backupDir' must be set";
+      }
+    ];
 
     # Define the systemd service
     systemd.services.backup = {
       description = "Backup Service";
-      path = with pkgs; [bash];
+      path = with pkgs; [curl restic];
+      environment = {
+        BACKUP_DIR = cfg.backupDir;
+        RESTIC_REPOSITORY = cfg.resticRepository;
+      };
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.bash}/bin/bash ${backupScriptPath}";
+        EnvironmentFile = "/var/lib/backup/env";
+        ExecStart = "${backupScriptPath}";
       };
     };
 
     # Define the systemd timer
-    # systemd.timers.backup = {
-    #   description = "Backup Timer";
-    #   wantedBy = [ "timers.target" ];
-    #   timerConfig = {
-    #     OnCalendar = "daily";
-    #     Persistent = true;
-    #   };
-    #   unitConfig.Unit = "backup.service";
-    # };
+    systemd.timers.backup = {
+      description = "Backup Timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+      };
+      unitConfig.Unit = "backup.service";
+    };
   });
 }
 

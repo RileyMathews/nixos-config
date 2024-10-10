@@ -23,11 +23,6 @@
     openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"];
   };
 
-  # virtualisation.docker = {
-  #   enable = true;
-  #   enableOnBoot = true;
-  # };
-
   virtualisation.oci-containers.containers."whoami" = {
     image = "containous/whoami";
     ports = ["8000:80"];
@@ -43,5 +38,7 @@
 
   services.backup = {
     enable = true;
+    resticRepository = "s3:https://37a8e358fee81bf1f20e08b6ffe72c1d.r2.cloudflarestorage.com:/test-restic-repository"; 
+    backupDir = "/home/riley/important-data";
   };
 }
