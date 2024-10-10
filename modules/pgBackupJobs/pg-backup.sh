@@ -1,0 +1,1 @@
+echo $S3_BUCKET_NAME

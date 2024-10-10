@@ -10,7 +10,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/caddy-single-proxy
-    ./../../modules/backup
+    ./../../modules/pgBackupJobs
   ];
 
   services.tailscale.enable = true;
@@ -48,4 +48,9 @@
   networking.firewall.allowedTCPPorts = [5432];
 
   programs.zsh.enable = true;
+
+  pgBackupJobs = {
+    testBackup.command = "test-backup";
+    fooBackup.command = "bar-backup";
+  };
 }
