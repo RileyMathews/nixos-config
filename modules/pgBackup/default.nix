@@ -16,7 +16,11 @@ in
       jobs = mkOption {
         type = with lib.types; attrsOf (submodule ({jobName, ...}: {
           options = {
-            command = mkOption {
+            bucket = mkOption {
+              type = str;
+            };
+            
+            database = mkOption {
               type = str;
             };
           };
@@ -26,6 +30,11 @@ in
 
     config = {
       systemd.services = lib.mapAttrs (jobName: cfg: {
+        path = with pkgs; [postgresql_16 curl gnutar gzip];
+        environment = {
+          S3_BUCKET_NAME = cfg.bucket;
+          DATABASE_NAME = cfg.database;
+        };
         serviceConfig = {
           ExecStart = "${backupScriptPath}";
         }; 

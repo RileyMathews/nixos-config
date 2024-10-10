@@ -51,8 +51,10 @@
 
   pgBackup = {
     jobs = {
-      testBackup.command = "test-backup";
-      fooBackup.command = "bar-backup";
+      test-backup = {
+        bucket = "test-db-backup";
+        database = "test";
+      };
     };
   };
 }
