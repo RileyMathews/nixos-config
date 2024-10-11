@@ -55,6 +55,14 @@
         bucket = "test-db-backup";
         database = "test";
       };
+      rpgweave-staging-backup = {
+        bucket = "rpgweave-staging-database-backups";
+        database = "rpgweave-staging";
+      };
+      rpgweave-production-backup = {
+        bucket = "rpgweave-database-backups";
+        database = "rpgweave";
+      };
     };
   };
 }
