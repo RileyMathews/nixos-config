@@ -40,5 +40,13 @@ in
           EnvironmentFile = "/var/lib/db-backup/env";
         }; 
       }) cfg.jobs;
+
+      systemd.timers = lib.mapAttrs (jobName: cfg: {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "daily";
+          Persistent = true;
+        };
+      }) cfg.jobs;
     };
   }
