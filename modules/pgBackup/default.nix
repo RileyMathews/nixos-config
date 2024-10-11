@@ -30,13 +30,14 @@ in
 
     config = {
       systemd.services = lib.mapAttrs (jobName: cfg: {
-        path = with pkgs; [postgresql_16 curl gnutar gzip];
+        path = with pkgs; [postgresql_16 curl gnutar gzip awscli2];
         environment = {
           S3_BUCKET_NAME = cfg.bucket;
           DATABASE_NAME = cfg.database;
         };
         serviceConfig = {
           ExecStart = "${backupScriptPath}";
+          EnvironmentFile = "/var/lib/db-backup/env";
         }; 
       }) cfg.jobs;
     };

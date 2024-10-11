@@ -16,15 +16,18 @@ on_error() {
 
 set -e
 trap 'on_error' ERR
-set -uxo pipefail
 
 check_env_var "S3_BUCKET_NAME"
 check_env_var "DATABASE_NAME"
+check_env_var "AWS_ACCESS_KEY_ID"
+check_env_var "AWS_SECRET_ACCESS_KEY"
+check_env_var "AWS_ENDPOINT_URL"
 
 current_date=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
 backup_dir=/tmp/db_backups/$DATABASE_NAME
 backup_output_name=$current_date
 backup_full_output_dir=$backup_dir/$backup_output_name
+tar_file_name=$backup_output_name.tar.gz
 
 mkdir -p $backup_dir
 cd $backup_dir
@@ -32,4 +35,8 @@ cd $backup_dir
 echo "backing up database $DATABASE_NAME to directory $backup_dir outputing to $backup_output_name"
 pg_dump --format=directory --create --clean --if-exists --file=$backup_output_name $DATABASE_NAME
 
-tar -czvf "$backup_output_name.tar.gz" $backup_output_name
+tar -czvf $tar_file_name $backup_output_name
+
+aws s3 cp $tar_file_name "s3://$S3_BUCKET_NAME/$tar_file_name"
+
+curl https://ntfy.rileymathews.com/home-server-alerts -d "$DATABASE_NAME db backup finished."
