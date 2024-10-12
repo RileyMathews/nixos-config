@@ -12,16 +12,6 @@
     ./../../modules/caddy-single-proxy
   ];
 
-  services.tailscale.enable = true;
-  users.users.riley = {
-    isNormalUser = true;
-    description = "Riley Mathews";
-    extraGroups = [ "networkmanager" "wheel"];
-    packages = with pkgs; [];
-    shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"];
-  };
-
   services.ntfy-sh = {
     enable = true;
     settings = {
@@ -37,6 +27,5 @@
     reverseProxyAddress = "127.0.0.1:8000";
   };
 
-  programs.zsh.enable = true;
   networking.hostName = "ntfy";
 }

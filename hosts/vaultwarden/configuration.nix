@@ -13,23 +13,6 @@
     ./../../modules/backup
   ];
 
-  services.tailscale.enable = true;
-  users.users.riley = {
-    isNormalUser = true;
-    description = "Riley Mathews";
-    extraGroups = [ "networkmanager" "wheel" "docker"];
-    packages = with pkgs; [];
-    shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"];
-  };
-
-  security.sudo = {
-    enable = true;
-    extraConfig = ''
-      %wheel ALL=(ALL:ALL) NOPASSWD: ALL
-    '';
-  };
-
   services.vaultwarden = {
     enable = true;
     config = {
@@ -43,11 +26,6 @@
     reverseProxyAddress = "127.0.0.1:8000";
   };
 
-  environment.systemPackages = with pkgs; [
-    restic
-  ];
-
-  programs.zsh.enable = true;
   networking.hostName = "vaultwarden";
 
   services.backup = {
