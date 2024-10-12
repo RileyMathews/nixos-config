@@ -130,6 +130,14 @@
               ./hosts/caddy-example/configuration.nix
             ];
           };
+
+          nginx-example = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/nginx-example/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
