@@ -26,5 +26,12 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"
   ];
 
+  security.sudo = {
+    enable = true;
+    extraConfig = ''
+      %wheel ALL=(ALL:ALL) NOPASSWD: ALL
+    '';
+  };
+
   system.stateVersion = "24.05";
 }

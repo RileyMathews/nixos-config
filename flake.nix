@@ -114,6 +114,14 @@
               ./hosts/pgadmin/configuration.nix
             ];
           };
+
+          gitea = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/gitea/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
