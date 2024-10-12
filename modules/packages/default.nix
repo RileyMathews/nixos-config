@@ -34,5 +34,8 @@
     playerctl
     sops
     ansible
+    nh
+    nvd
+    nix-output-monitor
   ];
 }
