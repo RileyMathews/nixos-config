@@ -41,11 +41,6 @@
     in
       {
         nixosConfigurations = {
-          nixVm = nixpkgs.lib.nixosSystem {
-            specialArgs = {inherit system unstablePkgs; };
-            modules = [./hosts/nixVm/configuration.nix];
-          };
-
           scotty = nixpkgs.lib.nixosSystem {
             specialArgs = {inherit system unstablePkgs; };
             modules = [
@@ -85,15 +80,6 @@
             modules = [
               disko.nixosModules.disko
               ./hosts/rpgweave-production-vm/configuration.nix
-            ];
-          };
-
-          # nixos-anywhere --flake .#generic --generate-hardware-config <hostname>
-          test-vm = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            modules = [
-              disko.nixosModules.disko
-              ./hosts/test-vm/configuration.nix
             ];
           };
 
