@@ -138,6 +138,14 @@
               ./hosts/nginx-example/configuration.nix
             ];
           };
+
+          homeassistant = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/homeassistant/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
