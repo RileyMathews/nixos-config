@@ -23,7 +23,7 @@
 
   myCaddy = {
     enable = true;
-    hostName = "homebeta.rileymathews.com";
-    reverseProxyAddress = "127.0.0.1:8000";
+    hostName = "home.rileymathews.com";
+    reverseProxyAddress = "127.0.0.1:8123";
   };
 }
