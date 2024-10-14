@@ -33,6 +33,8 @@
     in
       {
         nixosConfigurations = {
+          
+          # this laptop config is no longer in use and may be outdated
           scotty = nixpkgs.lib.nixosSystem {
             specialArgs = {inherit system unstablePkgs; };
             modules = [
