@@ -146,6 +146,14 @@
               ./hosts/homeassistant/configuration.nix
             ];
           };
+
+          borg = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/borg/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {
