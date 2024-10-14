@@ -16,14 +16,14 @@
   networking.hostName = "homeassistant";
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true;
-  virtualisation.oci-containers.containers."whoami" = {
-    image = "containous/whoami";
-    ports = ["8000:80"];
-  };
 
   myCaddy = {
     enable = true;
     hostName = "home.rileymathews.com";
     reverseProxyAddress = "127.0.0.1:8123";
   };
+
+  networking.firewall.enable = false;
+
+  services.avahi.enable = true;
 }
