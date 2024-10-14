@@ -2,6 +2,7 @@
   modulesPath,
   lib,
   pkgs,
+  unstablePkgs,
   ...
 }:
 {
@@ -13,4 +14,15 @@
   ];
   networking.hostName = "borg";
   nix.settings.experimental-features = ["nix-command" "flakes"];
+  environment.systemPackages = with pkgs; [
+    zsh
+    stow
+    starship
+    gcc
+    fzf
+    tmux
+    direnv
+    zoxide
+    unstablePkgs.neovim
+  ];
 }
