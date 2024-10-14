@@ -14,9 +14,7 @@
       ../../modules/packages/default.nix
       ../../modules/gaming/default.nix
       ../../modules/amdgpu/default.nix
-      # ../../modules/work
       ../../modules/base/default.nix
-      # ../../modules/postgres
     ];
 
   # Bootloader.
