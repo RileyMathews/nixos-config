@@ -33,16 +33,6 @@
     in
       {
         nixosConfigurations = {
-          
-          # this laptop config is no longer in use and may be outdated
-          scotty = nixpkgs.lib.nixosSystem {
-            specialArgs = {inherit system unstablePkgs; };
-            modules = [
-              ./hosts/scotty/configuration.nix
-              nixos-hardware.nixosModules.framework-16-7040-amd
-            ];
-          };
-
           redis = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
