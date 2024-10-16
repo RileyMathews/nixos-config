@@ -13,6 +13,8 @@
     ./../../modules/backup
   ];
 
+  networking.hostName = "pgadmin";
+
   services.pgadmin.enable = true;
   services.pgadmin.initialEmail = "dev@rileymathews.com";
   services.pgadmin.initialPasswordFile = "/home/riley/pgpass";
