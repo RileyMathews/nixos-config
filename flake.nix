@@ -6,7 +6,7 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-generators = {
-      url = "github:nix-community/nixos-generators";
+      url = "github:nix-community/nixos-generators/7c60ba4bc8d6aa2ba3e5b0f6ceb9fc07bc261565";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
@@ -38,6 +38,14 @@
             modules = [
               disko.nixosModules.disko
               ./hosts/redis-vm/configuration.nix
+            ];
+          };
+
+          template = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              disko.nixosModules.disko
+              ./hosts/template/configuration.nix
             ];
           };
         

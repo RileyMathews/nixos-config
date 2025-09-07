@@ -14,11 +14,18 @@
   services.openssh.enable = true;
   services.qemuGuest.enable = true;
 
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.git
-    pkgs.neovim
-    pkgs.fastfetch
+  environment.systemPackages = with pkgs; [
+    curl
+    git
+    neovim
+    fastfetch
+    zsh
+    stow
+    gcc
+    fzf
+    tmux
+    direnv
+    unstablePkgs.neovim
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [
@@ -34,6 +41,7 @@
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"];
   };
+  nix.settings.trusted-users = [ "root" "riley" ];
   programs.zsh.enable = true;
 
   security.sudo = {
@@ -45,5 +53,5 @@
 
   services.tailscale.enable = true;
 
-  system.stateVersion = "24.05";
+  # system.stateVersion = "24.05";
 }
