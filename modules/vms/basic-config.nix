@@ -25,7 +25,7 @@
     fzf
     tmux
     direnv
-    unstablePkgs.neovim
+    neovim
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [

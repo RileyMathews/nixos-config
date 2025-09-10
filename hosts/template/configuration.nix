@@ -12,7 +12,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/caddy-single-proxy
   ];
-  networking.hostName = "borg";
+  networking.hostName = "nixos-test";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   virtualisation.docker = {
     enable = true;
