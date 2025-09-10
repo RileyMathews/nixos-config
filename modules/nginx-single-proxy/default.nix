@@ -37,15 +37,21 @@ in
       description = "DNS provider for ACME DNS challenge.";
     };
 
-    environmentFile = mkOption {
-      type = types.path;
-      default = /home/riley/cloudflare;
-      description = "Path to the environment file containing DNS provider credentials.";
-    };
   };
 
   #### **Define Configuration**
   config = mkIf cfg.enable {
+    age.secrets.cloudflare-credentials = {
+      file = ../secrets/cloudflare-credentials.age;
+      mode = "0400";
+      owner = "acme";
+      group = "acme";
+    };
+
+    environment.etc."acme-cloudflare.env" = {
+      text = ''CF_API_TOKEN_FILE=${config.age.secrets.cloudflare-credentials.path}'';
+      mode = "0444";
+    };
     assertions = [
       {
         assertion = cfg.hostName != null;
@@ -79,7 +85,7 @@ in
         "${cfg.hostName}" = {
           dnsProvider = cfg.dnsProvider;
           group = "nginx";
-          environmentFile = cfg.environmentFile;
+          environmentFile = "/etc/acme-cloudflare.env";
         };
       };
     };

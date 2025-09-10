@@ -13,9 +13,13 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix }:
     let
       system = "x86_64-linux";
 
@@ -117,6 +121,7 @@
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko
+              agenix.nixosModules.default
               ./hosts/caddy-example/configuration.nix
             ];
           };
@@ -125,6 +130,7 @@
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko
+              agenix.nixosModules.default
               ./hosts/nginx-example/configuration.nix
             ];
           };
