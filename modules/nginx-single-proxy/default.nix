@@ -24,34 +24,16 @@ in
       default = null;
       description = "Reverse proxy address for the Caddy virtual host.";
     };
-
-    email = mkOption {
-      type = types.str;
-      default = "dev@rileymathews.com";
-      description = "Email address for ACME registration.";
-    };
-
-    dnsProvider = mkOption {
-      type = types.str;
-      default = "cloudflare";
-      description = "DNS provider for ACME DNS challenge.";
-    };
-
   };
-
   #### **Define Configuration**
   config = mkIf cfg.enable {
     age.secrets.cloudflare-credentials = {
-      file = ../secrets/cloudflare-credentials.age;
+      file = ../../secrets/cloudflare-credentials.age;
       mode = "0400";
-      owner = "acme";
-      group = "acme";
+      owner = "nginx";
+      group = "nginx";
     };
 
-    environment.etc."acme-cloudflare.env" = {
-      text = ''CF_API_TOKEN_FILE=${config.age.secrets.cloudflare-credentials.path}'';
-      mode = "0444";
-    };
     assertions = [
       {
         assertion = cfg.hostName != null;
@@ -80,12 +62,12 @@ in
 
     security.acme = {
       acceptTerms = true;
-      defaults.email = cfg.email;
+      defaults.email = "dev@rileymathews.com";
       certs = {
         "${cfg.hostName}" = {
-          dnsProvider = cfg.dnsProvider;
+          dnsProvider = "cloudflare";
           group = "nginx";
-          environmentFile = "/etc/acme-cloudflare.env";
+          environmentFile = config.age.secrets.cloudflare-credentials.path;
         };
       };
     };
