@@ -26,6 +26,7 @@
     tmux
     direnv
     neovim
+    just
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [
