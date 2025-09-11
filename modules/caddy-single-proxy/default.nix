@@ -24,19 +24,6 @@ in
       default = null;
       description = "Reverse proxy address for the Caddy virtual host.";
     };
-
-    email = mkOption {
-      type = types.str;
-      default = "dev@rileymathews.com";
-      description = "Email address for ACME registration.";
-    };
-
-    dnsProvider = mkOption {
-      type = types.str;
-      default = "cloudflare";
-      description = "DNS provider for ACME DNS challenge.";
-    };
-
   };
 
   #### **Define Configuration**
@@ -72,10 +59,10 @@ in
 
     security.acme = {
       acceptTerms = true;
-      defaults.email = cfg.email;
+      defaults.email = "dev@rileymathews.com";
       certs = {
         "${cfg.hostName}" = {
-          dnsProvider = cfg.dnsProvider;
+          dnsProvider = "cloudflare";
           group = "caddy";
           environmentFile = config.age.secrets.cloudflare-credentials.path;
         };

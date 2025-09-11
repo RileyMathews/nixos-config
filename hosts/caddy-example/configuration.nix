@@ -19,7 +19,7 @@
 
   myCaddy = {
     enable = true;
-    hostName = "caddy-example.rileymathews.com";
+    hostName = "nixos-example.rileymathews.com";
     reverseProxyAddress = "127.0.0.1:8000";
   };
 }
