@@ -11,6 +11,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale/default.nix
   ];
+  networking.hostName = "pg17";
 
   services.postgresql = {
     enable = true;
