@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.myCaddy;
+  cfg = config.myTailscale;
 in
 {
   options.myTailscale = {
@@ -16,7 +16,7 @@ in
 
   config = mkIf cfg.enable {
     age.secrets.tailscale-credentials.file = ../../secrets/tailscale-credentials.age;
-    services.tailsccale.enable = true;
+    services.tailscale.enable = true;
     services.tailscale.authKeyFile = config.age.secrets.tailscale-credentials.path;
   };
 }

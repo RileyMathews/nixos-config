@@ -10,6 +10,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/nginx-single-proxy
+    ./../../modules/tailscale
   ];
 
   sops.defaultSopsFile = ./../../secrets/secrets.yaml;
@@ -24,4 +25,5 @@
     hostName = "nixos-example.rileymathews.com";
     reverseProxyAddress = "http://127.0.0.1:8000";
   };
+  myTailscale.enable = true;
 }
