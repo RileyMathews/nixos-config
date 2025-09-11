@@ -6,6 +6,7 @@ let
   cfg = config.myNginx;
 in
 {
+  imports = [ ../acme-cloudflare ];
   options.myNginx = {
     enable = mkOption {
       type = types.bool;
@@ -27,12 +28,6 @@ in
   };
   #### **Define Configuration**
   config = mkIf cfg.enable {
-    age.secrets.cloudflare-credentials = {
-      file = ../../secrets/cloudflare-credentials.age;
-      mode = "0400";
-      owner = "acme";
-      group = "acme";
-    };
     assertions = [
       {
         assertion = cfg.hostName != null;
@@ -59,15 +54,11 @@ in
         };
     };
 
-    security.acme = {
-      acceptTerms = true;
-      defaults.email = "dev@rileymathews.com";
-      certs = {
-        "${cfg.hostName}" = {
-          dnsProvider = "cloudflare";
-          group = "nginx";
-          environmentFile = config.age.secrets.cloudflare-credentials.path;
-        };
+    myAcme = {
+      enable = true;
+      certs.${cfg.hostName} = {
+        hostName = cfg.hostName;
+        group = "nginx";
       };
     };
   };
