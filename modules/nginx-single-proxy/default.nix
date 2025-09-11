@@ -26,7 +26,6 @@ in
       description = "Reverse proxy address for the Caddy virtual host.";
     };
   };
-  #### **Define Configuration**
   config = mkIf cfg.enable {
     assertions = [
       {

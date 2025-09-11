@@ -27,7 +27,6 @@ in
     };
   };
 
-  #### **Define Configuration**
   config = mkIf cfg.enable {
     assertions = [
       {
