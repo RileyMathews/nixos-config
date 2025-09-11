@@ -10,13 +10,10 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
-    ./../../modules/caddy-single-proxy
+    ./../../modules/tailscale
   ];
-  networking.hostName = "nixos-test";
+  networking.hostName = "nixos-playground";
   nix.settings.experimental-features = ["nix-command" "flakes"];
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-  };
+  myTailscale.enable = true;
 }
 
