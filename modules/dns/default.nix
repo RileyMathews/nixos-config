@@ -42,7 +42,7 @@ in
     services.tailscale.enable = mkDefault true;
 
     # Configure age secret for Cloudflare credentials
-    age.secrets.cloudflare-credentials = {
+    age.secrets.cloudflare-api-key = {
       file = ../../secrets/cloudflare-api-key.age;
       owner = "tailscale-ddns";
       group = "tailscale-ddns";
@@ -66,7 +66,7 @@ in
       
       environment = {
         ZONE_ID = cfg.zoneId;
-        API_TOKEN_FILE = config.age.secrets.cloudflare-credentials.path;
+        API_TOKEN_FILE = config.age.secrets.cloudflare-api-key.path;
         DOMAINS = builtins.toJSON cfg.domains;
         # PATH = lib.makeBinPath [ pkgs.tailscale pythonEnv ];
       };
