@@ -9,8 +9,6 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
-    ./../../modules/caddy-single-proxy
-    ./../../modules/pgBackup
   ];
 
   services.postgresql = {
