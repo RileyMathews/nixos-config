@@ -42,15 +42,10 @@ in
   #### **Define Configuration**
   config = mkIf cfg.enable {
     age.secrets.cloudflare-credentials = {
-      file = ../secrets/cloudflare-credentials.age;
+      file = ../../secrets/cloudflare-credentials.age;
       mode = "0400";
       owner = "acme";
       group = "acme";
-    };
-
-    environment.etc."acme-cloudflare.env" = {
-      text = ''CF_API_TOKEN_FILE=${config.age.secrets.cloudflare-credentials.path}'';
-      mode = "0444";
     };
     assertions = [
       {
@@ -82,7 +77,7 @@ in
         "${cfg.hostName}" = {
           dnsProvider = cfg.dnsProvider;
           group = "caddy";
-          environmentFile = "/etc/acme-cloudflare.env";
+          environmentFile = config.age.secrets.cloudflare-credentials.path;
         };
       };
     };

@@ -11,6 +11,8 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/nginx-single-proxy
   ];
+
+  sops.defaultSopsFile = ./../../secrets/secrets.yaml;
   networking.hostName = "nginx-example";
   virtualisation.oci-containers.containers."whoami" = {
     image = "containous/whoami";

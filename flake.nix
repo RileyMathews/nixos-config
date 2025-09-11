@@ -17,9 +17,13 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix }:
     let
       system = "x86_64-linux";
 
@@ -131,6 +135,7 @@
             modules = [
               disko.nixosModules.disko
               agenix.nixosModules.default
+              sops-nix.nixosModules.sops
               ./hosts/nginx-example/configuration.nix
             ];
           };

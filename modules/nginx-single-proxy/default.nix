@@ -27,8 +27,15 @@ in
   };
   #### **Define Configuration**
   config = mkIf cfg.enable {
-    age.secrets.cloudflare-credentials = {
-      file = ../../secrets/cloudflare-credentials.age;
+    sops.secrets.cloudflare-api-key = {
+      key = "cloudflare/api_key";
+    };
+
+    sops.templates.cloudflare-credentials = {
+      content = ''
+        CLOUDFLARE_API_KEY=${config.sops.placeholder.cloudflare-api-key}
+        CLOUDFLARE_EMAIL=dev@rileymathews.com
+      '';
       mode = "0400";
       owner = "nginx";
       group = "nginx";
@@ -67,7 +74,7 @@ in
         "${cfg.hostName}" = {
           dnsProvider = "cloudflare";
           group = "nginx";
-          environmentFile = config.age.secrets.cloudflare-credentials.path;
+          environmentFile = config.sops.templates.cloudflare-credentials.path;
         };
       };
     };
