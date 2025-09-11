@@ -9,7 +9,7 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
-    ./../../modules/tailscale/default.nix
+    ./../../modules/tailscale
   ];
   networking.hostName = "pg17";
 
