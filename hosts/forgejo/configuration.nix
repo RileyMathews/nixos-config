@@ -1,4 +1,5 @@
 {
+  config,
   modulesPath,
   lib,
   pkgs,
@@ -36,6 +37,31 @@
     domains = [
       "git.rileymathews.com"
     ];
+  };
+
+  age.secrets.forgejo-database-password = {
+    file = ../../secrets/forgejo-database-password.age;
+    owner = "forgejo";
+    group = "forgejo";
+    mode = "0400";
+  };
+
+  services.forgejo = {
+    enable = true;
+    stateDir = "/mnt/forgejo";
+    settings = {
+      server = {
+        ROOT_URL = "https://git.rileymathews.com";
+        DOMAIN = "git.rileymathews.com";
+      };
+    };
+    database = {
+      user = "forgejo";
+      type = "postgres";
+      host = "pg17.tailscale.rileymathews.com";
+      passwordFile = config.age.secrets.forgejo-database-password.path;
+      createDatabase = false;
+    };
   };
 }
 
