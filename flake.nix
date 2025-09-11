@@ -101,7 +101,7 @@
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko
-              ./hosts/postgres-16/configuration.nix
+              ./hosts/postgres-17/configuration.nix
             ];
           };
 
