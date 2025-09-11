@@ -19,7 +19,7 @@
 
   myNginx = {
     enable = true;
-    hostName = "nginx-example.rileymathews.com";
+    hostName = "nixos-example.rileymathews.com";
     reverseProxyAddress = "http://127.0.0.1:8000";
   };
 }
