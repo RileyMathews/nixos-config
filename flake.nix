@@ -49,11 +49,12 @@
             ];
           };
 
-          template = nixpkgs.lib.nixosSystem {
+          playground = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko
-              ./hosts/template/configuration.nix
+              agenix.nixosModules.default
+              ./hosts/playground/configuration.nix
             ];
           };
         
