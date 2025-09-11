@@ -11,4 +11,5 @@ in
   # Cloudflare credentials for ACME DNS challenge
   "cloudflare-credentials.age".publicKeys = all;
   "tailscale-credentials.age".publicKeys = all;
+  "cloudflare-api-key.age".publicKeys = all;
 }

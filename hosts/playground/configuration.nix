@@ -11,6 +11,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
+    ./../../modules/dns
   ];
   networking.hostName = "nixos-playground";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -23,6 +24,13 @@
     device = "nas:/main/testing";
     fsType = "nfs";
     options = ["defaults"];
+  };
+  services.cloudflare-dns = {
+    enable = true;
+    domains = [
+      "testing.rileymathews.com"
+      "another-test.rileymathews.com"
+    ];
   };
 }
 
