@@ -26,6 +26,8 @@
       timezone = "UTC";
       log_timezone = "UTC";
     };
+    ensureUsers = [{ name = "riley"; ensureDBOwnership = true; }];
+    ensureDatabases = ["riley"];
   };
   myTailscale.enable = true;
   networking.firewall.allowedTCPPorts = [5432];
