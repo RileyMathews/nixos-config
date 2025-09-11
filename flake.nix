@@ -97,7 +97,7 @@
             ];
           };
 
-          postgres-16 = nixpkgs.lib.nixosSystem {
+          postgres-17 = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
               disko.nixosModules.disko

@@ -15,7 +15,7 @@
 
   services.postgresql = {
     enable = true;
-    package = pkgs.postgresql_16;
+    package = pkgs.postgresql_17;
     enableTCPIP = true;
     authentication = ''
       local all pgadmin peer
@@ -28,21 +28,4 @@
     };
   };
   networking.firewall.allowedTCPPorts = [5432];
-
-  pgBackup = {
-    jobs = {
-      test-backup = {
-        bucket = "test-db-backup";
-        database = "test";
-      };
-      rpgweave-staging-backup = {
-        bucket = "rpgweave-staging-database-backups";
-        database = "rpgweave-staging";
-      };
-      rpgweave-production-backup = {
-        bucket = "rpgweave-database-backups";
-        database = "rpgweave";
-      };
-    };
-  };
 }
