@@ -10,6 +10,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
+    ./../../modules/dns
   ];
   networking.hostName = "pg17";
 
@@ -26,9 +27,16 @@
       timezone = "UTC";
       log_timezone = "UTC";
     };
-    ensureUsers = [{ name = "riley"; ensureDBOwnership = true; }];
-    ensureDatabases = ["riley"];
+    ensureUsers = [
+      { name = "riley"; ensureDBOwnership = true; }
+      { name = "forgejo"; ensureDBOwnership = true; }
+    ];
+    ensureDatabases = ["riley" "forgejo"];
   };
   myTailscale.enable = true;
   networking.firewall.allowedTCPPorts = [5432];
+  services.cloudflare-dns = {
+    enable = true;
+    domains = ["pg17.tailscale.rileymathews.com"];
+  };
 }

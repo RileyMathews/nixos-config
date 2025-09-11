@@ -12,4 +12,5 @@ in
   "cloudflare-credentials.age".publicKeys = all;
   "tailscale-credentials.age".publicKeys = all;
   "cloudflare-api-key.age".publicKeys = all;
+  "forgejo-database-password.age".publicKeys = all;
 }
