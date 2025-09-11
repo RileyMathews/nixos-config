@@ -18,6 +18,12 @@ in
     age.secrets.tailscale-credentials.file = ../../secrets/tailscale-credentials.age;
     services.tailscale.enable = true;
     services.tailscale.authKeyFile = config.age.secrets.tailscale-credentials.path;
+    systemd.services.tailscaled = {
+      unitConfig.RequiresMountsFor = [ config.age.secrets.tailscale-credentials.path ];
+    };
+    systemd.services.tailscaled-autoconnect = {
+      unitConfig.RequiresMountsFor = [ config.age.secrets.tailscale-credentials.path ];
+    };
   };
 }
 
