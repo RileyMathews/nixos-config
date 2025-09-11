@@ -9,6 +9,7 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
+    ./../../modules/tailscale/default.nix
   ];
 
   services.postgresql = {
@@ -25,5 +26,6 @@
       log_timezone = "UTC";
     };
   };
+  myTailscale.enable = true;
   networking.firewall.allowedTCPPorts = [5432];
 }
