@@ -41,9 +41,11 @@
 
   virtualisation.podman.enable = true;
 
+  systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
+
   virtualisation.oci-containers.containers = {
     whoami = {
-      image = "docker.io/traefik/whoami:v1.11";
+      image = "docker.io/traefik/whoami:latest";
       ports = ["8000:80"];
       extraOptions = [
         "--label" "io.containers.autoupdate=registry"
