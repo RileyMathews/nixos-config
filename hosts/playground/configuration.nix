@@ -12,6 +12,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/dns
+    ./../../modules/nginx-single-proxy
   ];
   networking.hostName = "nixos-playground";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -29,8 +30,25 @@
     enable = true;
     domains = [
       "testing.rileymathews.com"
-      "another-test.rileymathews.com"
     ];
+  };
+
+  myNginx = {
+    enable = true;
+    hostName = "testing.rileymathews.com";
+    reverseProxyAddress = "http://127.0.0.1:8000";
+  };
+
+  virtualisation.podman.enable = true;
+
+  virtualisation.oci-containers.containers = {
+    whoami = {
+      image = "docker.io/traefik/whoami:v1.11";
+      ports = ["8000:80"];
+      extraOptions = [
+        "--label" "io.containers.autoupdate=registry"
+      ];
+    };
   };
 }
 
