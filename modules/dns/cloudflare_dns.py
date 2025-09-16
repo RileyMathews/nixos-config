@@ -107,7 +107,7 @@ def get_dns_record(domain: str, zone_id: str, api_token: str) -> Optional[dict]:
         print(f"Network error getting DNS record for {domain}: {e}")
         return None
 
-def create_dns_record(domain: str, ip: str, zone_id: str, api_token: str, ttl: int = 300) -> bool:
+def create_dns_record(domain: str, ip: str, zone_id: str, api_token: str) -> bool:
     """Create a new DNS A record."""
     url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
     headers = {
@@ -118,7 +118,6 @@ def create_dns_record(domain: str, ip: str, zone_id: str, api_token: str, ttl: i
         "type": "A",
         "name": domain,
         "content": ip,
-        "ttl": ttl,
         "proxied": False
     }
 
