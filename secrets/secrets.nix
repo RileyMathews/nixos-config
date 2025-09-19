@@ -14,4 +14,5 @@ in
   "cloudflare-api-key.age".publicKeys = all;
   "forgejo-database-password.age".publicKeys = [forgejo riley];
   "gatus-credentials.age".publicKeys = [borg riley];
+  "karakeep-env.age".publicKeys = [borg riley];
 }

@@ -15,6 +15,7 @@
     ./../../modules/dns
     ./../../modules/nginx-multi-proxy
     ./../../modules/gatus
+    ./../../modules/karakeep
   ];
   networking.hostName = "borg";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -33,6 +34,8 @@
   };
 
   virtualisation.podman.enable = true;
+
+  systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
 
   virtualisation.oci-containers.containers = {
     searxng = {

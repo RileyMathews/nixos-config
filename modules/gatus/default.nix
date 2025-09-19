@@ -35,4 +35,5 @@ lib,
   };
   services.gatus.environmentFile = config.age.secrets.gatus-credentials.path;
   systemd.services."gatus".after = [ "network.target" "run-agenix.d.mount" ];
+  systemd.services."gatus".requires = [ "run-agenix.d.mount" ];
 }
