@@ -24,13 +24,13 @@
   services.cloudflare-dns = {
     enable = true;
     domains = [
-      "betasearch.rileymathews.com"
+      "podsearch.rileymathews.com"
       # "bgatus.rileymathews.com"
     ];
   };
 
   myNginx.proxies.searxng = {
-    listenHost = "betasearch.rileymathews.com";
+    listenHost = "podsearch.rileymathews.com";
     backendHost = "http://127.0.0.1:8000";
   };
 
