@@ -16,6 +16,7 @@
     ./../../modules/nginx-multi-proxy
     ./../../modules/gatus
     ./../../modules/karakeep
+    ./../../modules/searxng
   ];
   networking.hostName = "borg";
   nix.settings.experimental-features = ["nix-command" "flakes"];
