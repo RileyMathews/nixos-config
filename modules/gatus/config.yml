@@ -1,3 +1,6 @@
+web:
+  port: 8020
+
 storage:
   type: postgres
   path: "postgres://gatus:${POSTGRES_PASSWORD}@db1.tailscale.rileymathews.com:5432/gatus"
@@ -43,7 +46,7 @@ endpoints:
 
   - name: forgejo
     <<: *defaults
-    url: "https://forgejo.rileymathews.com"
+    url: "https://git.rileymathews.com"
 
   - name: karakeep
     <<: *defaults
