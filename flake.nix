@@ -165,6 +165,7 @@
             specialArgs = {inherit system unstablePkgs; };
             modules = [
               disko.nixosModules.disko
+              agenix.nixosModules.default
               ./hosts/backup-server/configuration.nix
             ];
           };
