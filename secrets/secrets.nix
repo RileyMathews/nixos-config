@@ -5,7 +5,8 @@ let
   pg17 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILvOTkyp4FxnjriR+Y3E25kaBKdtXWekYph3m9SWSzLX root@nixos";
   playground = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEdaKF4qDveUOE7EDKQl5hwUfTh1lPkfpuhnAZVRZM58 root@nixos-playground";
   forgejo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKaNVYYQM1GrTxmROiI82gPlhYO3WOddhak9ks6NhvRu root@forgejo";
-  all = [riley borg pg17 playground forgejo];
+  backup-server = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICIHJHoXMk2fQ7UkPXrYiRMFTmRX842UgJl88WKLya6H root@backup-server";
+  all = [riley borg pg17 playground forgejo backup-server];
 in
 {
   # Cloudflare credentials for ACME DNS challenge
