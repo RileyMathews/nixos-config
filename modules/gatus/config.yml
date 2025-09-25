@@ -67,12 +67,6 @@ endpoints:
   - name: searxng
     <<: *defaults
     url: "https://search.rileymathews.com"
-  - name: nixsearxng
-    <<: *defaults
-    url: "https://nixsearch.rileymathews.com"
-  - name: podsearxng
-    <<: *defaults
-    url: "https://podsearch.rileymathews.com"
 
   - name: radicale
     <<: *defaults

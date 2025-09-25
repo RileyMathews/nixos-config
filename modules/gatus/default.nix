@@ -7,10 +7,10 @@ lib,
 {
   imports = [../nginx-multi-proxy ../dns];
   services.cloudflare-dns.enable = true;
-  services.cloudflare-dns.domains = ["bgatus.rileymathews.com"];
+  services.cloudflare-dns.domains = ["gatus.rileymathews.com"];
 
   myNginx.proxies.gatus = {
-    listenHost = "bgatus.rileymathews.com";
+    listenHost = "gatus.rileymathews.com";
     backendHost = "http://127.0.0.1:8020";
   };
 

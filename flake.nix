@@ -179,6 +179,16 @@
               ./hosts/borg/configuration.nix
             ];
           };
+
+          defiant = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {inherit system unstablePkgs; };
+            modules = [
+              disko.nixosModules.disko
+              agenix.nixosModules.default
+              ./hosts/defiant/configuration.nix
+            ];
+          };
         };    
 
         packages.x86_64-linux = {

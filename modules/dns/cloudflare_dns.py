@@ -18,6 +18,7 @@ def get_tailscale_ip() -> Optional[str]:
         ip = result.stdout.strip().split('\n')[0]
         return ip if ip else None
     except (subprocess.CalledProcessError, FileNotFoundError, IndexError):
+        subprocess.run(["tailscale", "status"])
         return None
 
 def read_api_token(token_file: str) -> str:
