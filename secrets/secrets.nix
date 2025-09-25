@@ -19,4 +19,5 @@ in
   "karakeep-env.age".publicKeys = [borg riley defiant];
   "aws-access-key.age".publicKeys = [riley backup-server];
   "gatus-database-password.age".publicKeys = [riley backup-server];
+  "miniflux-env-file.age".publicKeys = [riley defiant];
 }
