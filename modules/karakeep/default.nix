@@ -7,10 +7,10 @@
 {
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["bkarakeep.rileymathews.com"];
+    services.cloudflare-dns.domains = ["karakeep.rileymathews.com"];
 
     myNginx.proxies.karakeep = {
-        listenHost = "bkarakeep.rileymathews.com";
+        listenHost = "karakeep.rileymathews.com";
         backendHost = "http://127.0.0.1:3000";
     };
 
