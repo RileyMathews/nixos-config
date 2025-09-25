@@ -13,7 +13,6 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/gatus
-    ./../../modules/karakeep
     ./../../modules/searxng
   ];
   networking.hostName = "borg";
