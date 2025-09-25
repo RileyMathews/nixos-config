@@ -13,6 +13,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/karakeep
+    ./../../modules/miniflux
   ];
   networking.hostName = "defiant";
   nix.settings.experimental-features = ["nix-command" "flakes"];
