@@ -36,6 +36,10 @@ endpoints:
     <<: *defaults
     url: "https://vaultwarden.rileymathews.com"
 
+  - name: bvaultwarden
+    <<: *defaults
+    url: "https://bvaultwarden.rileymathews.com"
+
   - name: homeassistant
     <<: *defaults
     url: "https://home.rileymathews.com"
@@ -60,10 +64,6 @@ endpoints:
     <<: *defaults
     url: "https://miniflux.rileymathews.com"
 
-  - name: vikunja
-    <<: *defaults
-    url: "https://vikunja.rileymathews.com"
-
   - name: searxng
     <<: *defaults
     url: "https://search.rileymathews.com"
@@ -71,10 +71,6 @@ endpoints:
   - name: radicale
     <<: *defaults
     url: "https://radicale.rileymathews.com"
-
-  - name: nextcloud
-    <<: *defaults
-    url: "https://nextcloud.rileymathews.com"
 
   - name: audiobookshelf
     <<: *defaults
