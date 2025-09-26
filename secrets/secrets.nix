@@ -15,9 +15,10 @@ in
   "tailscale-credentials.age".publicKeys = all;
   "cloudflare-api-key.age".publicKeys = all;
   "forgejo-database-password.age".publicKeys = [forgejo riley backup-server];
-  "gatus-credentials.age".publicKeys = [borg riley];
+  "gatus-credentials.age".publicKeys = [defiant riley];
   "karakeep-env.age".publicKeys = [borg riley defiant];
   "aws-access-key.age".publicKeys = [riley backup-server];
   "gatus-database-password.age".publicKeys = [riley backup-server];
   "miniflux-env-file.age".publicKeys = [riley defiant];
+  "vaultwarden-env-file.age".publicKeys = [riley defiant];
 }
