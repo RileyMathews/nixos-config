@@ -51,7 +51,11 @@ backup_database() {
     # Clear password from environment
     unset PGPASSWORD
 
+    echo "ran pg_dump on $database_name"
+
     tar -czvf $tar_file_name $backup_output_name
+
+    echo "uploading $database_name files to s3"
 
     aws s3 cp $tar_file_name "s3://postgres-backups/$database_name/$tar_file_name"
 

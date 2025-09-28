@@ -17,17 +17,11 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
 
-  age.secrets.forgejo-database-password = {
-    file = ../../secrets/forgejo-database-password.age;
+  age.secrets.pg17-admin-password-file = {
+    file = ../../secrets/pg17-admin-password-file.age;
+    mode = "0400";
     owner = "backup";
     group = "backup";
-    mode = "0400";
-  };
-  age.secrets.gatus-database-password = {
-    file = ../../secrets/gatus-database-password.age;
-    owner = "backup";
-    group = "backup";
-    mode = "0400";
   };
 
   services.postgresBackup = {
@@ -36,14 +30,44 @@
       {
         name = "forgejo";
         host = "pg17.tailscale.rileymathews.com";
-        user = "forgejo";
-        passwordFile = config.age.secrets.forgejo-database-password.path;
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
       }
       {
         name = "gatus";
         host = "pg17.tailscale.rileymathews.com";
-        user = "gatus";
-        passwordFile = config.age.secrets.gatus-database-password.path;
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
+      {
+        name = "miniflux";
+        host = "pg17.tailscale.rileymathews.com";
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
+      {
+        name = "rpgweave";
+        host = "pg17.tailscale.rileymathews.com";
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
+      {
+        name = "rpgweave-staging";
+        host = "pg17.tailscale.rileymathews.com";
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
+      {
+        name = "mealie";
+        host = "db1.tailscale.rileymathews.com";
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
+      {
+        name = "vaultwarden";
+        host = "db1.tailscale.rileymathews.com";
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
       }
     ];
   };
