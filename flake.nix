@@ -41,6 +41,14 @@
     in
       {
         nixosConfigurations = {
+          picard = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {inherit system unstablePkgs; };
+            modules = [
+              ./hosts/picard/configuration.nix
+            ];
+          };
+
           redis = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
