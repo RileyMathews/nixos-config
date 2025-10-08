@@ -57,6 +57,16 @@
             ];
           };
 
+          relay = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {inherit system unstablePkgs; };
+            modules = [
+              disko.nixosModules.disko
+              agenix.nixosModules.default
+              ./hosts/relay/configuration.nix
+            ];
+          };
+
           playground = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             specialArgs = {inherit system unstablePkgs; };
