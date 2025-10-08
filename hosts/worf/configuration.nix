@@ -11,6 +11,7 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
+    ./../../modules/vaultwarden
   ];
   networking.hostName = "worf";
   nix.settings.experimental-features = ["nix-command" "flakes"];

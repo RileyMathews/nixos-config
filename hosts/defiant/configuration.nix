@@ -15,7 +15,6 @@
     ./../../modules/karakeep
     ./../../modules/miniflux
     ./../../modules/gatus
-    ./../../modules/vaultwarden
   ];
   networking.hostName = "defiant";
   nix.settings.experimental-features = ["nix-command" "flakes"];
