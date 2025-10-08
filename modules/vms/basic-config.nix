@@ -25,7 +25,6 @@
     fzf
     tmux
     direnv
-    neovim
     just
   ];
 

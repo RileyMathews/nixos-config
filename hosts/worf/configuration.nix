@@ -1,5 +1,4 @@
 {
-  config,
   modulesPath,
   lib,
   pkgs,
@@ -12,11 +11,10 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
-    ./../../modules/karakeep
-    ./../../modules/miniflux
-    ./../../modules/gatus
+    ./../../modules/vaultwarden
   ];
-  networking.hostName = "defiant";
+  networking.hostName = "worf";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
 }
+
