@@ -121,6 +121,7 @@
     pavucontrol
     zsh
     bash
+    slack
     i3
     stow
     gcc
