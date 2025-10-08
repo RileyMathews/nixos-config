@@ -12,7 +12,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
   ];
-  networking.hostName = "nixos-playground";
+  networking.hostName = "worf";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
 }
