@@ -15,6 +15,8 @@
         backendHost = "http://127.0.0.1:8222";
     };
 
+    networking.firewall.allowedTCPPorts = [8222];
+
     boot.kernelModules = [ "nfs" ];
     boot.supportedFilesystems = [ "nfs" ];
     fileSystems."/mnt/vaultwarden" = {
