@@ -16,7 +16,14 @@
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostName = "picard"; # Define your hostname.
+  nix.settings.trusted-users = [ "riley" ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  nix.settings = {
+    # nix-direnv
+    keep-outputs = true;
+    keep-derivations = true;
+  };
 
   hardware.bluetooth.enable = true;
 
@@ -111,11 +118,13 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
+    dunst
     alacritty
     rofi-wayland
     brave
     curl
     git
+    git-prole
     neovim
     fastfetch
     pavucontrol
@@ -128,11 +137,25 @@
     fzf
     tmux
     direnv
+    nix-direnv
     unstablePkgs.neovim
     just
     hyprland
     waybar
+    signal-desktop
   ];
+
+  # environment.pathsToLink = [
+  #   "/share/nix-direnv"
+  # ];
+  # programs.direnv.enable = true;
+  # programs.direnv.nix-direnv.enable = true;
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
