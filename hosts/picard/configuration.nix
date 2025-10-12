@@ -143,6 +143,9 @@
     hyprland
     waybar
     signal-desktop
+    wl-clipboard
+    grim
+    slurp
   ];
 
   # environment.pathsToLink = [
