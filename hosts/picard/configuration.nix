@@ -94,6 +94,7 @@
   security.rtkit.enable = true;
 
   programs = {
+    obs-studio.enable = true;
     hyprland.enable = true;
     zsh.enable = true;
 
@@ -138,7 +139,7 @@
       nix-direnv
       unstablePkgs.neovim
       just
-      hyprland
+      unstablePkgs.hyprland
       waybar
       signal-desktop
       wl-clipboard
@@ -147,6 +148,7 @@
       virtualglLib
       mesa-demos
       btop
+      catppuccin-cursors.mochaDark
     ];
   };
 
