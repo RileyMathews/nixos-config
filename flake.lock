@@ -86,6 +86,27 @@
         "type": "github"
       }
     },
+    "kolide": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1754409882,
+        "narHash": "sha256-KB3wHSrFMzQemZoAU6WHmD/p3iGwj59B/Dw/LyjnMXc=",
+        "owner": "kolide",
+        "repo": "nix-agent",
+        "rev": "9861a1c126514d11a7100edae87ddfce31be909c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kolide",
+        "ref": "main",
+        "repo": "nix-agent",
+        "type": "github"
+      }
+    },
     "nixlib": {
       "locked": {
         "lastModified": 1729386149,
@@ -175,6 +196,7 @@
       "inputs": {
         "agenix": "agenix",
         "disko": "disko",
+        "kolide": "kolide",
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
