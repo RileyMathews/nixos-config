@@ -149,6 +149,7 @@
       mesa-demos
       btop
       catppuccin-cursors.mochaDark
+      claude-code
     ];
   };
 
