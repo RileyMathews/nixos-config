@@ -36,10 +36,6 @@ endpoints:
     <<: *defaults
     url: "https://vaultwarden.rileymathews.com"
 
-  - name: bvaultwarden
-    <<: *defaults
-    url: "https://bvaultwarden.rileymathews.com"
-
   - name: homeassistant
     <<: *defaults
     url: "https://home.rileymathews.com"

@@ -59,13 +59,13 @@
       }
       {
         name = "mealie";
-        host = "db1.tailscale.rileymathews.com";
+        host = "pg17.tailscale.rileymathews.com";
         user = "backup";
         passwordFile = config.age.secrets.pg17-admin-password-file.path;
       }
       {
         name = "vaultwarden";
-        host = "db1.tailscale.rileymathews.com";
+        host = "pg17.tailscale.rileymathews.com";
         user = "backup";
         passwordFile = config.age.secrets.pg17-admin-password-file.path;
       }

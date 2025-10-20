@@ -6,15 +6,6 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
-    services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["bvaultwarden.rileymathews.com"];
-
-    myNginx.proxies.vaultwarden = {
-        listenHost = "bvaultwarden.rileymathews.com";
-        backendHost = "http://127.0.0.1:8222";
-    };
-
     networking.firewall.allowedTCPPorts = [8222];
 
     boot.kernelModules = [ "nfs" ];
@@ -37,7 +28,7 @@
     services.vaultwarden.environmentFile = config.age.secrets.vaultwarden-env-file.path;
     services.vaultwarden.dbBackend = "postgresql";
     services.vaultwarden.config = {
-        DOMAIN = "https://bvaultwarden.rileymathews.com";
+        DOMAIN = "https://vaultwarden.rileymathews.com";
         SIGNUPS_ALLOWED = true;
         ROCKET_ADDRESS = "0.0.0.0";
         ROCKET_PORT = "8222";
