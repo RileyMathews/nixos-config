@@ -17,7 +17,4 @@
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
-
-  virtualisation.docker.enable = true;
-  virtualisation.oci-containers.backend = "docker";
 }
