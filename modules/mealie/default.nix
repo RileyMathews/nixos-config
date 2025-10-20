@@ -8,10 +8,10 @@
 {
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["bmealie.rileymathews.com"];
+    services.cloudflare-dns.domains = ["mealie.rileymathews.com"];
 
     myNginx.proxies.mealie = {
-        listenHost = "bmealie.rileymathews.com";
+        listenHost = "mealie.rileymathews.com";
         backendHost = "http://127.0.0.1:9000";
     };
 
