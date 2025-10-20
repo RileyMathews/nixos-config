@@ -16,4 +16,6 @@
   networking.hostName = "borg";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+
+  virtualisation.docker.enable = true;
 }
