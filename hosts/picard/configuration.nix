@@ -33,8 +33,15 @@
   };
 
   hardware = {
+    system76.enableAll = true;
     bluetooth.enable = true;
-    graphics.enable = true;
+    graphics = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        libvdpau-va-gl
+      ];
+    };
     nvidia = {
       modesetting.enable = true;
       powerManagement.enable = false;
@@ -150,6 +157,9 @@
       btop
       catppuccin-cursors.mochaDark
       claude-code
+      mpv
+      ffmpeg
+      yt-dlp
     ];
   };
 
