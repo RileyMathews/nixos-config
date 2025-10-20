@@ -52,10 +52,6 @@ endpoints:
     <<: *defaults
     url: "https://karakeep.rileymathews.com"
 
-  - name: immich
-    <<: *defaults
-    url: "https://immich.rileymathews.com"
-
   - name: miniflux
     <<: *defaults
     url: "https://miniflux.rileymathews.com"
