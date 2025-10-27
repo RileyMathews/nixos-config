@@ -165,6 +165,7 @@
       ffmpeg
       yt-dlp
       xorg.xlsclients
+      brightnessctl
     ];
   };
 
