@@ -121,6 +121,10 @@
 
     shells = with pkgs; [ zsh bash ];
 
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
+
     systemPackages = with pkgs; [
       git
       dunst
@@ -160,6 +164,8 @@
       mpv
       ffmpeg
       yt-dlp
+      xorg.xlsclients
+      brightnessctl
     ];
   };
 
