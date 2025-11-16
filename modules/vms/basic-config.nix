@@ -15,17 +15,7 @@
   services.qemuGuest.enable = true;
 
   environment.systemPackages = with pkgs; [
-    curl
-    git
-    neovim
-    fastfetch
     zsh
-    stow
-    gcc
-    fzf
-    tmux
-    direnv
-    just
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [
