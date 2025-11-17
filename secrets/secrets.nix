@@ -9,7 +9,8 @@ let
   defiant = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHYRmmjMCzfaKZv3A9z5Q6MAiE9Xxnel3ScWcmPoMOYC root@defiant";
   worf = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN44i6nHrXX1TFfNeQleNFl789qw7elL9afiTMTqX5k1 root@nixos-playground";
   discovery = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZ0qHOcH0XH0ZsU3cBwGnN40BwbWZKUwcb4tjFFwLtL root@discovery";
-  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery];
+  relay = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKX/AOKzEh71NxQqzgMgDDOEbfVq9h/pP4GFDTPkHkZS root@relay";
+  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery relay];
 in
 {
   # Cloudflare credentials for ACME DNS challenge
