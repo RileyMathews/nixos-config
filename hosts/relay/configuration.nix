@@ -14,5 +14,6 @@
   ];
   networking.hostName = "relay";
   nix.settings.experimental-features = ["nix-command" "flakes"];
+  myTailscale.enable = true;
 }
 
