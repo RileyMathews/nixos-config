@@ -22,6 +22,12 @@
                     default = "http://localhost:8080";
                     description = "Backend host to proxy to.";
                 };
+
+                proxyProtocol = lib.mkOption {
+                    type = lib.types.bool;
+                    default = false;
+                    description = "Whether to enable proxy protocol.";
+                };
             };
         }));
 
@@ -43,6 +49,10 @@
                         proxyPass = proxyConfig.backendHost;
                         proxyWebsockets = true;
                     };
+                    listen = [
+                        { addr = "0.0.0.0"; port = 80; proxyProtocol = proxyConfig.proxyProtocol; }
+                        { addr = "0.0.0.0"; port = 443; proxyProtocol = proxyConfig.proxyProtocol; ssl = true; }
+                    ];
                 })
                 (lib.filterAttrs (name: proxyConfig: proxyConfig.enable) config.myNginx.proxies);
         };
