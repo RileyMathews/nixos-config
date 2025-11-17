@@ -29,7 +29,7 @@
   };
 
   myNginx.proxies.vaultwarden = {
-    listenHost = "vault.rileymathews.com";
+    listenHost = "vaultwarden.rileymathews.com";
     backendHost = "http://worf:8222";
     proxyProtocol = true;
   };
