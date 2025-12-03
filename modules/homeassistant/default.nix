@@ -8,10 +8,10 @@
 {
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["homeb.rileymathews.com"];
+    services.cloudflare-dns.domains = ["home.rileymathews.com"];
 
-    myNginx.proxies.mealie = {
-        listenHost = "homeb.rileymathews.com";
+    myNginx.proxies.homeassistant = {
+        listenHost = "home.rileymathews.com";
         backendHost = "http://127.0.0.1:8123";
     };
 
@@ -21,22 +21,20 @@
         options = ["defaults"];
     };
 
-    systemd.services."podman-homeassistant".unitConfig = {
-        Requires = [ "mnt-homeassistant.mount" ];
-        After = [ "mnt-homeassistant.mount" ];
-    };
+    # systemd.services."podman-homeassistant".unitConfig = {
+    #     Requires = [ "mnt-homeassistant.mount" ];
+    #     After = [ "mnt-homeassistant.mount" ];
+    # };
 
     virtualisation.oci-containers.containers = {
-        mealie = {
+        homeassistant = {
             image = "linuxserver/homeassistant:version-2025.11.3";
             extraOptions = [ "--network=host" ];
             volumes = [ 
                 "/mnt/homeassistant/config:/config"
                 "/mnt/homeassistant/media:/media"
-                "/etc/localtime:/etc/localtime:ro"
             ];
             devices = [ "/dev/ttyACM0:/dev/ttyACM0" ];
-            user = "1000:1000";
             environment = {
                 PUID = "1000";
                 GUID = "1000";
