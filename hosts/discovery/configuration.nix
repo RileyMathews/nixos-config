@@ -13,6 +13,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/mealie
+    ./../../modules/docker-registry
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];

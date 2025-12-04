@@ -40,6 +40,7 @@
             enable = true;
             recommendedProxySettings = true;
             recommendedTlsSettings = true;
+            clientMaxBodySize = "5g";
 
             virtualHosts = lib.mapAttrs'
                 (name: proxyConfig: lib.nameValuePair proxyConfig.listenHost {
