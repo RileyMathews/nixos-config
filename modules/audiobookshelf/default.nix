@@ -1,0 +1,44 @@
+{
+    config,
+    modulesPath,
+    lib,
+    unstablePkgs,
+    ...
+}:
+{
+    imports = [../nginx-multi-proxy ../dns];
+    services.cloudflare-dns.enable = true;
+    services.cloudflare-dns.domains = ["audiobookshelf.rileymathews.com"];
+
+    myNginx.proxies.audiobookshelf = {
+        listenHost = "audiobookshelf.rileymathews.com";
+        backendHost = "http://127.0.0.1:13378";
+    };
+
+    fileSystems."/mnt/audiobookshelf" = {
+        device = "nas:/main/audiobookshelf";
+        fsType = "nfs";
+        options = ["defaults"];
+    };
+
+    systemd.services."podman-audiobookshelf".unitConfig = {
+        Requires = [ "mnt-audiobookshelf.mount" ];
+        After = [ "mnt-audiobookshelf.mount" ];
+    };
+
+    virtualisation.oci-containers.containers = {
+        audiobookshelf = {
+            image = "ghcr.io/advplyr/audiobookshelf:2.31.0";
+            ports = ["13378:80"];
+            volumes = [ 
+                "/mnt/audiobookshelf/audiobooks:/audiobooks" 
+                "/mnt/audiobookshelf/podcasts:/podcasts" 
+                "/mnt/audiobookshelf/config:/config" 
+                "/mnt/audiobookshelf/metadata:/metadata" 
+            ];
+            environment = {
+                TZ = "America/Chicago";
+            };
+        };
+    };
+}

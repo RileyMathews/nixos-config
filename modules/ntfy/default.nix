@@ -9,7 +9,7 @@ lib,
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = ["ntfy.rileymathews.com"];
 
-  myNginx.proxies.gatus = {
+  myNginx.proxies.ntfy = {
     listenHost = "ntfy.rileymathews.com";
     backendHost = "http://127.0.0.1:8021";
   };

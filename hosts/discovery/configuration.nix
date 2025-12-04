@@ -14,6 +14,7 @@
     ./../../modules/tailscale
     ./../../modules/mealie
     ./../../modules/docker-registry
+    ./../../modules/audiobookshelf
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
