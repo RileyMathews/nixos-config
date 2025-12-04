@@ -60,18 +60,10 @@ endpoints:
     <<: *defaults
     url: "https://search.rileymathews.com"
 
-  - name: radicale
-    <<: *defaults
-    url: "https://radicale.rileymathews.com"
-
   - name: audiobookshelf
     <<: *defaults
     url: "https://audiobookshelf.rileymathews.com"
 
-  - name: WUD
-    <<: *defaults
-    url: "https://wud.rileymathews.com"
-
   - name: registry
     <<: *defaults
-    url: "https://registr.rileymathews.com/v2/"
+    url: "https://registry.rileymathews.com/v2/"

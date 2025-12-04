@@ -38,6 +38,8 @@
             ];
             environment = {
                 TZ = "America/Chicago";
+                ACCESS_TOKEN_EPIRY = "31557600";
+                REFRESH_TOKEN_EPIRY = "31557600";
             };
         };
     };
