@@ -71,3 +71,7 @@ endpoints:
   - name: WUD
     <<: *defaults
     url: "https://wud.rileymathews.com"
+
+  - name: registry
+    <<: *defaults
+    url: "https://registr.rileymathews.com/v2/"
