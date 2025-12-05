@@ -15,11 +15,17 @@
         backendHost = "http://127.0.0.1:9000";
     };
 
-    fileSystems."/mnt/mealie" = {
-        device = "nas:/main/mealie";
-        fsType = "nfs";
-        options = ["defaults"];
-    };
+    systemd.mounts = [{
+        what = "nas:/main/mealie";
+        where = "/mnt/mealie";
+        type = "nfs";
+        options = "defaults";
+
+        # Make it wait for Tailscale
+        wantedBy = [ "multi-user.target" ];
+        after = [ "tailscale-ready.service" ];
+        requires = [ "tailscale-ready.service" ];
+    }];
 
     systemd.services."podman-mealie".unitConfig = {
         Requires = [ "mnt-mealie.mount" ];

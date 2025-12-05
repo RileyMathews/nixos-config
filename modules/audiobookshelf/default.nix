@@ -15,16 +15,22 @@
         backendHost = "http://127.0.0.1:13378";
     };
 
-    fileSystems."/mnt/audiobookshelf" = {
-        device = "nas:/main/audiobookshelf";
-        fsType = "nfs";
-        options = ["defaults"];
-    };
-
     systemd.services."podman-audiobookshelf".unitConfig = {
         Requires = [ "mnt-audiobookshelf.mount" ];
         After = [ "mnt-audiobookshelf.mount" ];
     };
+
+    systemd.mounts = [{
+        what = "nas:/main/audiobookshelf";
+        where = "/mnt/audiobookshelf";
+        type = "nfs";
+        options = "defaults";
+
+        # Make it wait for Tailscale
+        wantedBy = [ "multi-user.target" ];
+        after = [ "tailscale-ready.service" ];
+        requires = [ "tailscale-ready.service" ];
+    }];
 
     virtualisation.oci-containers.containers = {
         audiobookshelf = {

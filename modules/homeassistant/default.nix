@@ -9,22 +9,31 @@
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["home.rileymathews.com"];
+    services.rpcbind.enable = true;
+    boot.kernelModules = [ "nfs" ];
+    boot.supportedFilesystems = [ "nfs" ];
 
     myNginx.proxies.homeassistant = {
         listenHost = "home.rileymathews.com";
         backendHost = "http://127.0.0.1:8123";
     };
 
-    fileSystems."/mnt/homeassistant" = {
-        device = "nas:/main/homeassistant";
-        fsType = "nfs";
-        options = ["defaults"];
-    };
+    systemd.mounts = [{
+        what = "nas:/main/homeassistant";
+        where = "/mnt/homeassistant";
+        type = "nfs";
+        options = "defaults";
 
-    # systemd.services."podman-homeassistant".unitConfig = {
-    #     Requires = [ "mnt-homeassistant.mount" ];
-    #     After = [ "mnt-homeassistant.mount" ];
-    # };
+        # Make it wait for Tailscale
+        wantedBy = [ "multi-user.target" ];
+        after = [ "tailscale-ready.service" ];
+        requires = [ "tailscale-ready.service" ];
+    }];
+
+    systemd.services."docker-homeassistant".unitConfig = {
+        Requires = [ "mnt-homeassistant.mount" ];
+        After = [ "mnt-homeassistant.mount" ];
+    };
 
     virtualisation.oci-containers.containers = {
         homeassistant = {

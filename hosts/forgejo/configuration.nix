@@ -46,6 +46,7 @@
     options = "defaults";
     
     # Make it wait for Tailscale
+    # TODO: does this block shutdown because tailscale service never stops?
     wantedBy = [ "multi-user.target" ];
     after = [ "tailscale-ready.service" ];
     requires = [ "tailscale-ready.service" ];

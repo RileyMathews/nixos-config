@@ -10,11 +10,18 @@
 
     boot.kernelModules = [ "nfs" ];
     boot.supportedFilesystems = [ "nfs" ];
-    fileSystems."/mnt/vaultwarden" = {
-        device = "nas:/main/vaultwarden";
-        fsType = "nfs";
-        options = ["defaults"];
-    };
+
+    systemd.mounts = [{
+        what = "nas:/main/vaultwarden";
+        where = "/mnt/vaultwarden";
+        type = "nfs";
+        options = "defaults";
+
+        # Make it wait for Tailscale
+        wantedBy = [ "multi-user.target" ];
+        after = [ "tailscale-ready.service" ];
+        requires = [ "tailscale-ready.service" ];
+    }];
 
     services.vaultwarden.enable = true;
     age.secrets.vaultwarden-env-file = {
