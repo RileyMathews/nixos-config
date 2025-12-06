@@ -233,6 +233,16 @@
           ];
         };
 
+        couchdb = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {inherit system unstablePkgs; };
+          modules = [
+            disko.nixosModules.disko
+            agenix.nixosModules.default
+            ./hosts/couchdb/configuration.nix
+          ];
+        };
+
         relay = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {inherit system unstablePkgs; };

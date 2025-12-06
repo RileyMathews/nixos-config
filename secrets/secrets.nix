@@ -11,7 +11,8 @@ let
   discovery = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZ0qHOcH0XH0ZsU3cBwGnN40BwbWZKUwcb4tjFFwLtL root@discovery";
   relay = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKX/AOKzEh71NxQqzgMgDDOEbfVq9h/pP4GFDTPkHkZS root@relay";
   bridge = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAdVIhED8NhLRMlebU5qn353+NIMFQF28qsYZ7eSruQx root@bridge";
-  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge];
+  couchdb = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMnQnRAy24MnQ03KSajKqYm085+TxmpJqvRQ5b581BM1 root@couchdb";
+  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb];
 in
 {
   # Cloudflare credentials for ACME DNS challenge
