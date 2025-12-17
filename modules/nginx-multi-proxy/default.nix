@@ -12,13 +12,13 @@
                 };
 
                 listenHost = lib.mkOption {
-                    type = lib.types.string;
+                    type = lib.types.str;
                     default = "localhost";
                     description = "Host to listen on.";
                 };
 
                 backendHost = lib.mkOption {
-                    type = lib.types.string;
+                    type = lib.types.str;
                     default = "http://localhost:8080";
                     description = "Backend host to proxy to.";
                 };
