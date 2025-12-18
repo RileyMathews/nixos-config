@@ -27,10 +27,14 @@
     backendHost = "http://rpgweave-staging:80";
     proxyProtocol = true;
   };
-
   myNginx.proxies.vaultwarden = {
     listenHost = "vaultwarden.rileymathews.com";
     backendHost = "http://worf:8222";
+    proxyProtocol = true;
+  };
+  myNginx.proxies.proxmox = {
+    listenHost = "pve.rileymathews.com";
+    backendHost = "https://shipyard:8006";
     proxyProtocol = true;
   };
 }

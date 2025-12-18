@@ -12,7 +12,6 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
-    ./../../modules/searxng
   ];
   networking.hostName = "borg";
   nix.settings.experimental-features = ["nix-command" "flakes"];

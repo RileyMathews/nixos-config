@@ -15,6 +15,7 @@
     ./../../modules/mealie
     ./../../modules/docker-registry
     ./../../modules/audiobookshelf
+    ./../../modules/searxng
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
