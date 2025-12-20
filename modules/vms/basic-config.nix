@@ -28,7 +28,7 @@
   users.users.riley = {
     isNormalUser = true;
     description = "Riley Mathews";
-    extraGroups = [ "networkmanager" "wheel" "docker"];
+    extraGroups = [ "networkmanager" "wheel" "docker" "podman"];
     packages = with pkgs; [];
     shell = pkgs.zsh;
     group = "riley";

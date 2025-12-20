@@ -16,6 +16,7 @@
     ./../../modules/docker-registry
     ./../../modules/audiobookshelf
     ./../../modules/searxng
+    ./../../modules/karakeep
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
