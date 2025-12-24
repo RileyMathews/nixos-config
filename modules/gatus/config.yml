@@ -25,6 +25,7 @@ alerting:
     default-alert:
       failure-threshold: 3
       send-on-resolved: true
+      minimum-reminder-interval: 10m
 
 
 endpoints:
