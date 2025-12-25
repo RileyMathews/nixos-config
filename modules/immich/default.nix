@@ -8,7 +8,7 @@
 {
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["immich.rileymathews.com"];
+    services.cloudflare-dns.domains = ["immich.rileymathews.com" "pg-immich.rileymathews.com"];
 
     myNginx.proxies.immich = {
         listenHost = "immich.rileymathews.com";
@@ -42,15 +42,27 @@
             ports = ["2283:2283"];
             volumes = [ 
                 "/mnt/immich/uploads:/usr/src/app/upload" 
-                "/etc/localtime:/etc/localtime:ro"
             ];
             environment = {
                 IMMICH_VERSION = "release";
-                DB_HOSTNAME = "pg17-immich.tailscale.rileymathews.com";
+                # password in secrets file
+                DB_HOSTNAME = "pg-immich.rileymathews.com";
                 DB_USERNAME = "immich";
                 IMMICH_WORKERS_INCLUDE = "api";
                 REDIS_HOSTNAME = "redis.tailscale.rileymathews.com";
                 REDIS_DB_INDEX = "4";
+            };
+            environmentFiles = [ config.age.secrets.immich-credentials-file.path ];
+        };
+
+        database = {
+            image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:c44be5f2871c59362966d71eab4268170eb6f5653c0e6170184e72b38ffdf107";
+            ports = [ "5432:5432" ];
+            volumes = [ "immich_db_data_volume:/var/lib/postgresql/data" ];
+            environment = {
+                POSTGRES_INITDB_ARTGS = "--data-checksums";
+                POSTGRES_USER = "immich";
+                POSTGRES_DATABASE = "immich";
             };
             environmentFiles = [ config.age.secrets.immich-credentials-file.path ];
         };
