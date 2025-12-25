@@ -31,6 +31,10 @@
         Requires = [ "mnt-immich.mount" ];
         After = [ "mnt-immich.mount" ];
     };
+    systemd.services."podman-transcoding".unitConfig = {
+        Requires = [ "mnt-immich.mount" ];
+        After = [ "mnt-immich.mount" ];
+    };
 
     age.secrets.immich-credentials-file = {
         file =  ../../secrets/immich-credentials-file.age;
@@ -49,6 +53,23 @@
                 DB_HOSTNAME = "pg-immich.rileymathews.com";
                 DB_USERNAME = "immich";
                 IMMICH_WORKERS_INCLUDE = "api";
+                REDIS_HOSTNAME = "redis.tailscale.rileymathews.com";
+                REDIS_DB_INDEX = "4";
+            };
+            environmentFiles = [ config.age.secrets.immich-credentials-file.path ];
+        };
+
+        transcoding = {
+            image = "ghcr.io/immich-app/immich-server:v2.4.1";
+            volumes = [ 
+                "/mnt/immich/uploads:/usr/src/app/upload" 
+            ];
+            environment = {
+                IMMICH_VERSION = "release";
+                # password in secrets file
+                DB_HOSTNAME = "pg-immich.rileymathews.com";
+                DB_USERNAME = "immich";
+                IMMICH_WORKERS_INCLUDE = "microservices";
                 REDIS_HOSTNAME = "redis.tailscale.rileymathews.com";
                 REDIS_DB_INDEX = "4";
             };
