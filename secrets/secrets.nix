@@ -29,5 +29,6 @@ in
   "vaultwarden-env-file.age".publicKeys = [riley worf];
   "pg17-admin-password-file.age".publicKeys = [riley backup-server];
   "mealie-credentials-file.age".publicKeys = [riley discovery];
+  "immich-credentials-file.age".publicKeys = [riley discovery];
   "karakeep-credentials-file.age".publicKeys = [riley discovery];
 }

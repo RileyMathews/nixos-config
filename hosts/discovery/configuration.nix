@@ -17,6 +17,7 @@
     ./../../modules/audiobookshelf
     ./../../modules/searxng
     ./../../modules/karakeep
+    ./../../modules/immich
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
