@@ -6,15 +6,6 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
-    services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["immich.rileymathews.com" "pg-immich.rileymathews.com"];
-
-    myNginx.proxies.immich = {
-        listenHost = "immich.rileymathews.com";
-        backendHost = "http://127.0.0.1:2283";
-    };
-
     systemd.mounts = [{
         what = "nas:/main/immich";
         where = "/mnt/immich";
@@ -27,7 +18,7 @@
         requires = [ "tailscale-ready.service" ];
     }];
 
-    systemd.services."podman-immich".unitConfig = {
+    systemd.services."podman-transcoding".unitConfig = {
         Requires = [ "mnt-immich.mount" ];
         After = [ "mnt-immich.mount" ];
     };
@@ -35,11 +26,15 @@
     age.secrets.immich-credentials-file = {
         file =  ../../secrets/immich-credentials-file.age;
     };
+    virtualisation.podman = {
+        enable = true;
+        dockerCompat = true;
+        defaultNetwork.settings.dns_enabled = true;
+    };
 
     virtualisation.oci-containers.containers = {
-        immich = {
+        transcoding = {
             image = "ghcr.io/immich-app/immich-server:v2.4.1";
-            ports = ["2283:2283"];
             volumes = [ 
                 "/mnt/immich/uploads:/usr/src/app/upload" 
             ];
@@ -48,23 +43,18 @@
                 # password in secrets file
                 DB_HOSTNAME = "pg-immich.rileymathews.com";
                 DB_USERNAME = "immich";
-                IMMICH_WORKERS_INCLUDE = "api";
+                IMMICH_WORKERS_INCLUDE = "microservices";
                 REDIS_HOSTNAME = "redis.tailscale.rileymathews.com";
                 REDIS_DB_INDEX = "4";
+                # GPU-related environment variables
+                NVIDIA_VISIBLE_DEVICES = "all";
+                NVIDIA_DRIVER_CAPABILITIES = "compute,video,utility";
             };
             environmentFiles = [ config.age.secrets.immich-credentials-file.path ];
-        };
-
-        database = {
-            image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23";
-            ports = [ "5432:5432" ];
-            volumes = [ "immich_db_data_volume:/var/lib/postgresql/data" ];
-            environment = {
-                POSTGRES_INITDB_ARTGS = "--data-checksums";
-                POSTGRES_USER = "immich";
-                POSTGRES_DATABASE = "immich";
-            };
-            environmentFiles = [ config.age.secrets.immich-credentials-file.path ];
+            extraOptions = [
+                "--device=nvidia.com/gpu=all"
+                "--security-opt=label=disable"
+            ];
         };
     };
 }
