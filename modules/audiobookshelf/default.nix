@@ -34,7 +34,7 @@
 
     virtualisation.oci-containers.containers = {
         audiobookshelf = {
-            image = "ghcr.io/advplyr/audiobookshelf:2.31.0";
+            image = "ghcr.io/advplyr/audiobookshelf:2.32.1";
             ports = ["13378:80"];
             volumes = [ 
                 "/mnt/audiobookshelf/audiobooks:/audiobooks" 

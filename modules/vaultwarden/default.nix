@@ -23,24 +23,27 @@
         requires = [ "tailscale-ready.service" ];
     }];
 
-    services.vaultwarden.enable = true;
     age.secrets.vaultwarden-env-file = {
         file = ../../secrets/vaultwarden-env-file.age;
-        mode = "0400";
-        owner = "vaultwarden";
-        group = "vaultwarden";
+        # mode = "0400";
+        # owner = "vaultwarden";
+        # group = "vaultwarden";
     };
-    services.vaultwarden.package = unstablePkgs.vaultwarden;
-    services.vaultwarden.webVaultPackage = unstablePkgs.vaultwarden.webvault;
-    services.vaultwarden.environmentFile = config.age.secrets.vaultwarden-env-file.path;
-    services.vaultwarden.dbBackend = "postgresql";
-    services.vaultwarden.config = {
-        DOMAIN = "https://vaultwarden.rileymathews.com";
-        SIGNUPS_ALLOWED = true;
-        ROCKET_ADDRESS = "0.0.0.0";
-        ROCKET_PORT = "8222";
-        DATA_FOLDER = "/mnt/vaultwarden/data";
+    systemd.services."podman-vaultwarden".after = [ "network.target" "run-agenix.d.mount" "mnt-vaultwarden.mount" ];
+    systemd.services."podman-vaultwarden".requires = [ "run-agenix.d.mount" "mnt-vaultwarden.mount" ];
+    virtualisation.oci-containers.containers = {
+        vaultwarden = {
+            image = "vaultwarden/server:1.35.1";
+            ports = ["8222:8222"];
+            volumes = [ "/mnt/vaultwarden/data:/data" ];
+            user = "1000:1000";
+            environment = {
+                DOMAIN = "https://vaultwarden.rileymathews.com";
+                SIGNUPS_ALLOWED = "true";
+                ROCKET_ADDRESS = "0.0.0.0";
+                ROCKET_PORT = "8222";
+            };
+            environmentFiles = [ config.age.secrets.vaultwarden-env-file.path ];
+        };
     };
-    systemd.services."vaultwarden".after = [ "network.target" "run-agenix.d.mount" "mnt-vaultwarden.mount" ];
-    systemd.services."vaultwarden".requires = [ "run-agenix.d.mount" "mnt-vaultwarden.mount" ];
 }
