@@ -18,6 +18,7 @@
     ./../../modules/searxng
     ./../../modules/karakeep
     ./../../modules/immich
+    ./../../modules/paperless
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];

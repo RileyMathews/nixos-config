@@ -31,4 +31,5 @@ in
   "mealie-credentials-file.age".publicKeys = [riley discovery];
   "immich-credentials-file.age".publicKeys = [riley discovery data];
   "karakeep-credentials-file.age".publicKeys = [riley discovery];
+  "paperless-credentials-file.age".publicKeys = [riley discovery];
 }
