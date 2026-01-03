@@ -75,6 +75,12 @@
         user = "backup";
         passwordFile = config.age.secrets.pg17-admin-password-file.path;
       }
+      {
+        name = "homebox";
+        host = "pg17.tailscale.rileymathews.com";
+        user = "backup";
+        passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
     ];
   };
 }

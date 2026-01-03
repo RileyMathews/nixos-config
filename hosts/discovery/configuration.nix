@@ -19,6 +19,7 @@
     ./../../modules/karakeep
     ./../../modules/immich
     ./../../modules/paperless
+    ./../../modules/homebox
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
