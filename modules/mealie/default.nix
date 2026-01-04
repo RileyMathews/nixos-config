@@ -38,7 +38,7 @@
 
     virtualisation.oci-containers.containers = {
         mealie = {
-            image = "ghcr.io/mealie-recipes/mealie:v3.9.1";
+            image = "ghcr.io/mealie-recipes/mealie:v3.9.2";
             ports = ["9000:9000"];
             volumes = [ "/mnt/mealie/app/data:/app/data" ];
             user = "1000:1000";
