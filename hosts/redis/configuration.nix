@@ -12,8 +12,18 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
+    ./../../modules/dns
   ];
   networking.hostName = "redis";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+  services.redis.servers."main-redis" = {
+    enable = true;
+    port = 6379;
+  };
+  networking.firewall.allowedTCPPorts = [6379];
+  services.cloudflare-dns = {
+    enable = true;
+    domains = ["redis8.tailscale.rileymathews.com"];
+  };
 }
