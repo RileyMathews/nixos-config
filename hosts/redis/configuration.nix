@@ -26,4 +26,9 @@
     enable = true;
     domains = ["redis8.tailscale.rileymathews.com"];
   };
+  # redis usage...
+  # 1 RPG Weave
+  # 2 RPG Weave Staging
+  # 3 Immich
+  # 4 Paperless
 }

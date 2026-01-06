@@ -49,8 +49,8 @@
                 DB_HOSTNAME = "pg-immich.rileymathews.com";
                 DB_USERNAME = "immich";
                 IMMICH_WORKERS_INCLUDE = "api";
-                REDIS_HOSTNAME = "redis.tailscale.rileymathews.com";
-                REDIS_DB_INDEX = "4";
+                REDIS_HOSTNAME = "redis8.tailscale.rileymathews.com";
+                REDIS_DB_INDEX = "3";
             };
             environmentFiles = [ config.age.secrets.immich-credentials-file.path ];
         };
