@@ -48,7 +48,7 @@
             ];
             user = "1000:1000";
             environment = {
-                PAPERLESS_REDIS = "redis://redis.tailscale.rileymathews.com:6379/5";
+                PAPERLESS_REDIS = "redis://redis8.tailscale.rileymathews.com:6379/4";
                 PAPERLESS_DBHOST = "pg17.tailscale.rileymathews.com";
                 PAPERLESS_URL = "https://paperless.rileymathews.com";
                 PAPERLESS_TIME_ZONE = "America/Chicago";

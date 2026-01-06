@@ -27,8 +27,8 @@
     domains = ["redis8.tailscale.rileymathews.com"];
   };
   # redis usage...
-  # 1 RPG Weave
-  # 2 RPG Weave Staging
+  # 1 RPG Weave - not migrated yet
+  # 2 RPG Weave Staging - not migrated yet
   # 3 Immich
   # 4 Paperless
 }
