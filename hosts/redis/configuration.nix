@@ -20,6 +20,10 @@
   services.redis.servers."main-redis" = {
     enable = true;
     port = 6379;
+    bind = "redis8.tailscale.rileymathews.com";
+    settings = {
+      protected-mode = "no";
+    };
   };
   networking.firewall.allowedTCPPorts = [6379];
   services.cloudflare-dns = {

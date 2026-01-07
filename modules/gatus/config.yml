@@ -68,3 +68,11 @@ endpoints:
   - name: registry
     <<: *defaults
     url: "https://registry.rileymathews.com/v2/"
+
+  - name: immich
+    <<: *defaults
+    url: "https://immich.rileymathews.com"
+
+  - name: paperless
+    <<: *defaults
+    url: "https://paperless.rileymathews.com"
