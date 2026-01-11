@@ -33,7 +33,7 @@
     systemd.services."podman-vaultwarden".requires = [ "run-agenix.d.mount" "mnt-vaultwarden.mount" ];
     virtualisation.oci-containers.containers = {
         vaultwarden = {
-            image = "vaultwarden/server:1.35.1";
+            image = "vaultwarden/server:1.35.2";
             ports = ["8222:8222"];
             volumes = [ "/mnt/vaultwarden/data:/data" ];
             user = "1000:1000";

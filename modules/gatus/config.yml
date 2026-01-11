@@ -76,3 +76,7 @@ endpoints:
   - name: paperless
     <<: *defaults
     url: "https://paperless.rileymathews.com"
+
+  - name: homebridge
+    <<: *defaults
+    url: "https://homebridge.rileymathews.com"

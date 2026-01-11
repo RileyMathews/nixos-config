@@ -11,6 +11,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/homeassistant
+    ./../../modules/homebridge
   ];
 
   networking.hostName = "bridge";
