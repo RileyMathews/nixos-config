@@ -44,5 +44,30 @@
     '';
   };
 
+  # Garbage collect daily, keep only 7 days of generations
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
+  };
+
+  # Deduplicate the store weekly
+  nix.optimise = {
+    automatic = true;
+    dates = [ "weekly" ];
+  };
+
+  # Keep only 3 most recent generations per profile
+  # (runs after garbage collection)
+  nix.settings.keep-outputs = false;
+  nix.settings.keep-derivations = false;
+
+  # Tight journal limits
+  services.journald.extraConfig = ''
+    SystemMaxUse=100M
+    SystemMaxFileSize=20M
+    MaxRetentionSec=1week
+  '';
+
   system.stateVersion = "25.11";
 }

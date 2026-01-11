@@ -79,6 +79,7 @@
     user = "git";
     group = "git";
     stateDir = "/mnt/forgejo";
+    package = pkgs.forgejo;
     settings = {
       server = {
         ROOT_URL = "https://git.rileymathews.com";
