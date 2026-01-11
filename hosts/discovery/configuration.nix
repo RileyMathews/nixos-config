@@ -20,6 +20,7 @@
     ./../../modules/immich
     ./../../modules/paperless
     ./../../modules/homebox
+    ./../../modules/miniflux
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];

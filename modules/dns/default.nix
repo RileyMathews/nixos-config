@@ -91,8 +91,8 @@ in
       };
 
       # Ensure dependencies are available
-      after = [ "tailscaled.service" ];
-      wants = [ "tailscaled.service" ];
+      after = [ "tailscaled.service" "tailscale-ready.service" ];
+      wants = [ "tailscaled.service" "tailscale-ready.service" ];
       wantedBy = [ "multi-user.target" ];
     };
 

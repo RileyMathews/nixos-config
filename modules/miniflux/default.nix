@@ -11,18 +11,20 @@
 
     myNginx.proxies.miniflux = {
         listenHost = "miniflux.rileymathews.com";
-        backendHost = "http://127.0.0.1:8080";
+        backendHost = "http://127.0.0.1:9732";
     };
 
-    services.miniflux.enable = true;
     age.secrets.miniflux-env-file = {
         file = ../../secrets/miniflux-env-file.age;
-        mode = "0400";
-        owner = "miniflux";
-        group = "miniflux";
     };
-    services.miniflux.adminCredentialsFile = config.age.secrets.miniflux-env-file.path;
-    services.miniflux.createDatabaseLocally = false;
-    systemd.services."miniflux".after = [ "network.target" "run-agenix.d.mount" ];
-    systemd.services."miniflux".requires = [ "run-agenix.d.mount" ];
+
+    virtualisation.oci-containers.containers = {
+        miniflux = {
+            image = "miniflux/miniflux:2.2.16";
+            ports = ["9732:8080"];
+            user = "1000:1000";
+            environmentFiles = [ config.age.secrets.miniflux-env-file.path ];
+        };
+    };
+
 }
