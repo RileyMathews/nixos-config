@@ -69,7 +69,7 @@
     };
   };
 
-  time.timeZone = "America/New_York";
+  time.timeZone = "America/Chicago";
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -160,6 +160,7 @@
       unstablePkgs.neovim
       just
       unstablePkgs.hyprland
+      unstablePkgs.hyprcursor
       waybar
       signal-desktop
       wl-clipboard
@@ -175,6 +176,9 @@
       yt-dlp
       xorg.xlsclients
       brightnessctl
+      opencode
+      claude-code
+      nodejs
     ];
   };
 
