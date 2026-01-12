@@ -112,14 +112,19 @@
 
   programs = {
     obs-studio.enable = true;
-    hyprland.enable = true;
+    hyprland = {
+      enable = true;
+      package = unstablePkgs.hyprland;
+    };
     zsh.enable = true;
 
     direnv = {
       enable = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
-      nix-direnv.enable = true;
+      nix-direnv = {
+        enable = true;
+      };
     };
   };
 
@@ -136,7 +141,6 @@
     };
 
     systemPackages = with pkgs; [
-      git
       dunst
       alacritty
       rofi
@@ -144,23 +148,17 @@
       curl
       git
       git-prole
-      neovim
       fastfetch
       pavucontrol
-      zsh
-      bash
       slack
       i3
       stow
       gcc
       fzf
       tmux
-      direnv
       impala
-      nix-direnv
       unstablePkgs.neovim
       just
-      unstablePkgs.hyprland
       unstablePkgs.hyprcursor
       waybar
       signal-desktop
@@ -171,7 +169,6 @@
       mesa-demos
       btop
       catppuccin-cursors.mochaDark
-      claude-code
       mpv
       ffmpeg
       yt-dlp
