@@ -69,5 +69,15 @@
     MaxRetentionSec=1week
   '';
 
+  # do not include enable here.
+  # individual hosts should
+  # enable podman on their own
+  virtualisation.podman = {
+    autoPrune = {
+      enable = true;
+      flags = [ "--all" ];
+    };
+  };
+
   system.stateVersion = "25.11";
 }
