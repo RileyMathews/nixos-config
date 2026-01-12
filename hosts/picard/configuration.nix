@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
   ];
+  nixpkgs.config.allowUnfree = true;
 
   boot = {
     loader = {
@@ -176,8 +177,8 @@
       yt-dlp
       xorg.xlsclients
       brightnessctl
-      opencode
-      claude-code
+      unstablePkgs.opencode
+      unstablePkgs.claude-code
       nodejs
     ];
   };
@@ -188,8 +189,6 @@
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
   };
-
-  nixpkgs.config.allowUnfree = true;
 
   fonts.packages = with pkgs; [ nerd-fonts.hack ];
 
