@@ -177,6 +177,7 @@
       unstablePkgs.opencode
       unstablePkgs.claude-code
       nodejs
+      ripgrep
     ];
   };
 
