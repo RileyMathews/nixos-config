@@ -27,4 +27,5 @@
   myTailscale.enable = true;
   boot.kernelModules = [ "nfs" ];
   boot.supportedFilesystems = [ "nfs" ];
+  systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
 }

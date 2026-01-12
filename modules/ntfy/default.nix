@@ -14,10 +14,15 @@ lib,
     backendHost = "http://127.0.0.1:8021";
   };
 
-  services.ntfy-sh.enable = true;
-  services.ntfy-sh.settings = {
-    listen-http = ":8021";
-    base-url = "https://ntfy.rileymathews.com";
-    upstream-base-url = "https://ntfy.sh";
+  environment.etc."ntfy/server.yml".text = ''
+    base-url: "https://ntfy.rileymathews.com"
+    listen-http: ":8021"
+  '';
+
+  virtualisation.oci-containers.containers.ntfy = {
+    image = "binwiederhier/ntfy:v2.15";
+    volumes = [ "/etc/ntfy/server.yml:/etc/ntfy/server.yml:ro" ];
+    ports = [ "8021:8021" ];
+    cmd = ["serve"];
   };
 }
