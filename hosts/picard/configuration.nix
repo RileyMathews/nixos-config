@@ -129,7 +129,7 @@
       git
       dunst
       alacritty
-      rofi-wayland
+      rofi
       brave
       curl
       git
