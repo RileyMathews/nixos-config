@@ -30,7 +30,7 @@
         requires = [ "tailscale-ready.service" ];
     }];
 
-    systemd.services."docker-homeassistant".unitConfig = {
+    systemd.services."podman-homeassistant".unitConfig = {
         Requires = [ "mnt-homeassistant.mount" ];
         After = [ "mnt-homeassistant.mount" ];
     };

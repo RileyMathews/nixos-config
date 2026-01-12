@@ -30,14 +30,14 @@
         requires = [ "tailscale-ready.service" ];
     }];
 
-    systemd.services."docker-homebridge".unitConfig = {
+    systemd.services."podman-homebridge".unitConfig = {
         Requires = [ "mnt-homebridge.mount" ];
         After = [ "mnt-homebridge.mount" ];
     };
 
     virtualisation.oci-containers.containers = {
         homebridge = {
-            image = "homebridge/homebridge:latest";
+            image = "docker.io/homebridge/homebridge:latest";
             extraOptions = [ 
                 "--network=host" 
                 "--label" 

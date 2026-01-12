@@ -15,10 +15,11 @@
   ];
 
   networking.hostName = "bridge";
-  virtualisation.docker.enable = true;
-  virtualisation.oci-containers.backend = "docker";
+  virtualisation.podman.enable = true;
+  virtualisation.oci-containers.backend = "podman";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
   networking.firewall.enable = false;
   services.avahi.enable = true;
+  systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
 }
