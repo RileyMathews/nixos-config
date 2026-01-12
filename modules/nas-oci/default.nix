@@ -143,7 +143,7 @@ in
           value = {
             unitConfig = {
               RequiresMountsFor = requiredMountPoints;
-              Requires = cfg.extraDepends;
+              Wants = cfg.extraDepends;
               After = cfg.extraDepends;
             };
 
