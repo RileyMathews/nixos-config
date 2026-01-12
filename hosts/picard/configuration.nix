@@ -7,9 +7,18 @@
 
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        consoleMode = "auto";
+      };
       efi.canTouchEfiVariables = true;
     };
+
+    initrd = {
+      kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+    };
+
+    kernelParams = [ "nvidia-drm.modeset=1" ];
   };
 
   nix = {
