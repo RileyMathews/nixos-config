@@ -28,4 +28,6 @@
   boot.kernelModules = [ "nfs" ];
   boot.supportedFilesystems = [ "nfs" ];
   systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
+  # open up PG port as its needed for backup
+  networking.firewall.allowedTCPPorts = [80 443 5432];
 }

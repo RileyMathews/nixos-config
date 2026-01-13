@@ -14,7 +14,8 @@ let
   couchdb = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMnQnRAy24MnQ03KSajKqYm085+TxmpJqvRQ5b581BM1 root@couchdb";
   data = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEU1lucp6jkoONSvMbz0ds4N3rYhuT02uwXMkTZKHHQD root@data";
   redis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILQ/lz7yITSSPMq2ph0tcGpNs89b+yUurCVhJu2QJbMx root@redis";
-  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb data redis];
+  engineering = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFxkcMdBd1XreDuoL6Rqm1z1+33oLNixRWZJ0dz6+2Xq root@engineering";
+  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb data redis engineering];
 in
 {
   # Cloudflare credentials for ACME DNS challenge
@@ -34,4 +35,5 @@ in
   "karakeep-credentials-file.age".publicKeys = [riley discovery];
   "paperless-credentials-file.age".publicKeys = [riley discovery];
   "homebox-credentials-file.age".publicKeys = [riley discovery];
+  "immich-password-file.age".publicKeys = [riley backup-server];
 }

@@ -24,6 +24,13 @@
     group = "backup";
   };
 
+  age.secrets.immich-password-file = {
+    file =  ../../secrets/immich-password-file.age;
+    mode = "0400";
+    group = "backup";
+    owner = "backup";
+  };
+
   services.postgresBackup = {
     enable = true;
     entries = [
@@ -80,6 +87,12 @@
         host = "pg17.tailscale.rileymathews.com";
         user = "backup";
         passwordFile = config.age.secrets.pg17-admin-password-file.path;
+      }
+      {
+        name = "immich";
+        host = "discovery";
+        user = "immich";
+        passwordFile = config.age.secrets.immich-password-file.path;
       }
     ];
   };
