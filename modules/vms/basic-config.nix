@@ -78,6 +78,17 @@
       flags = [ "--all" ];
     };
   };
+  services.prometheus = {
+    exporters = {
+      node = {
+        enable = true;
+        enabledCollectors = [ "systemd" ];
+        port = 9002;
+      };
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [9002];
 
   system.stateVersion = "25.11";
 }
