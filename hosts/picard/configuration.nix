@@ -141,43 +141,44 @@
     };
 
     systemPackages = with pkgs; [
-      dunst
       alacritty
-      rofi
       brave
-      curl
-      git
-      git-prole
-      fastfetch
-      pavucontrol
-      slack
-      i3
-      stow
-      gcc
-      fzf
-      tmux
-      impala
-      unstablePkgs.neovim
-      just
-      unstablePkgs.hyprcursor
-      waybar
-      signal-desktop
-      wl-clipboard
-      grim
-      slurp
-      virtualglLib
-      mesa-demos
+      brightnessctl
       btop
       catppuccin-cursors.mochaDark
-      mpv
+      curl
+      dunst
+      fastfetch
       ffmpeg
-      yt-dlp
-      xorg.xlsclients
-      brightnessctl
-      unstablePkgs.opencode
-      unstablePkgs.claude-code
+      fzf
+      gcc
+      git
+      git-prole
+      grim
+      i3
+      impala
+      just
+      mesa-demos
+      mpv
       nodejs
+      pavucontrol
       ripgrep
+      rofi
+      signal-desktop
+      slack
+      slurp
+      stow
+      thunderbird-bin
+      tmux
+      unstablePkgs.claude-code
+      unstablePkgs.hyprcursor
+      unstablePkgs.neovim
+      unstablePkgs.opencode
+      virtualglLib
+      waybar
+      wl-clipboard
+      xorg.xlsclients
+      yt-dlp
     ];
   };
 
