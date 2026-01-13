@@ -66,7 +66,7 @@
           ];
         };
 
-        postgres-17 = nixpkgs.lib.nixosSystem {
+        pg17 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             disko.nixosModules.disko
@@ -194,7 +194,24 @@
             ./hosts/engineering/configuration.nix
           ];
         };
-      };    
+      };
+
+      # List of VMs for batch deployment (in flake definition order)
+      vmDeployments = [
+        "pg17"
+        "worf"
+        "forgejo"
+        "backup-server"
+        "borg"
+        "defiant"
+        "bridge"
+        "discovery"
+        "couchdb"
+        "relay"
+        "data"
+        "redis"
+        "engineering"
+      ];
 
       packages.x86_64-linux = {
         iso = nixos-generators.nixosGenerate {
@@ -209,6 +226,7 @@
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           agenix.packages.${system}.default
+          jq
         ];
       };
     };

@@ -55,6 +55,17 @@
           targets = [ 
             "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" 
             "discovery:9002"
+            "data:9002"
+            "defiant:9002"
+            "borg:9002"
+            "redis:9002"
+            "worf:9002"
+            "bridge:9002"
+            "forgejo:9002"
+            "pg17:9002"
+            "backup-server:9002"
+            "couchdb:9002"
+            "relay:9002"
           ];
         }];
       }
