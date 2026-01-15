@@ -36,4 +36,5 @@ in
   "paperless-credentials-file.age".publicKeys = [riley discovery];
   "homebox-credentials-file.age".publicKeys = [riley discovery];
   "immich-password-file.age".publicKeys = [riley backup-server];
+  "joplin-credentials-file.age".publicKeys = [riley discovery];
 }

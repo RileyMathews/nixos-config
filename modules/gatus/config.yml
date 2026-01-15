@@ -84,3 +84,7 @@ endpoints:
   - name: ntfy
     <<: *defaults
     url: "https://ntfy.rileymathews.com"
+
+  - name: joplin
+    <<: *defaults
+    url: "https://joplin.rileymathews.com"

@@ -44,7 +44,7 @@
                     POSTGRES_DB = "mealie";
                     MAX_WORKERS = "1";
                     WEB_CONCURRENCY = "1";
-                    BASE_URL = "bmealie.rileymathews.com";
+                    BASE_URL = "mealie.rileymathews.com";
                     TOKEN_TIME = "720";
                 };
                 environmentFiles = [ config.age.secrets.mealie-credentials-file.path ];

@@ -21,6 +21,7 @@
     ./../../modules/paperless
     ./../../modules/homebox
     ./../../modules/miniflux
+    ./../../modules/joplin
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];

@@ -157,6 +157,7 @@
       grim
       i3
       impala
+      joplin-desktop
       just
       lazygit
       mesa-demos
