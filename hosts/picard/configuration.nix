@@ -158,6 +158,7 @@
       i3
       impala
       just
+      lazygit
       mesa-demos
       mpv
       nodejs
