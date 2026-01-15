@@ -22,6 +22,7 @@
     ./../../modules/homebox
     ./../../modules/miniflux
     ./../../modules/joplin
+    ./../../modules/vikunja
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];

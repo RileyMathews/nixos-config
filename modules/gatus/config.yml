@@ -88,3 +88,7 @@ endpoints:
   - name: joplin
     <<: *defaults
     url: "https://joplin.rileymathews.com"
+
+  - name: vikunja
+    <<: *defaults
+    url: "https://vikunja.rileymathews.com"
