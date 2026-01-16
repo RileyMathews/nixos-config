@@ -23,6 +23,7 @@
     ./../../modules/miniflux
     ./../../modules/joplin
     ./../../modules/vikunja
+    ./../../modules/webhooks
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
