@@ -160,6 +160,7 @@
       joplin-desktop
       just
       lazygit
+      librewolf
       mesa-demos
       mpv
       nodejs
