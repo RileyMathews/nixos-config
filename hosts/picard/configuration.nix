@@ -171,6 +171,7 @@
       slurp
       stow
       thunderbird-bin
+      tldr
       tmux
       unstablePkgs.claude-code
       unstablePkgs.hyprcursor
@@ -187,8 +188,15 @@
   users.users.riley = {
     isNormalUser = true;
     description = "Riley Mathews";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "podman" ];
     shell = pkgs.zsh;
+  };
+  
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+    };
   };
 
   fonts.packages = with pkgs; [ nerd-fonts.hack ];
