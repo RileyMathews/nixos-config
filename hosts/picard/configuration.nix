@@ -142,6 +142,7 @@
 
     systemPackages = with pkgs; [
       alacritty
+      bitwarden-cli
       brave
       brightnessctl
       btop
@@ -158,13 +159,16 @@
       i3
       impala
       joplin-desktop
+      jq
       just
+      keyutils
       lazygit
       librewolf
       mesa-demos
       mpv
       nodejs
       pavucontrol
+      qutebrowser
       ripgrep
       rofi
       signal-desktop
