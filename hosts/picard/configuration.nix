@@ -147,6 +147,8 @@
       brightnessctl
       btop
       catppuccin-cursors.mochaDark
+      nix-search-cli
+      spotify
       curl
       dunst
       fastfetch
