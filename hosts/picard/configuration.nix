@@ -17,6 +17,8 @@
 
     initrd = {
       kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+      systemd.enable = true;
+      luks.devices."luks-acc369d3-8fac-4a34-a4cd-b209e7710813".crypttabExtraOpts = [ "tpm2-device=auto" ];
     };
 
     kernelParams = [ "nvidia-drm.modeset=1" ];
@@ -108,7 +110,10 @@
     };
   };
 
-  security.rtkit.enable = true;
+  security = {
+    tpm2.enable = true;
+    rtkit.enable = true;
+  };
 
   programs = {
     obs-studio.enable = true;
@@ -180,6 +185,7 @@
       thunderbird-bin
       tldr
       tmux
+      tpm2-tools
       unstablePkgs.claude-code
       unstablePkgs.hyprcursor
       unstablePkgs.neovim
