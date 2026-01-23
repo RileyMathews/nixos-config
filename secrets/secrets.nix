@@ -38,4 +38,5 @@ in
   "immich-password-file.age".publicKeys = [riley backup-server];
   "joplin-credentials-file.age".publicKeys = [riley discovery];
   "vikunja-credentials-file.age".publicKeys = [riley discovery];
+  "buffer-credentials-file.age".publicKeys = [riley discovery];
 }

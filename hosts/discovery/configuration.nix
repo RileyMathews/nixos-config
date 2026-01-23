@@ -24,6 +24,7 @@
     ./../../modules/joplin
     ./../../modules/vikunja
     ./../../modules/webhooks
+    ./../../modules/buffer
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
