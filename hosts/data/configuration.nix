@@ -14,6 +14,7 @@
     ./../../modules/tailscale
     ./../../modules/immich-transcoding
     ./../../modules/whisper
+    ./../../modules/piper
   ];
 
   networking.hostName = "data";

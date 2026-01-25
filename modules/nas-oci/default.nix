@@ -119,7 +119,14 @@ in
         "${m.mountPoint}" = {
           device = m.device;
           fsType = m.fsType;
-          options = if m.options == null then cfg.nfsOptions else m.options;
+          options =
+            let
+              baseOptions = if m.options == null then cfg.nfsOptions else m.options;
+            in
+              baseOptions ++ [
+                "x-systemd.requires=tailscale-ready.service"
+                "x-systemd.after=tailscale-ready.service"
+              ];
         };
       })
       (lib.attrValues cfg.mounts));
@@ -152,4 +159,3 @@ in
       cfg.containers;
   };
 }
-

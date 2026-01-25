@@ -14,6 +14,8 @@
         backendHost = "http://127.0.0.1:10300";
     };
 
+    networking.firewall.allowedTCPPorts = [10300];
+
     services.nasOci = {
         enable = true;
 
@@ -24,17 +26,21 @@
 
         containers.whisper = {
             definition = {
-                image = "lscr.io/linuxserver/faster-whisper:latest";
+                image = "lscr.io/linuxserver/faster-whisper:gpu";
                 ports = [ "10300:10300" ];
                 volumes = [ "/mnt/whisper/config:/config:rw" ];
                 environment = {
                     PUID = "1000";
                     PGID = "1000";
                     TZ = "America/Chicago";
-                    WHISPER_MODEL = "tiny-int8";
+                    WHISPER_MODEL = "medium";
+                    NVIDIA_VISIBLE_DEVICES = "all";
+                    NVIDIA_DRIVER_CAPABILITIES = "compute,video,utility";
                 };
                 extraOptions = [
                     "--label" "io.containers.autoupdate=registry"
+                    "--device=nvidia.com/gpu=all"
+                    "--security-opt=label=disable"
                 ];
             };
         };
