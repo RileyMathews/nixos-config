@@ -13,6 +13,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/immich-transcoding
+    ./../../modules/whisper
   ];
 
   networking.hostName = "data";
@@ -35,4 +36,5 @@
   boot.kernelModules = [ "nfs" ];
   boot.supportedFilesystems = [ "nfs" ];
   virtualisation.podman.enable = true;
+  systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
 }
