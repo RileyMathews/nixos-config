@@ -35,12 +35,22 @@
         After = [ "mnt-homeassistant.mount" ];
     };
 
+    environment.etc."configuration.yaml" = {
+        source = ./configuration.yaml;
+    };
+
+    age.secrets.homeassistant-secrets-file = {
+        file = ../../secrets/homeassistant-secrets-file.age;
+    };
+
     virtualisation.oci-containers.containers = {
         homeassistant = {
             image = "linuxserver/homeassistant:version-2026.1.0";
             extraOptions = [ "--network=host" ];
             volumes = [ 
                 "/mnt/homeassistant/config:/config"
+                "/etc/configuration.yaml:/config/configuration.yaml"
+                "${config.age.secrets.homeassistant-secrets-file.path}:/config/secrets.yaml"
                 "/mnt/homeassistant/media:/media"
             ];
             devices = [ "/dev/ttyACM0:/dev/ttyACM0" ];
