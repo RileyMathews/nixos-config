@@ -2,9 +2,13 @@
     config,
     modulesPath,
     lib,
+    pkgs,
     unstablePkgs,
     ...
 }:
+let
+    haConfigFile = pkgs.writeText "configuration.yaml" (builtins.readFile ./configuration.yaml);
+in
 {
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
@@ -49,7 +53,7 @@
             extraOptions = [ "--network=host" ];
             volumes = [ 
                 "/mnt/homeassistant/config:/config"
-                "/etc/configuration.yaml:/config/configuration.yaml"
+                "${haConfigFile}:/config/configuration.yaml"
                 "${config.age.secrets.homeassistant-secrets-file.path}:/config/secrets.yaml"
                 "/mnt/homeassistant/media:/media"
             ];
