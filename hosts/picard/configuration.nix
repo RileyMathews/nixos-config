@@ -170,7 +170,6 @@
       just
       keyutils
       lazygit
-      librewolf
       mesa-demos
       mpv
       nodejs
