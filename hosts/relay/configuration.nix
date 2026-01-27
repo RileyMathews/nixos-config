@@ -12,7 +12,10 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/nginx-multi-proxy
+    ./../../modules/dns
   ];
+  services.cloudflare-dns.enable = true;
+  services.cloudflare-dns.domains = [ "pve.rileymathews.com" ];
   networking.hostName = "relay";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
@@ -30,11 +33,6 @@
   myNginx.proxies.vaultwarden = {
     listenHost = "vaultwarden.rileymathews.com";
     backendHost = "http://worf:8222";
-    proxyProtocol = true;
-  };
-  myNginx.proxies.proxmox = {
-    listenHost = "pve.rileymathews.com";
-    backendHost = "https://shipyard:8006";
     proxyProtocol = true;
   };
 }
