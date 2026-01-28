@@ -152,8 +152,6 @@
       brightnessctl
       btop
       catppuccin-cursors.mochaDark
-      nix-search-cli
-      spotify
       curl
       dunst
       fastfetch
@@ -172,14 +170,17 @@
       lazygit
       mesa-demos
       mpv
+      nix-search-cli
       nodejs
       pavucontrol
+      playerctl
       qutebrowser
       ripgrep
       rofi
       signal-desktop
       slack
       slurp
+      spotify
       stow
       thunderbird-bin
       tldr
