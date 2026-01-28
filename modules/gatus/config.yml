@@ -92,3 +92,7 @@ endpoints:
   - name: vikunja
     <<: *defaults
     url: "https://vikunja.rileymathews.com"
+
+  - name: buffer
+    <<: *defaults
+    url: "https://buffer.rileymathews.com"
