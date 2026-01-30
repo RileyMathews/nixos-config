@@ -25,9 +25,13 @@
       url = "github:kolide/nix-agent/main";
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq }:
     let
       system = "x86_64-linux";
 
@@ -54,6 +58,7 @@
           modules = [
             ./hosts/picard/configuration.nix
             kolide.nixosModules.kolide-launcher
+            auto-cpufreq.nixosModules.default
           ];
         };
 

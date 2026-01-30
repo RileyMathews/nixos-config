@@ -45,7 +45,11 @@
   };
 
   hardware = {
-    system76.enableAll = true;
+    system76 = {
+      firmware-daemon.enable = true;
+      kernel-modules.enable = true;
+      power-daemon.enable = true;
+    };
     bluetooth.enable = true;
     graphics = {
       enable = true;
@@ -116,6 +120,19 @@
   };
 
   programs = {
+    auto-cpufreq = {
+      enable = true;
+      settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "never";
+        };
+        charger = {
+          governor = "performance";
+          turbo = "auto";
+        };
+      };
+    };
     obs-studio.enable = true;
     hyprland = {
       enable = true;
@@ -172,6 +189,7 @@
       mpv
       nix-search-cli
       nodejs
+      nvtopPackages.nvidia
       pavucontrol
       playerctl
       qutebrowser
