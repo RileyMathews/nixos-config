@@ -39,5 +39,6 @@ in
   "joplin-credentials-file.age".publicKeys = [riley discovery];
   "vikunja-credentials-file.age".publicKeys = [riley discovery];
   "buffer-credentials-file.age".publicKeys = [riley discovery];
+  "openwebui-credentials-file.age".publicKeys = [riley discovery];
   "homeassistant-secrets-file.age".publicKeys = [riley bridge];
 }

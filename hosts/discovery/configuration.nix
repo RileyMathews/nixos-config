@@ -25,6 +25,7 @@
     ./../../modules/vikunja
     ./../../modules/webhooks
     ./../../modules/buffer
+    ./../../modules/open-webui
     ./../../modules/podman-exporter
   ];
   networking.hostName = "discovery";

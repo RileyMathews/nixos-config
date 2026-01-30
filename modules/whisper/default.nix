@@ -33,7 +33,7 @@
                     PUID = "1000";
                     PGID = "1000";
                     TZ = "America/Chicago";
-                    WHISPER_MODEL = "large";
+                    WHISPER_MODEL = "small";
                     NVIDIA_VISIBLE_DEVICES = "all";
                     NVIDIA_DRIVER_CAPABILITIES = "compute,video,utility";
                 };
