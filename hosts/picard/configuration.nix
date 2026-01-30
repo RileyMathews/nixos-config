@@ -48,7 +48,7 @@
     system76 = {
       firmware-daemon.enable = true;
       kernel-modules.enable = true;
-      pwer-daemon.enable = true;
+      power-daemon.enable = true;
     };
     bluetooth.enable = true;
     graphics = {
@@ -189,6 +189,7 @@
       mpv
       nix-search-cli
       nodejs
+      nvtopPackages.nvidia
       pavucontrol
       playerctl
       qutebrowser
