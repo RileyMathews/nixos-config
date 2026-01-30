@@ -16,6 +16,7 @@ unstablePkgs,
     ./../../modules/immich-ml
     ./../../modules/whisper
     ./../../modules/piper
+    ./../../modules/ollama
     ./../../modules/podman-exporter
   ];
 
