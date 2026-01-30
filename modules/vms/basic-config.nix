@@ -1,4 +1,5 @@
 {
+  config,
   modulesPath,
   lib,
   pkgs,
@@ -88,7 +89,8 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [9002];
+  networking.firewall.allowedTCPPorts = [9002]
+    ++ lib.optionals config.virtualisation.podman.enable [9882];
 
   system.stateVersion = "25.11";
 }

@@ -14,6 +14,7 @@
     ./../../modules/tailscale
     ./../../modules/gatus
     ./../../modules/ntfy
+    ./../../modules/podman-exporter
   ];
   networking.hostName = "defiant";
   nix.settings.experimental-features = ["nix-command" "flakes"];

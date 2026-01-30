@@ -1,19 +1,8 @@
 # NixOS Configuration - Agent Guidelines
 
-## Build Commands
-- Build configuration: `just build HOSTNAME` or `nix run nixpkgs#nixos-rebuild -- build --flake .#HOSTNAME`
-- Deploy to remote: `just deploy .#HOSTNAME user@host` or `nix run nixpkgs#nixos-rebuild -- switch --flake .#HOSTNAME --target-host user@host --use-remote-sudo`
-- Provision new system: `just provision .#HOSTNAME root@ip` or `nix run github:nix-community/nixos-anywhere -- --flake .#HOSTNAME --target-host root@ip`
-- Enter dev shell: `nix develop`
+This is my nix configuration repository. It is responsible mostly for configuring the VMs in my homelab though it also has one laptop 'picard' that is configured here as well.
 
-## Code Style Guidelines
-- Use 2-space indentation for Nix expressions
-- Module structure: options → config → assertions (in that order)
-- Use `with lib;` at top of modules for brevity
-- Import dependencies explicitly in flake.nix inputs
-- Use descriptive option names with consistent prefixes (e.g., `myCaddy.*`, `services.backup.*`)
-- Always include `type`, `default`, and `description` for options
-- Use `mkIf cfg.enable` for conditional configuration blocks
-- Include assertions for required options when enabling modules
-- Use `builtins.readFile` for external script content
-- Follow NixOS module conventions with proper attribute paths
+It follows a pretty standard pattern where hosts are defined in the flake.nix file. These import a vanilla configuration.nix file for each host and then there are
+quite a few modules that are shared between each host. The modules directory contains some moduels that are more low level like defining an nginx config
+that is used across pretty much every VM and some modules that just define app containers and their direct dependencies that are only used on one VM.
+

@@ -35,7 +35,28 @@
         http_addr = "127.0.0.1";
       };
     };
+    provision = {
+      enable = true;
+      datasources.settings.datasources = [
+        {
+          name = "Prometheus";
+          type = "prometheus";
+          access = "proxy";
+          url = "http://127.0.0.1:${toString config.services.prometheus.port}";
+          isDefault = true;
+        }
+      ];
+      dashboards.settings.providers = [
+        {
+          name = "default";
+          options.path = "/etc/grafana-dashboards";
+        }
+      ];
+    };
   };
+
+  environment.etc."grafana-dashboards/podman.json".source = ./podman-dashboard.json;
+  environment.etc."grafana-dashboards/node-exporter.json".source = ./node-exporter-dashboard.json;
 
   services.prometheus = {
     enable = true;
@@ -66,6 +87,18 @@
             "backup-server:9002"
             "couchdb:9002"
             "relay:9002"
+          ];
+        }];
+      }
+      {
+        job_name = "podman";
+        static_configs = [{
+          targets = [
+            "borg:9882"
+            "data:9882"
+            "defiant:9882"
+            "bridge:9882"
+            "discovery:9882"
           ];
         }];
       }

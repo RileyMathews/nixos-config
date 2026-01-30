@@ -25,6 +25,7 @@
     ./../../modules/vikunja
     ./../../modules/webhooks
     ./../../modules/buffer
+    ./../../modules/podman-exporter
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];

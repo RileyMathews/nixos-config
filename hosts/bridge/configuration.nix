@@ -12,6 +12,7 @@
     ./../../modules/tailscale
     ./../../modules/homeassistant
     ./../../modules/homebridge
+    ./../../modules/podman-exporter
   ];
 
   networking.hostName = "bridge";

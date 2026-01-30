@@ -16,6 +16,7 @@ unstablePkgs,
     ./../../modules/immich-ml
     ./../../modules/whisper
     ./../../modules/piper
+    ./../../modules/podman-exporter
   ];
 
   networking.hostName = "data";
