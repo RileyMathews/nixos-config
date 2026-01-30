@@ -1,10 +1,10 @@
 {
-  config,
-  modulesPath,
-  lib,
-  pkgs,
-  unstablePkgs,
-  ...
+config,
+modulesPath,
+lib,
+pkgs,
+unstablePkgs,
+...
 }:
 {
   imports = [
@@ -13,6 +13,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/immich-transcoding
+    ./../../modules/immich-ml
     ./../../modules/whisper
     ./../../modules/piper
   ];
@@ -36,6 +37,14 @@
 
   boot.kernelModules = [ "nfs" ];
   boot.supportedFilesystems = [ "nfs" ];
-  virtualisation.podman.enable = true;
   systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
+  environment.systemPackages = with pkgs; [
+    nvtopPackages.nvidia
+  ];
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
 }
