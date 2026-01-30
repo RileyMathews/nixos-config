@@ -52,6 +52,7 @@
                 PAPERLESS_DBHOST = "pg17.tailscale.rileymathews.com";
                 PAPERLESS_URL = "https://paperless.rileymathews.com";
                 PAPERLESS_TIME_ZONE = "America/Chicago";
+                PAPERLESS_CONSUMER_POLLING = "5";
             };
             environmentFiles = [ config.age.secrets.paperless-credentials-file.path ];
         };

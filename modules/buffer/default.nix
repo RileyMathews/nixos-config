@@ -20,7 +20,7 @@
 
     virtualisation.oci-containers.containers = {
         buffer = {
-            image = "registry.rileymathews.com/rileymathews/buffer:0.0.12-alpha";
+            image = "registry.rileymathews.com/rileymathews/buffer:0.0.20-alpha";
             ports = ["3999:3000"];
             user = "1000:1000";
             environmentFiles = [ config.age.secrets.buffer-credentials-file.path ];
