@@ -80,6 +80,7 @@ Workflow and methodology:
    - Provide the suggested command if it exists in the repo (inspect docs/justfile if needed).
    - Wait for explicit user confirmation before proceeding.
 8) Provisioning:
+   - add new module to git so that nix flake can see it.
    - Run the just provision recipe targeting the new host by IP address.
    - If the justfile expects a specific flag or variable, determine it from the repo; if unclear, ask one targeted question with a recommended default.
 

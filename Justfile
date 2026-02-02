@@ -5,7 +5,7 @@ deploy HOST:
     nix run nixpkgs#nixos-rebuild -- switch --flake .#{{HOST}} --target-host root@{{HOST}}
 
 provision FLAKEPATH IP:
-    nix run github:nix-community/nixos-anywhere -- --flake {{FLAKEPATH}} --target-host root@{{IP}}
+    nix run github:nix-community/nixos-anywhere -- --flake {{FLAKEPATH}} --target-host root@{{IP}} --copy-host-keys
 
 build-iso:
     nix run nixpkgs#nixos-rebuild -- build-image --flake .#iso --image-variant iso

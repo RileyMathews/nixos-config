@@ -16,7 +16,8 @@ let
   data = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEU1lucp6jkoONSvMbz0ds4N3rYhuT02uwXMkTZKHHQD root@data";
   redis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILQ/lz7yITSSPMq2ph0tcGpNs89b+yUurCVhJu2QJbMx root@redis";
   engineering = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFxkcMdBd1XreDuoL6Rqm1z1+33oLNixRWZJ0dz6+2Xq root@engineering";
-  all = [local riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb data redis engineering];
+  enterprise = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOErkdPfh6ssrA5xrRL1YJ5dxIf90amvZdi88GuuNGPF root@enterprise";
+  all = [local riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb data redis engineering enterprise];
 in
 {
   # Cloudflare credentials for ACME DNS challenge
