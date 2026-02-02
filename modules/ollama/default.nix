@@ -14,7 +14,7 @@
     };
 
     virtualisation.oci-containers.containers.ollama = {
-        image = "ollama/ollama:0.15.2";
+        image = "ollama/ollama:0.15.4";
         ports = [ "11434:11434" ];
         environment = {
             OLLAMA_HOST = "0.0.0.0:11434";

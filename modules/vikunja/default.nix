@@ -28,11 +28,12 @@
 
         containers.vikunja = {
             definition = {
-                image = "vikunja/vikunja:0.24.6";
+                image = "vikunja/vikunja:1.0.0";
                 ports = [ "3456:3456" ];
                 volumes = [ "/mnt/vikunja/files:/app/vikunja/files" ];
+                user = "1000:1000";
                 environment = {
-                    VIKUNJA_SERVICE_PUBLIC_URL = "https://vikunja.rileymathews.com";
+                    VIKUNJA_SERVICE_PUBLICURL = "https://vikunja.rileymathews.com";
                     VIKUNJA_DATABASE_TYPE = "postgres";
                     VIKUNJA_DATABASE_HOST = "pg17.tailscale.rileymathews.com";
                     VIKUNJA_DATABASE_PORT = "5432";
