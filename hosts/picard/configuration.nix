@@ -134,6 +134,9 @@
       };
     };
     obs-studio.enable = true;
+    niri = {
+      enable = true;
+    };
     hyprland = {
       enable = true;
       package = unstablePkgs.hyprland;
