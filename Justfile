@@ -1,8 +1,8 @@
 build HOSTNAME:
     nix run nixpkgs#nixos-rebuild -- build --flake .#{{HOSTNAME}}
 
-deploy FLAKEPATH HOST:
-    nix run nixpkgs#nixos-rebuild -- switch --flake {{FLAKEPATH}} --target-host root@{{HOST}}
+deploy HOST:
+    nix run nixpkgs#nixos-rebuild -- switch --flake .#{{HOST}} --target-host root@{{HOST}}
 
 provision FLAKEPATH IP:
     nix run github:nix-community/nixos-anywhere -- --flake {{FLAKEPATH}} --target-host root@{{IP}}
