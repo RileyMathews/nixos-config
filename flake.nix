@@ -194,7 +194,7 @@
           system = "x86_64-linux";
           specialArgs = {inherit system unstablePkgs; };
           modules = [
-            ./hosts/engineering/configuration.nix
+            ./hosts/iso/configuration.nix
           ];
         };
       };
