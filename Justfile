@@ -7,6 +7,9 @@ deploy HOST:
 provision FLAKEPATH IP:
     nix run github:nix-community/nixos-anywhere -- --flake {{FLAKEPATH}} --target-host root@{{IP}}
 
+build-iso:
+    nix run nixpkgs#nixos-rebuild -- build-image --flake .#iso --image-variant iso
+
 # Deploy all VMs sequentially (fails immediately on any error)
 deploy-all-vms:
     #!/usr/bin/env bash

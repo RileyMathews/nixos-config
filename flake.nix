@@ -189,6 +189,16 @@
             ./hosts/engineering/configuration.nix
           ];
         };
+
+        iso = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {inherit system unstablePkgs; };
+          modules = [
+            disko.nixosModules.disko
+            agenix.nixosModules.default
+            ./hosts/engineering/configuration.nix
+          ];
+        };
       };
 
       # List of VMs for batch deployment (in flake definition order)
@@ -206,16 +216,6 @@
         "redis"
         "engineering"
       ];
-
-      packages.x86_64-linux = {
-        iso = nixos-generators.nixosGenerate {
-          system = "x86_64-linux";
-          format = "iso";
-          modules = [
-            ./hosts/iso/configuration.nix
-          ];
-        };
-      };
 
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = with pkgs; [
