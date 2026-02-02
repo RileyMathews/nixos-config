@@ -1,1 +1,6 @@
 .direnv
+.envrc.secret
+result
+age
+
+secrets/keys/agenix-master.agekey

@@ -1,5 +1,6 @@
 let
   # Your user SSH public key
+  local = "age1zdptqyrz3qt609tuw4f2t6ffvfuu7dgxhcgn3kdhc3d4ztlq53kqnx0279";
   riley = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com";
   borg = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0BPGd3sFaR0lrLuG6STXWqJHowivuXf2s02TSE/eQj root@nixos-test";
   pg17 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILvOTkyp4FxnjriR+Y3E25kaBKdtXWekYph3m9SWSzLX root@nixos";
@@ -15,7 +16,7 @@ let
   data = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEU1lucp6jkoONSvMbz0ds4N3rYhuT02uwXMkTZKHHQD root@data";
   redis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILQ/lz7yITSSPMq2ph0tcGpNs89b+yUurCVhJu2QJbMx root@redis";
   engineering = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFxkcMdBd1XreDuoL6Rqm1z1+33oLNixRWZJ0dz6+2Xq root@engineering";
-  all = [riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb data redis engineering];
+  all = [local riley borg pg17 playground forgejo backup-server defiant worf discovery relay bridge couchdb data redis engineering];
 in
 {
   # Cloudflare credentials for ACME DNS challenge
