@@ -134,9 +134,6 @@
       };
     };
     obs-studio.enable = true;
-    niri = {
-      enable = true;
-    };
     hyprland = {
       enable = true;
       package = unstablePkgs.hyprland;
@@ -178,6 +175,7 @@
       ffmpeg
       fzf
       gcc
+      gh
       git
       git-prole
       grim
@@ -199,6 +197,7 @@
       ripgrep
       rofi
       signal-desktop
+      skopeo
       slack
       slurp
       spotify
