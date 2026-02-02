@@ -190,16 +190,6 @@
           ];
         };
 
-        enterprise = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/enterprise/configuration.nix
-          ];
-        };
-
         iso = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {inherit system unstablePkgs; };
