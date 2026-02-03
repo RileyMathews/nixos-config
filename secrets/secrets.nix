@@ -27,15 +27,15 @@ in
   "miniflux-env-file.age".publicKeys = [riley hostKeysByName.discovery];
   "vaultwarden-env-file.age".publicKeys = [riley hostKeysByName.worf];
   "pg17-admin-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
-  "mealie-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "mealie-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "immich-credentials-file.age".publicKeys = [riley hostKeysByName.discovery hostKeysByName.data];
   "karakeep-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
-  "paperless-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
-  "homebox-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "paperless-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
+  "homebox-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "immich-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
   "joplin-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
-  "vikunja-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
-  "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "vikunja-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
+  "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
   "homeassistant-secrets-file.age".publicKeys = [riley hostKeysByName.bridge];
 }

@@ -99,6 +99,8 @@
             "defiant:9882"
             "bridge:9882"
             "discovery:9882"
+            "enterprise:9882"
+            "yamato:9882"
           ];
         }];
       }

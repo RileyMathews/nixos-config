@@ -12,18 +12,12 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
-    ./../../modules/mealie
     ./../../modules/docker-registry
-    ./../../modules/audiobookshelf
-    ./../../modules/searxng
-    ./../../modules/karakeep
-    ./../../modules/immich
-    ./../../modules/paperless
-    ./../../modules/homebox
     ./../../modules/miniflux
+    ./../../modules/karakeep
+    ./../../modules/audiobookshelf
+    ./../../modules/immich
     ./../../modules/joplin
-    ./../../modules/vikunja
-    ./../../modules/webhooks
     ./../../modules/buffer
     ./../../modules/open-webui
     ./../../modules/podman-exporter
