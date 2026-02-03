@@ -18,10 +18,15 @@ def ensure_required_commands() -> None:
     proxmox.require_cmd("agenix")
     proxmox.require_cmd("ping")
     proxmox.require_cmd("ssh-keyscan")
+    proxmox.require_cmd("git")
 
 
 def run_just(args: list[str], repo_root: pathlib.Path) -> None:
     proxmox.run_command(["just", *args], cwd=repo_root)
+
+
+def run_git_add(args: list[str], repo_root: pathlib.Path) -> None:
+    proxmox.run_command(["git", "add", *args], cwd=repo_root)
 
 
 def read_vm_name() -> str:
@@ -142,6 +147,7 @@ def main() -> None:
 
     shutil.copytree(host_template_pre_dir, host_dir)
     proxmox.replace_hostname_placeholder(host_dir / "configuration.nix", vm_name)
+    run_git_add([str(host_dir)], repo_root)
 
     run_just(["build-iso"], repo_root)
 
@@ -204,6 +210,7 @@ def main() -> None:
 
     host_keys_dir.mkdir(parents=True, exist_ok=True)
     host_key_path.write_text(f"{host_key_line}\n", encoding="utf-8")
+    run_git_add([str(host_keys_dir)], repo_root)
 
     secrets_dir = repo_root / "secrets"
     proxmox.run_command(["agenix", "--rekey"], cwd=secrets_dir)
@@ -211,6 +218,7 @@ def main() -> None:
     shutil.rmtree(host_dir)
     shutil.copytree(host_template_post_dir, host_dir)
     proxmox.replace_hostname_placeholder(host_dir / "configuration.nix", vm_name)
+    run_git_add([str(host_dir)], repo_root)
 
     run_just(["finalize", vm_name, ip_address], repo_root)
 
