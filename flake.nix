@@ -115,8 +115,9 @@
         buildInputs = with pkgs; [
           agenix.packages.${system}.default
           jq
+          python3
+          python3Packages.requests
         ];
       };
     };
 }
-

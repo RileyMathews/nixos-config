@@ -4,3 +4,4 @@ result
 age
 
 secrets/keys/agenix-master.agekey
+__pycache__
