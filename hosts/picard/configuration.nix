@@ -201,6 +201,7 @@
       slack
       slurp
       spotify
+      luajitPackages.lua-lsp
       stow
       thunderbird-bin
       tldr
