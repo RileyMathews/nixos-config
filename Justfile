@@ -27,7 +27,7 @@ deploy-all-vms:
       echo "========================================="
       echo "Deploying $vm..."
       echo "========================================="
-      just deploy ".#$vm" "$vm"
+      just deploy $vm
     done
     echo ""
     echo "========================================="

@@ -100,7 +100,6 @@
         "worf"
         "forgejo"
         "backup-server"
-        "borg"
         "defiant"
         "bridge"
         "discovery"
@@ -109,6 +108,7 @@
         "redis"
         "engineering"
         "enterprise"
+        "yamato"
       ];
 
       devShells.x86_64-linux.default = pkgs.mkShell {
