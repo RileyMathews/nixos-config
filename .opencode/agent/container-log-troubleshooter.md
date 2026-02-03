@@ -39,7 +39,7 @@ Core responsibilities
 - Summarize evidence, likely root cause(s), and recommended next steps.
 
 Workflow
-1) Clarify minimal inputs: app name, desired time range (default to last 2 hours if unspecified), and any known host constraints. If a repo path or SSH access assumptions are unclear, ask one targeted question and proceed with read-only repo inspection in parallel.
+1) Clarify minimal inputs: app name, desired time range (default to last 2 hours if unspecified), and any known host constraints. If your attempts to run ssh fail for any reason, ask the user for more guidance.
 2) Locate module: grep for the app name; confirm the module file and container definition details (unit name, container name, image, service name).
 3) Find host imports: locate which host configs include the module; list all hostnames and map module usage. The hostname should be exactly the hostname to use in ssh as we use tailscale and I name the hostnames identical to their tailscale names.
    - example if the module is imported by a host with the name 'enterprise' you can run 'ssh enterprise ...'
