@@ -23,7 +23,7 @@
     };
     kolide = {
       url = "github:kolide/nix-agent/main";
-      inputs.nixpkgs.follows = "nixpkgs"; 
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     auto-cpufreq = {
       url = "github:AdnanHodzic/auto-cpufreq";
@@ -37,169 +37,64 @@
 
       pkgs = import nixpkgs {
         inherit system;
-
-        config = {
-          allowUnfree = true;
-        };
+        config.allowUnfree = true;
       };
 
       unstablePkgs = import nixpkgs-unstable {
         inherit system;
-        config = {
-          allowUnfree = true;
-        };
-      };
-    in
-      {
-      nixosConfigurations = {
-        picard = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            ./hosts/picard/configuration.nix
-            kolide.nixosModules.kolide-launcher
-            auto-cpufreq.nixosModules.default
-          ];
-        };
-
-        playground = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/playground/configuration.nix
-          ];
-        };
-
-        pg17 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/postgres-17/configuration.nix
-          ];
-        };
-
-        worf = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/worf/configuration.nix
-          ];
-        };
-
-        forgejo = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/forgejo/configuration.nix
-          ];
-        };
-
-        backup-server = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/backup-server/configuration.nix
-          ];
-        };
-
-        borg = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/borg/configuration.nix
-          ];
-        };
-
-        defiant = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/defiant/configuration.nix
-          ];
-        };
-
-        bridge = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/bridge/configuration.nix
-          ];
-        };
-
-        discovery = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/discovery/configuration.nix
-          ];
-        };
-
-        relay = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/relay/configuration.nix
-          ];
-        };
-
-        data = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/data/configuration.nix
-          ];
-        };
-
-        redis = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/redis/configuration.nix
-          ];
-        };
-
-        engineering = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            disko.nixosModules.disko
-            agenix.nixosModules.default
-            ./hosts/engineering/configuration.nix
-          ];
-        };
-
-        iso = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {inherit system unstablePkgs; };
-          modules = [
-            ./hosts/iso/configuration.nix
-          ];
-        };
+        config.allowUnfree = true;
       };
 
-      # List of VMs for batch deployment (in flake definition order)
+      lib = nixpkgs.lib;
+
+      # Optional: define per-host extra modules here.
+      # Anything not listed falls back to defaultModules.
+      hostExtras = {
+        picard = [
+          kolide.nixosModules.kolide-launcher
+          auto-cpufreq.nixosModules.default
+        ];
+        iso = [ ];
+      };
+
+      # Optional: define per-host "base modules" you want on most machines
+      defaultModules = [
+        disko.nixosModules.disko
+        agenix.nixosModules.default
+      ];
+
+      mkHost = hostName:
+        let
+          hostPath = ./hosts/${hostName}/configuration.nix;
+          extras = hostExtras.${hostName} or [ ];
+          modules =
+            # If you want *some* hosts (like iso) to NOT get default modules,
+            # just set hostExtras.iso = [] and move iso to a "noDefaults" set,
+            # or keep a hostDefaults map. Simplest: special-case here:
+            (if hostName == "iso" then [ hostPath ] else defaultModules ++ [ hostPath ] ++ extras);
+        in
+        lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit system unstablePkgs; };
+          inherit modules;
+        };
+
+      # Discover directories under ./hosts automatically
+      hostNames =
+        builtins.attrNames (builtins.readDir ./hosts);
+
+      # Keep only directories that contain configuration.nix
+      validHostNames =
+        lib.filter (n:
+          let t = (builtins.readDir ./hosts).${n};
+          in t == "directory" && builtins.pathExists (./hosts/${n}/configuration.nix)
+        ) hostNames;
+
+    in {
+      nixosConfigurations =
+        lib.genAttrs validHostNames mkHost;
+
+      # If you still want an explicit list for vmDeployments, keep it separate
       vmDeployments = [
         "pg17"
         "worf"
@@ -224,3 +119,4 @@
       };
     };
 }
+

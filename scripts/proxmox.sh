@@ -1,16 +1,47 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v jq >/dev/null 2>&1; then
-  echo "jq is required but was not found in PATH" >&2
-  exit 1
-fi
+require_cmd() {
+  local cmd="$1"
+
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "${cmd} is required but was not found in PATH" >&2
+    exit 1
+  fi
+}
+
+require_cmd jq
+require_cmd curl
+require_cmd ssh-keyscan
+require_cmd just
+require_cmd agenix
+require_cmd ping
 
 PROXMOX_BASE_URL="https://shipyard:8006"
 PROXMOX_NODE="shipyard"
 PROXMOX_STORAGE="local"
 PROXMOX_DISK_STORAGE="nvme"
 PROXMOX_DEBUG="${PROXMOX_DEBUG:-1}"
+
+replace_hostname_placeholder() {
+  local config_path="$1"
+  local hostname="$2"
+
+  if [[ ! -f "$config_path" ]]; then
+    echo "Missing configuration.nix at ${config_path}" >&2
+    return 1
+  fi
+
+  if ! grep -q '{{template}}' "$config_path"; then
+    echo "Expected hostname placeholder {{template}} not found in ${config_path}" >&2
+    return 1
+  fi
+
+  local escaped_hostname="$hostname"
+  escaped_hostname="${escaped_hostname//&/\\&}"
+  escaped_hostname="${escaped_hostname//\//\\/}"
+  sed -i "s/{{template}}/${escaped_hostname}/g" "$config_path"
+}
 
 _proxmox_api_request() {
   local method="$1"
@@ -280,6 +311,37 @@ if [[ $# -ne 1 ]]; then
 fi
 
 vm_name="$1"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+hosts_dir="${repo_root}/hosts"
+host_dir="${hosts_dir}/${vm_name}"
+host_template_pre_dir="${hosts_dir}/template-pre"
+host_template_post_dir="${hosts_dir}/template-post"
+host_keys_dir="${repo_root}/secrets/host-keys"
+host_key_path="${host_keys_dir}/${vm_name}.pub"
+
+if [[ -e "$host_dir" ]]; then
+  echo "Host directory already exists at ${host_dir}" >&2
+  exit 1
+fi
+
+if [[ -e "$host_key_path" ]]; then
+  echo "Host key already exists at ${host_key_path}" >&2
+  exit 1
+fi
+
+if [[ ! -d "$host_template_pre_dir" ]]; then
+  echo "Host pre-provision template directory not found at ${host_template_pre_dir}" >&2
+  exit 1
+fi
+
+if [[ ! -d "$host_template_post_dir" ]]; then
+  echo "Host post-provision template directory not found at ${host_template_post_dir}" >&2
+  exit 1
+fi
+
+pushd "$repo_root" >/dev/null
+cp -a "$host_template_pre_dir" "$host_dir"
+replace_hostname_placeholder "${host_dir}/configuration.nix" "$vm_name"
 
 just build-iso
 
@@ -355,14 +417,64 @@ while true; do
   ip_address="$(jq -r '[.data.result[]?."ip-addresses"[]? | select(."ip-address-type" == "ipv4") | ."ip-address" | select(. != "127.0.0.1") | select((startswith("169.254.")) | not)] | .[0] // empty' <<<"$interfaces_json")"
 
   if [[ -n "$ip_address" ]]; then
-    host_key="$(ssh-keyscan -t ed25519 "$ip_address" 2>/dev/null)"
-    host_key_type="$(awk '{print $2}' <<<"$host_key")"
-    host_key_value="$(awk '{print $3}' <<<"$host_key")"
-    jq -cn --arg ip "$ip_address" --arg key_type "$host_key_type" --arg key "$host_key_value" \
-      '{ip: $ip, host_key: {type: $key_type, value: $key}}'
     break
   fi
 
   sleep "$poll_interval_seconds"
 done
 
+if [[ -z "${ip_address-}" ]]; then
+  echo "Failed to resolve guest IP" >&2
+  exit 1
+fi
+
+just provision ".#${vm_name}" "${ip_address}"
+
+post_provision_deadline_seconds=300
+post_provision_start_time="$(date +%s)"
+post_provision_log_time=0
+
+while true; do
+  now="$(date +%s)"
+  if (( now - post_provision_start_time > post_provision_deadline_seconds )); then
+    echo "Timed out waiting for host to respond to ping after provision" >&2
+    exit 1
+  fi
+
+  if (( now - post_provision_log_time >= 15 )); then
+    echo "Waiting for host to respond to ping after provision..." >&2
+    post_provision_log_time="$now"
+  fi
+
+  if ping -c 1 -W 2 "$ip_address" >/dev/null 2>&1; then
+    break
+  fi
+
+  sleep "$poll_interval_seconds"
+done
+
+host_key="$(ssh-keyscan -t ed25519 "$ip_address" 2>/dev/null)"
+host_key_line="$(awk '$2 == "ssh-ed25519" {print $2, $3; exit}' <<<"$host_key")"
+if [[ -z "$host_key_line" ]]; then
+  echo "Failed to parse host SSH key" >&2
+  exit 1
+fi
+
+host_key_type="ssh-ed25519"
+host_key_value="$(awk '{print $2}' <<<"$host_key_line")"
+jq -cn --arg ip "$ip_address" --arg key_type "$host_key_type" --arg key "$host_key_value" \
+  '{ip: $ip, host_key: {type: $key_type, value: $key}}'
+
+mkdir -p "$host_keys_dir"
+printf '%s\n' "$host_key_line" > "$host_key_path"
+
+pushd "${repo_root}/secrets" >/dev/null
+agenix --rekey
+popd >/dev/null
+
+rm -rf "$host_dir"
+cp -a "$host_template_post_dir" "$host_dir"
+replace_hostname_placeholder "${host_dir}/configuration.nix" "$vm_name"
+
+just finalize "${vm_name}" "${ip_address}"
+popd >/dev/null

@@ -4,8 +4,11 @@ build HOSTNAME:
 deploy HOST:
     nix run nixpkgs#nixos-rebuild -- switch --flake .#{{HOST}} --target-host root@{{HOST}}
 
+finalize FLAKEPATH IP:
+    nix run nixpkgs#nixos-rebuild -- switch --flake .#{{FLAKEPATH}} --target-host root@{{IP}}
+
 provision FLAKEPATH IP:
-    nix run github:nix-community/nixos-anywhere -- --flake {{FLAKEPATH}} --target-host root@{{IP}} --copy-host-keys
+    nix run github:nix-community/nixos-anywhere -- --flake {{FLAKEPATH}} --target-host root@{{IP}}
 
 build-iso:
     nix run nixpkgs#nixos-rebuild -- build-image --flake .#iso --image-variant iso

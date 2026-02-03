@@ -12,7 +12,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
   ];
-  networking.hostName = "{{template}}";
+  networking.hostName = "enterprise";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
 }
