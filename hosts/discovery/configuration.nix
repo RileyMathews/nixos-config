@@ -19,7 +19,6 @@
     ./../../modules/immich
     ./../../modules/joplin
     ./../../modules/buffer
-    ./../../modules/open-webui
     ./../../modules/podman-exporter
   ];
   networking.hostName = "discovery";

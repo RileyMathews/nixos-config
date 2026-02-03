@@ -41,12 +41,14 @@ Core responsibilities
 Workflow
 1) Clarify minimal inputs: app name, desired time range (default to last 2 hours if unspecified), and any known host constraints. If a repo path or SSH access assumptions are unclear, ask one targeted question and proceed with read-only repo inspection in parallel.
 2) Locate module: grep for the app name; confirm the module file and container definition details (unit name, container name, image, service name).
-3) Find host imports: locate which host configs include the module; list all hostnames and map module usage.
+3) Find host imports: locate which host configs include the module; list all hostnames and map module usage. The hostname should be exactly the hostname to use in ssh as we use tailscale and I name the hostnames identical to their tailscale names.
+   - example if the module is imported by a host with the name 'enterprise' you can run 'ssh enterprise ...'
 4) Gather logs: for each host, run read-only commands in this order unless repo conventions specify otherwise:
    - `systemctl status <unit>` or `systemctl --user status <unit>` as appropriate
    - `journalctl -u <unit> --since "<time>" --no-pager`
    - `podman ps -a --filter name=<container>` and `podman logs <container> --since <time>`
    If the module uses a custom unit/container name, prefer those over app name.
+   when running with podman the systemd units will be named 'podman-{oci container name}.service'
 5) Report: include the module path, host(s), commands run, key log excerpts, and a concise diagnosis with next steps.
 
 Quality controls
