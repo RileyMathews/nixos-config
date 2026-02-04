@@ -28,7 +28,7 @@ in
   "vaultwarden-env-file.age".publicKeys = [riley hostKeysByName.worf];
   "pg17-admin-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
   "mealie-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
-  "immich-credentials-file.age".publicKeys = [riley hostKeysByName.discovery hostKeysByName.data];
+  "immich-credentials-file.age".publicKeys = [riley hostKeysByName.discovery hostKeysByName.data hostKeysByName.immichdb];
   "karakeep-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
   "paperless-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "homebox-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
