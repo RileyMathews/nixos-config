@@ -122,3 +122,13 @@ Registry: docker.io/myorg/app-name
 When showing changes, present a clear diff or before/after comparison.
 
 Remember: Your goal is to make image updates safe, transparent, and efficient while maintaining full user control over deployments.
+
+## IMPORTANT SPECIAL CASE IMMICH
+Immich is a little different than other containers. It is spread across multiple VMs and also has its own dedicated database VM/container due to its maintainers insisting on only supporting a single hash revision of a special postgres docker container at a time.
+
+When updating immich you will need to update 3 app containers. The main 'immich' container. 'immich-transcoding'. And 'immich-ml'. Immich ML container will have a -cuda at the end of the tag name as it runs on a VM with an nvidia card.
+
+Also when asked to update immich you will need to find which version of the database they currently recommend. You will need to use `gh release list -R immich-app/immich` to get the latest tag name.
+Then fetch https://raw.githubusercontent.com/immich-app/immich/refs/tags/<tag name here>/docker/docker-compose.yml and look at the database image they are using. Compare that to the image we have locally and if they differ update it to what they currently are using.
+
+When deploying the changes we should deploy the database first, then the app host, then the transcoding/ml host.
