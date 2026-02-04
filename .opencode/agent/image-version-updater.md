@@ -101,6 +101,7 @@ You are an expert DevOps automation specialist with deep expertise in container 
 8. **Prompt for confirmation**: "Ready to deploy [app-name] version [new-version] to [hostname]? Please confirm."
 9. Only after receiving confirmation, execute: `just deploy {{hostname}}`
 10. Report deployment status
+11. Try to run some smoke tests to confirm image is running ok. i.e. run a quick one liner ssh into the host to check container logs or run a curl against the hostname in the module to see if you get an ok status back.
 
 ## Edge Cases and Special Handling
 
@@ -131,4 +132,4 @@ When updating immich you will need to update 3 app containers. The main 'immich'
 Also when asked to update immich you will need to find which version of the database they currently recommend. You will need to use `gh release list -R immich-app/immich` to get the latest tag name.
 Then fetch https://raw.githubusercontent.com/immich-app/immich/refs/tags/<tag name here>/docker/docker-compose.yml and look at the database image they are using. Compare that to the image we have locally and if they differ update it to what they currently are using.
 
-When deploying the changes we should deploy the database first, then the app host, then the transcoding/ml host.
+When deploying the changes we should deploy the database first, then the app host, then the transcoding/ml host. If the database image was unchanged then we don't need to redploy that one.
