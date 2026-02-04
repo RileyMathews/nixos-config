@@ -23,4 +23,5 @@
   systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+  networking.firewall.allowedTCPPorts = [80 443];
 }
