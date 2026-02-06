@@ -89,12 +89,6 @@
         passwordFile = config.age.secrets.pg17-admin-password-file.path;
       }
       {
-        name = "immich";
-        host = "discovery";
-        user = "immich";
-        passwordFile = config.age.secrets.immich-password-file.path;
-      }
-      {
         name = "vikunja";
         host = "pg17.tailscale.rileymathews.com";
         user = "backup";
@@ -108,7 +102,7 @@
       }
       {
         name = "immich";
-        host = "discovery";
+        host = "immichdb";
         user = "immich";
         passwordFile = config.age.secrets.immich-password-file.path;
       }

@@ -11,11 +11,9 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
-    ./../../modules/podman-exporter
-    ./../../modules/open-webui
-    ./../../modules/reverse-health-check
+    ./../../modules/immichdb
   ];
-  networking.hostName = "yamato";
+  networking.hostName = "immichdb";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
 }

@@ -12,11 +12,11 @@
 
     virtualisation.oci-containers.containers = {
         machine-learning = {
-            image = "ghcr.io/immich-app/immich-machine-learning:v2.5.2-cuda";
+            image = "ghcr.io/immich-app/immich-machine-learning:v2.5.3-cuda";
             environment = {
                 IMMICH_VERSION = "release";
                 # password in secrets file
-                DB_HOSTNAME = "pg-immich.rileymathews.com";
+                DB_HOSTNAME = "immichdb.rileymathews.com";
                 DB_USERNAME = "immich";
                 REDIS_HOSTNAME = "redis8.tailscale.rileymathews.com";
                 REDIS_DB_INDEX = "3";

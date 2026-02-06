@@ -29,7 +29,7 @@
 
     virtualisation.oci-containers.containers = {
         transcoding = {
-            image = "ghcr.io/immich-app/immich-server:v2.5.2";
+            image = "ghcr.io/immich-app/immich-server:v2.5.3";
             volumes = [ 
                 "/mnt/immich/uploads:/usr/src/app/upload" 
             ];

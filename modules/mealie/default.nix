@@ -28,7 +28,7 @@
 
         containers.mealie = {
             definition = {
-                image = "ghcr.io/mealie-recipes/mealie:v3.10.1";
+                image = "ghcr.io/mealie-recipes/mealie:v3.10.2";
                 ports = [ "9000:9000" ];
                 volumes = [ "/mnt/mealie/app/data:/app/data" ];
                 user = "1000:1000";
