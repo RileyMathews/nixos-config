@@ -8,7 +8,7 @@
 {
     imports = [../nginx-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["immich.rileymathews.com" "pg-immich.rileymathews.com"];
+    services.cloudflare-dns.domains = ["immich.rileymathews.com"];
 
     myNginx.proxies.immich = {
         listenHost = "immich.rileymathews.com";
