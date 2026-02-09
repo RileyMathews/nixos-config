@@ -9,6 +9,10 @@ from typing import Any, Iterable, Tuple
 import subprocess
 
 import requests
+import urllib3
+
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class ProxmoxError(RuntimeError):
