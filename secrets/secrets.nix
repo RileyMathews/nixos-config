@@ -38,4 +38,5 @@ in
   "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.yamato];
   "homeassistant-secrets-file.age".publicKeys = [riley hostKeysByName.bridge];
+  "opecde-test-secrets-file.age".publicKeys = [riley];
 }
