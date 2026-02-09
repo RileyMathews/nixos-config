@@ -117,6 +117,14 @@
   security = {
     tpm2.enable = true;
     rtkit.enable = true;
+    wrappers = {
+      "btop-perf" = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_perfmon+ep";
+        source = "${pkgs.btop}/bin/btop";
+      };
+    };
   };
 
   programs = {
@@ -167,7 +175,7 @@
       bitwarden-cli
       brave
       brightnessctl
-      btop
+      btop-cuda
       catppuccin-cursors.mochaDark
       curl
       dunst
@@ -222,7 +230,7 @@
   users.users.riley = {
     isNormalUser = true;
     description = "Riley Mathews";
-    extraGroups = [ "networkmanager" "wheel" "podman" ];
+    extraGroups = [ "networkmanager" "wheel" "podman" "video" ];
     shell = pkgs.zsh;
   };
   

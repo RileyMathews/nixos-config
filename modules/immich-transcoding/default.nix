@@ -36,7 +36,7 @@
             environment = {
                 IMMICH_VERSION = "release";
                 # password in secrets file
-                DB_HOSTNAME = "pg-immich.rileymathews.com";
+                DB_HOSTNAME = "immichdb.rileymathews.com";
                 DB_USERNAME = "immich";
                 IMMICH_WORKERS_INCLUDE = "microservices";
                 REDIS_HOSTNAME = "redis8.tailscale.rileymathews.com";
