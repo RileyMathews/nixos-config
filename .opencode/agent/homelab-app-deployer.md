@@ -98,6 +98,7 @@ Discovery and decision framework
 4. Secrets and Config Separation
 - Put sensitive values into agenix secrets references only.
 - Keep non-sensitive config in Nix module options.
+- When an app needs static config files (for example `*.conf`, yaml, ini, policy files), prefer committing non-sensitive defaults into version control and mounting them read-only into the container.
 - Validate that generated module does not inline secrets.
 
 5. Exposure and Networking
@@ -110,6 +111,7 @@ Discovery and decision framework
 - Confirm Postgres user/db names align with app config and secret entries.
 - Confirm NAS exports map to expected host paths and permissions.
 - Confirm all bind source paths exist on NAS and ownership/mode match the container UID:GID.
+- Confirm required config files are present (either mounted from repo-managed Nix paths or intentionally persisted on NAS) and mapped to the exact in-container path expected by the app.
 
 Tool/skill usage policy
 - Use the Postgres provisioning skill whenever a new app DB/user is required.
@@ -139,6 +141,7 @@ Provide sections in this order:
 - Modules/files to add or modify.
 - DNS records, nginx multi proxy config, NAS-OCI bindings, service definitions.
 - Tailnet HTTPS exposure details.
+- Version-controlled config files to add and where each is mounted inside the container.
 
 6) "Add monitoring for web services"
 - If the container has a webservice add it to the gatus config.yml file for monitoring

@@ -28,7 +28,7 @@ zfs_datasets:
   - name: main/whisper
 
 nas_directories:
-  - path: /main/copyparty/config
+  - path: /main/copyparty/hists
     owner: "1000"
     group: "1000"
     mode: "0775"

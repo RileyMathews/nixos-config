@@ -1,4 +1,7 @@
-{ ... }:
+{ pkgs, ... }:
+let
+  confFile = pkgs.writeText "configuration.yaml" (builtins.readFile ./copyparty.conf);
+in
 {
   imports = [
     ../nas-oci
@@ -27,8 +30,9 @@
         image = "copyparty/ac:1.20.6";
         ports = [ "127.0.0.1:3923:3923" ];
         volumes = [
-          "/mnt/copyparty/config:/cfg"
           "/mnt/copyparty/data:/w"
+          "/mnt/copyparty/hists:/cfg/hists"
+          "${confFile}:/cfg/copyparty.conf:ro"
         ];
         user = "1000:1000";
         environment = {
@@ -37,7 +41,7 @@
         cmd = [
           "--http-only"
           "--no-crt"
-          "--xff-src=127.0.0.0/8"
+          "--xff-src=lan"
           "--rproxy=1"
           "--site=https://copyparty.rileymathews.com/"
         ];
