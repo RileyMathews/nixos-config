@@ -104,3 +104,15 @@ endpoints:
   - name: grafana
     <<: *defaults
     url: "https://grafana.rileymathews.com"
+
+  - name: jellyfin
+    <<: *defaults
+    url: "https://jellyfin.rileymathews.com"
+
+  - name: copyparty
+    <<: *defaults
+    url: "https://copyparty.rileymathews.com"
+
+  - name: pinchflat
+    <<: *defaults
+    url: "https://pinchflat.rileymathews.com"

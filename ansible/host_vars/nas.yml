@@ -1,0 +1,129 @@
+---
+zfs_datasets:
+  - name: main
+  - name: main/audiobookshelf
+  - name: main/calibre
+  - name: main/couchdb
+  - name: main/copyparty
+  - name: main/data
+  - name: main/deadfire
+  - name: main/docker_images
+  - name: main/forgejo
+  - name: main/homeassistant
+  - name: main/homebox
+  - name: main/homebridge
+  - name: main/immich
+  - name: main/jellyfin
+  - name: main/karakeep
+  - name: main/mealie
+  - name: main/minio
+  - name: main/nextcloud
+  - name: main/paperless
+  - name: main/pinchflat
+  - name: main/piper
+  - name: main/radicale
+  - name: main/stump
+  - name: main/testing
+  - name: main/vaultwarden
+  - name: main/vikunja
+  - name: main/whisper
+
+nas_directories:
+  - path: /main/copyparty/hists
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/copyparty/data
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/jellyfin/config
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/jellyfin/media
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/jellyfin/media/pinchflat
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/pinchflat/config
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+
+nfs_exports:
+  - path: /main
+    clients:
+      - host: "*"
+        options: rw,sync,fsid=0,crossmnt,no_subtree_check
+  - path: /main/whisper
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/testing
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check
+  - path: /main/jellyfin
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check
+  - path: /main/stump
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/vaultwarden
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/immich
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/forgejo
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/nextcloud
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/radicale
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/audiobookshelf
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/homeassistant
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/homebridge
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/docker_images
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/couchdb
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/karakeep
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/paperless
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash
+  - path: /main/homebox
+    clients:
+      - host: "*"
+        options: rw,sync,no_subtree_check,no_root_squash

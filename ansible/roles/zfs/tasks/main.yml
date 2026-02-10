@@ -1,0 +1,7 @@
+---
+- name: Ensure ZFS datasets are present
+  community.general.zfs:
+    name: "{{ item.name }}"
+    state: present
+    extra_zfs_properties: "{{ item.properties | default({}) }}"
+  loop: "{{ zfs_datasets | default([]) }}"

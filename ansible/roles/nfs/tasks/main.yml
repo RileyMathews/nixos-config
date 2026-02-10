@@ -1,0 +1,15 @@
+---
+- name: Render NFS exports file
+  ansible.builtin.template:
+    src: exports.j2
+    dest: "{{ nfs_exports_file | default('/etc/exports') }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: reload_nfs
+
+- name: Ensure NFS service is enabled and running
+  ansible.builtin.systemd:
+    name: "{{ nfs_service_name | default('nfs-server') }}"
+    enabled: true
+    state: started

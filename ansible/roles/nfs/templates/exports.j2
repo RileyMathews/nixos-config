@@ -1,0 +1,3 @@
+{% for export in nfs_exports | default([]) %}
+{{ export.path | default('') }} {% for client in export.clients | default([]) %}{{ client.host | default('*') }}({{ client.options | default('rw,sync,no_subtree_check') }}){% if not loop.last %} {% endif %}{% endfor %}{{ '\n' }}
+{% endfor %}
