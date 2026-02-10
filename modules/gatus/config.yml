@@ -108,3 +108,7 @@ endpoints:
   - name: jellyfin
     <<: *defaults
     url: "https://jellyfin.rileymathews.com"
+
+  - name: copyparty
+    <<: *defaults
+    url: "https://copyparty.rileymathews.com"

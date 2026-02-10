@@ -1,0 +1,10 @@
+---
+- name: Ensure required NAS directories are present
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default('1000') }}"
+    group: "{{ item.group | default('1000') }}"
+    mode: "{{ item.mode | default('0775') }}"
+    recurse: "{{ item.recurse | default(false) | bool }}"
+  loop: "{{ nas_directories | default([]) }}"

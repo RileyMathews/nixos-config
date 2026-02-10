@@ -6,7 +6,7 @@
     owner: root
     group: root
     mode: "0644"
-  notify: Reload NFS server exports
+  notify: reload_nfs
 
 - name: Ensure NFS service is enabled and running
   ansible.builtin.systemd:

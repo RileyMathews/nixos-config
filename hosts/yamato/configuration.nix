@@ -14,6 +14,7 @@
     ./../../modules/podman-exporter
     ./../../modules/open-webui
     ./../../modules/jellyfin
+    ./../../modules/copyparty
     ./../../modules/reverse-health-check
   ];
   networking.hostName = "yamato";

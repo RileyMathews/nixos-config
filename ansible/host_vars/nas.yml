@@ -4,6 +4,7 @@ zfs_datasets:
   - name: main/audiobookshelf
   - name: main/calibre
   - name: main/couchdb
+  - name: main/copyparty
   - name: main/data
   - name: main/deadfire
   - name: main/docker_images
@@ -25,6 +26,16 @@ zfs_datasets:
   - name: main/vaultwarden
   - name: main/vikunja
   - name: main/whisper
+
+nas_directories:
+  - path: /main/copyparty/config
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/copyparty/data
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
 
 nfs_exports:
   - path: /main
