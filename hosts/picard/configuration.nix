@@ -69,8 +69,11 @@
         intelBusId  = "PCI:0:2:0";
         nvidiaBusId = "PCI:2:0:0";
         offload = {
+          enable = false;
+          enableOffloadCmd = false;
+        };
+        sync = {
           enable = true;
-          enableOffloadCmd = true;
         };
       };
     };
@@ -128,6 +131,7 @@
   };
 
   programs = {
+    firefox.enable = true;
     auto-cpufreq = {
       enable = true;
       settings = {
