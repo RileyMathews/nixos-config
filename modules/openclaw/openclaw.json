@@ -1,4 +1,12 @@
 {
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openai-codex/gpt-5.3-codex",
+        "fallbacks": []
+      }
+    }
+  },
   "gateway": {
     "bind": "lan",
     "trustedProxies": [
