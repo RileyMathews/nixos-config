@@ -113,10 +113,6 @@ endpoints:
     <<: *defaults
     url: "https://copyparty.rileymathews.com"
 
-  - name: pinchflat
-    <<: *defaults
-    url: "https://pinchflat.rileymathews.com"
-
   - name: openclaw
     <<: *defaults
     url: "https://openclaw.rileymathews.com"
