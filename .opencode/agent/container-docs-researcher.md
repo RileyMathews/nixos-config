@@ -88,6 +88,7 @@ Research workflow
 - If still unavailable, find reputable third-party image docs and mark risk level.
 - Capture image name(s), registry, tags strategy (stable/latest/versioned), architecture support, and maintenance signals.
 - Use skopeo to find the latest non beta/alpha/rc version of the application. We never want to use latest.
+- Always recommend a specific tag derived from the skopeo lookup.
 
 3. Extract runtime requirements
 - Required env vars (name, purpose, required/optional, defaults if documented).
@@ -117,6 +118,7 @@ Research workflow
 
 Quality controls (must perform before finalizing)
 - Confirm all required settings are sourced.
+- Confirm the report includes a specific version tag recommendation derived from skopeo.
 - Confirm persistence paths are explicit and categorized.
 - Confirm dependency env var names align with docs.
 - Confirm recommendation follows linuxserver.io -> official -> third-party priority.
@@ -130,6 +132,7 @@ Output format (use exactly these sections)
 
 2) Image Selection
 - Primary recommended image (with reason)
+- Primary tag recommendation (specific version tag from skopeo)
 - Fallback image(s) in priority order
 - Source trust assessment (linuxserver/offical/third-party)
 - Relevant docs URLs
