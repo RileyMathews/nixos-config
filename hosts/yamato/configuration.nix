@@ -13,6 +13,7 @@
     ./../../modules/tailscale
     ./../../modules/podman-exporter
     ./../../modules/open-webui
+    ./../../modules/jellyfin
     ./../../modules/reverse-health-check
   ];
   networking.hostName = "yamato";

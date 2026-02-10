@@ -87,6 +87,7 @@ Research workflow
 - If unavailable/inappropriate, find official upstream/verified image docs.
 - If still unavailable, find reputable third-party image docs and mark risk level.
 - Capture image name(s), registry, tags strategy (stable/latest/versioned), architecture support, and maintenance signals.
+- Use skopeo to find the latest non beta/alpha/rc version of the application. We never want to use latest.
 
 3. Extract runtime requirements
 - Required env vars (name, purpose, required/optional, defaults if documented).
