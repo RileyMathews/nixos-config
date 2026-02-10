@@ -116,3 +116,7 @@ endpoints:
   - name: pinchflat
     <<: *defaults
     url: "https://pinchflat.rileymathews.com"
+
+  - name: openclaw
+    <<: *defaults
+    url: "https://openclaw.rileymathews.com"

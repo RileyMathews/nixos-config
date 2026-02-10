@@ -39,5 +39,6 @@ in
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.yamato];
   "pinchflat-env-file.age".publicKeys = [riley hostKeysByName.yamato];
   "homeassistant-secrets-file.age".publicKeys = [riley hostKeysByName.bridge];
+  "openclaw-credentials-file.age".publicKeys = [riley hostKeysByName.openclaw];
   "opecde-test-secrets-file.age".publicKeys = [riley];
 }

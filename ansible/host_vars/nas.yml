@@ -18,6 +18,7 @@ zfs_datasets:
   - name: main/mealie
   - name: main/minio
   - name: main/nextcloud
+  - name: main/openclaw
   - name: main/paperless
   - name: main/pinchflat
   - name: main/piper
@@ -53,6 +54,14 @@ nas_directories:
     owner: "1000"
     group: "1000"
     mode: "0775"
+  - path: /main/openclaw/state
+    owner: "1000"
+    group: "1000"
+    mode: "0770"
+  - path: /main/openclaw/workspace
+    owner: "1000"
+    group: "1000"
+    mode: "0770"
 
 nfs_exports:
   - path: /main
