@@ -15,6 +15,7 @@
     ./../../modules/open-webui
     ./../../modules/jellyfin
     ./../../modules/copyparty
+    ./../../modules/pinchflat
     ./../../modules/reverse-health-check
   ];
   networking.hostName = "yamato";

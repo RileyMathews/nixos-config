@@ -19,6 +19,7 @@ zfs_datasets:
   - name: main/minio
   - name: main/nextcloud
   - name: main/paperless
+  - name: main/pinchflat
   - name: main/piper
   - name: main/radicale
   - name: main/stump
@@ -33,6 +34,22 @@ nas_directories:
     group: "1000"
     mode: "0775"
   - path: /main/copyparty/data
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/jellyfin/config
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/jellyfin/media
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/jellyfin/media/pinchflat
+    owner: "1000"
+    group: "1000"
+    mode: "0775"
+  - path: /main/pinchflat/config
     owner: "1000"
     group: "1000"
     mode: "0775"

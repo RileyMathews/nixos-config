@@ -112,3 +112,7 @@ endpoints:
   - name: copyparty
     <<: *defaults
     url: "https://copyparty.rileymathews.com"
+
+  - name: pinchflat
+    <<: *defaults
+    url: "https://pinchflat.rileymathews.com"
