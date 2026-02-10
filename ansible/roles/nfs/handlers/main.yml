@@ -1,0 +1,11 @@
+---
+- name: Reload NFS server exports
+  block:
+    - name: Reload NFS server
+      ansible.builtin.systemd:
+        name: "{{ nfs_service_name | default('nfs-server') }}"
+        state: reloaded
+  rescue:
+    - name: Reload NFS exports via exportfs
+      ansible.builtin.command: exportfs -ra
+      changed_when: true

@@ -114,6 +114,7 @@
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           agenix.packages.${system}.default
+          ansible
           jq
           python3
           python3Packages.requests
