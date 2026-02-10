@@ -137,6 +137,9 @@ Provide sections in this order:
 - DNS records, nginx multi proxy config, NAS-OCI bindings, service definitions.
 - Tailnet HTTPS exposure details.
 
+6) "Add monitoring for web services"
+- If the container has a webservice add it to the gatus config.yml file for monitoring
+
 6) "Review Checklist"
 - Bullet checklist for user verification before deployment.
 - End with a clear stop gate: "Ready for your review. I will not run final deployment until you confirm."

@@ -104,3 +104,7 @@ endpoints:
   - name: grafana
     <<: *defaults
     url: "https://grafana.rileymathews.com"
+
+  - name: jellyfin
+    <<: *defaults
+    url: "https://jellyfin.rileymathews.com"
