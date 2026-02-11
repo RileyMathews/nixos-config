@@ -112,7 +112,3 @@ endpoints:
   - name: copyparty
     <<: *defaults
     url: "https://copyparty.rileymathews.com"
-
-  - name: openclaw
-    <<: *defaults
-    url: "https://openclaw.rileymathews.com"
