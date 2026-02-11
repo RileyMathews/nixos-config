@@ -1,4 +1,10 @@
-{ config, pkgs, unstablePkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  unstablePkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -16,7 +22,12 @@
     };
 
     initrd = {
-      kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+      kernelModules = [
+        "nvidia"
+        "nvidia_modeset"
+        "nvidia_uvm"
+        "nvidia_drm"
+      ];
       systemd.enable = true;
       luks.devices."luks-acc369d3-8fac-4a34-a4cd-b209e7710813".crypttabExtraOpts = [ "tpm2-device=auto" ];
     };
@@ -24,9 +35,18 @@
     kernelParams = [ "nvidia-drm.modeset=1" ];
   };
 
+  specialisation = {
+    zen.configuration = {
+      boot.kernelPackages = pkgs.linuxPackages_zen;
+    };
+  };
+
   nix = {
     settings = {
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       trusted-users = [ "riley" ];
       keep-outputs = true;
       keep-derivations = true;
@@ -64,9 +84,9 @@
       powerManagement.finegrained = false;
       open = true;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
       prime = {
-        intelBusId  = "PCI:0:2:0";
+        intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:2:0:0";
         offload = {
           enable = false;
@@ -102,7 +122,10 @@
         layout = "us";
         variant = "";
       };
-      videoDrivers = [ "nvidia" "modesetting" ];
+      videoDrivers = [
+        "nvidia"
+        "modesetting"
+      ];
     };
 
     tailscale.enable = true;
@@ -168,7 +191,10 @@
       text = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbml6YXRpb24iOiJuYWtvbmUiLCJraWQiOiJiODoxZDowNjo5NzpjYjo3OTpjMDo3MTpjNDoxNTpjZDo5Yzo4Mjo0MDo4NjpjYSIsImNyZWF0ZWRBdCI6IjE3MDUxMTgwMzYiLCJjcmVhdGVkQnkiOiJrd29ya2VyIn0.vCMoj_pnDjEG3Ji9y8elRzN10QfFOwGxZrJAQcJWP41SmDN1PsLQusKucX7lwUTlfgm6-9mKLnaJ9uhA-2j0G2_J2TCP9KxyvZ2M2jH4x_5muf1kV99RgwJhhjlFbZU_9ri8ZZc-fOlaaFZi6hKg5GwaaLSNTex2HKzfcx3PVdDjaXoAKc-THHgtQ9-j_4P_co7JkxxCgnsqpMw13qm2nNZ5PAE2wOuU1_MdVeNam4MnLt1BBgxbeclCHfKjrcg-H9UDcQtwiYxllsfDSpmgfNDr2b69Y064UqKAjqWyvE33c-7hBx_R2HC9glXulmdijgPgGABT1Ad6zhA6QS8xTg";
     };
 
-    shells = with pkgs; [ zsh bash ];
+    shells = with pkgs; [
+      zsh
+      bash
+    ];
 
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
@@ -235,10 +261,15 @@
   users.users.riley = {
     isNormalUser = true;
     description = "Riley Mathews";
-    extraGroups = [ "networkmanager" "wheel" "podman" "video" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "podman"
+      "video"
+    ];
     shell = pkgs.zsh;
   };
-  
+
   virtualisation = {
     containers.enable = true;
     podman = {
@@ -250,4 +281,3 @@
 
   system.stateVersion = "25.05";
 }
-
