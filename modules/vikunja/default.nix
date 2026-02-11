@@ -28,7 +28,7 @@
 
         containers.vikunja = {
             definition = {
-                image = "vikunja/vikunja:1.0.0";
+                image = "vikunja/vikunja:1.1.0";
                 ports = [ "3456:3456" ];
                 volumes = [ "/mnt/vikunja/files:/app/vikunja/files" ];
                 user = "1000:1000";
@@ -45,4 +45,3 @@
         };
     };
 }
-
