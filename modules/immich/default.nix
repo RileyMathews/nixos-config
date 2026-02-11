@@ -38,7 +38,7 @@
 
     virtualisation.oci-containers.containers = {
         immich = {
-            image = "ghcr.io/immich-app/immich-server:v2.5.3";
+            image = "ghcr.io/immich-app/immich-server:v2.5.6";
             ports = ["2283:2283"];
             volumes = [ 
                 "/mnt/immich/uploads:/usr/src/app/upload" 

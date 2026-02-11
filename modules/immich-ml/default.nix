@@ -12,7 +12,7 @@
 
     virtualisation.oci-containers.containers = {
         machine-learning = {
-            image = "ghcr.io/immich-app/immich-machine-learning:v2.5.3-cuda";
+            image = "ghcr.io/immich-app/immich-machine-learning:v2.5.6-cuda";
             environment = {
                 IMMICH_VERSION = "release";
                 # password in secrets file
