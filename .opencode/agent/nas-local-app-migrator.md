@@ -76,6 +76,8 @@ Unexpected conditions (must stop and ask)
 - Nix rebuild/switch errors.
 - Backup service run fails, or snapshot does not include migrated paths.
 - Any command returns output that conflicts with module assumptions.
+- `just build <host>` or `just deploy <host>` fails.
+- Agent cannot find expected Just targets in `Justfile`.
 
 How to ask when blocked by unexpected results
 - Ask exactly one grouped question with:
@@ -130,6 +132,13 @@ Workflow (strict order)
 Standard command runbook (adapt placeholders)
 Use these commands in order unless app specifics require changes.
 
+Repository build/deploy rule (required)
+- This repo deploys to remote hosts via `Justfile` targets.
+- Do not run plain `nixos-rebuild switch --flake .#<host>` for deployment in this repo.
+- Always use:
+  - `just build <host>` for evaluation/build check.
+  - `just deploy <host>` for remote switch (`--target-host root@<host>`).
+
 A) Discovery
 ```bash
 git grep -n "<app-name>" modules hosts
@@ -179,9 +188,13 @@ G) Apply Nix changes and switch
 git grep -n "restic-local-appdata\|resticLocalAppdata" modules/<app>/default.nix modules/restic-local-appdata/default.nix
 
 # local repo edits first, then:
-nixos-rebuild build --flake .#<host>
-nixos-rebuild switch --flake .#<host>
+just build <host>
+just deploy <host>
 ```
+
+If `just` is unavailable or target names changed
+- Read `Justfile` and adapt to current target names.
+- If no clear equivalent for build/deploy exists, stop and ask user before proceeding.
 
 Required Nix edits during cutover (do not skip)
 - App module file `modules/<app>/default.nix`:
@@ -234,7 +247,8 @@ Rollback commands (must provide every time)
 ```bash
 # 1) restore previous Nix config for this app
 # 2) rebuild/switch host
-nixos-rebuild switch --flake .#<host>
+just build <host>
+just deploy <host>
 
 # 3) restart service
 ssh <host> "sudo systemctl restart podman-<container-name>.service"

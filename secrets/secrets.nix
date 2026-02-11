@@ -22,7 +22,7 @@ in
   "forgejo-database-password.age".publicKeys = [hostKeysByName.forgejo riley hostKeysByName."backup-server"];
   "gatus-credentials.age".publicKeys = [hostKeysByName.defiant riley];
   "karakeep-env.age".publicKeys = [hostKeysByName.borg riley hostKeysByName.defiant];
-  "aws-access-key.age".publicKeys = [riley hostKeysByName."backup-server"];
+  "aws-access-key.age".publicKeys = all;
   "gatus-database-password.age".publicKeys = [riley hostKeysByName."backup-server"];
   "miniflux-env-file.age".publicKeys = [riley hostKeysByName.discovery];
   "vaultwarden-env-file.age".publicKeys = [riley hostKeysByName.worf];
@@ -41,4 +41,5 @@ in
   "homeassistant-secrets-file.age".publicKeys = [riley hostKeysByName.bridge];
   "openclaw-credentials-file.age".publicKeys = [riley hostKeysByName.openclaw];
   "opecde-test-secrets-file.age".publicKeys = [riley];
+  "restic-password.age".publicKeys = all;
 }
