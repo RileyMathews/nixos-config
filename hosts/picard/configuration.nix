@@ -198,6 +198,7 @@
       just
       keyutils
       lazygit
+      luajitPackages.lua-lsp
       mesa-demos
       mpv
       nix-search-cli
@@ -213,7 +214,6 @@
       slack
       slurp
       spotify
-      luajitPackages.lua-lsp
       stow
       thunderbird-bin
       tldr
@@ -226,6 +226,7 @@
       virtualglLib
       waybar
       wl-clipboard
+      wlr-which-key
       xorg.xlsclients
       yt-dlp
     ];
