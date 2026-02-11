@@ -27,7 +27,7 @@
 
         containers.vaultwarden = {
             definition = {
-                image = "vaultwarden/server:1.35.2";
+                image = "vaultwarden/server:1.35.3";
                 ports = ["8222:8222"];
                 volumes = [ "/mnt/vaultwarden/data:/data" ];
                 user = "1000:1000";
