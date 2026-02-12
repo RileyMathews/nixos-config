@@ -13,6 +13,7 @@
   nixpkgs.config.allowUnfree = true;
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
@@ -33,12 +34,6 @@
     };
 
     kernelParams = [ "nvidia-drm.modeset=1" ];
-  };
-
-  specialisation = {
-    zen.configuration = {
-      boot.kernelPackages = pkgs.linuxPackages_zen;
-    };
   };
 
   nix = {
@@ -80,8 +75,8 @@
     };
     nvidia = {
       modesetting.enable = true;
-      powerManagement.enable = false;
-      powerManagement.finegrained = false;
+      powerManagement.enable = true;
+      powerManagement.finegrained = true;
       open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.beta;
@@ -89,11 +84,11 @@
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:2:0:0";
         offload = {
-          enable = false;
-          enableOffloadCmd = false;
+          enable = true;
+          enableOffloadCmd = true;
         };
         sync = {
-          enable = true;
+          enable = false;
         };
       };
     };
