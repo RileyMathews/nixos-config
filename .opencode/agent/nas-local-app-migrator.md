@@ -97,6 +97,7 @@ Workflow (strict order)
 - Check free space and source size.
 - Confirm destination path plan and ownership plan.
 - Confirm rollback path exists (source untouched).
+- Check NAS legacy backup list (`/etc/restic-backup/directories.txt`) for the app path and record whether it exists.
 
 3) Prepare destination
 - Create destination directories.
@@ -122,8 +123,9 @@ Workflow (strict order)
 - Inspect recent logs for obvious errors.
 
 7) Backup verification
-- Run `restic-local-appdata-backup.service` manually once.
+- If the app path is present in `/etc/restic-backup/directories.txt`, run `restic-local-appdata-backup.service` manually once.
 - Confirm snapshot creation and migrated paths present.
+- If the app path is not present, skip backup verification for this app.
 
 8) Handover
 - Report what changed, verification evidence, and exact rollback commands.
@@ -151,6 +153,13 @@ ssh <host> "hostname"
 ssh <host> "df -h /"
 ssh <host> "sudo du -sh <nas-source-path-1> <nas-source-path-2> 2>/dev/null"
 ssh <host> "systemctl status podman-<container-name>.service --no-pager"
+```
+
+B1) Preflight on NAS (legacy backup list)
+```bash
+ssh <nas-host> "sudo ls -la /etc/restic-backup"
+ssh <nas-host> "sudo cat /etc/restic-backup/directories.txt"
+ssh <nas-host> "sudo grep -Fx '/main/<app>' /etc/restic-backup/directories.txt && echo 'present' || echo 'missing'"
 ```
 
 Recommended capacity guard
@@ -201,11 +210,13 @@ Required Nix edits during cutover (do not skip)
   - Add import if missing:
     - `../restic-local-appdata`
   - Replace NAS-backed volume source paths (`/mnt/...`) with local paths (`/var/lib/appdata/...`).
+  - If the module uses `services.nasOci` and no NAS mounts remain, remove the `../nas-oci` import and convert the container to `virtualisation.oci-containers`.
   - Remove only app-specific NAS mount/dependency wiring that is no longer used by this app.
-  - Add/merge block:
+  - If the app path is present in `/etc/restic-backup/directories.txt`, add/merge block:
     - `services.resticLocalAppdata.enable = true;`
     - `services.resticLocalAppdata.paths = [ <migrated-local-paths...> ];`
     - optional: `services.resticLocalAppdata.excludePatterns = [ <exclude-paths...> ];`
+  - If the app path is not present in `/etc/restic-backup/directories.txt`, do not add it to `services.resticLocalAppdata.paths`.
 
 When multiple apps on the same host set this option
 - `services.resticLocalAppdata.paths` is a list option and merges across imported app modules.

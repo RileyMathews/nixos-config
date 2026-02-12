@@ -1,7 +1,6 @@
 { config, lib, ... }:
 {
     imports = [
-        ../nas-oci
         ../nginx-multi-proxy
         ../dns
     ];
@@ -16,34 +15,23 @@
 
     networking.firewall.allowedTCPPorts = [10300];
 
-    services.nasOci = {
-        enable = true;
-
-        mounts.whisper = {
-            mountPoint = "/mnt/whisper";
-            device = "nas:/whisper";
+    virtualisation.oci-containers.containers.whisper = {
+        image = "lscr.io/linuxserver/faster-whisper:gpu";
+        ports = [ "10300:10300" ];
+        volumes = [ "/var/lib/appdata/whisper/config:/config:rw" ];
+        environment = {
+            PUID = "1000";
+            PGID = "1000";
+            TZ = "America/Chicago";
+            WHISPER_MODEL = "small";
+            NVIDIA_VISIBLE_DEVICES = "all";
+            NVIDIA_DRIVER_CAPABILITIES = "compute,video,utility";
         };
-
-        containers.whisper = {
-            definition = {
-                image = "lscr.io/linuxserver/faster-whisper:gpu";
-                ports = [ "10300:10300" ];
-                volumes = [ "/mnt/whisper/config:/config:rw" ];
-                environment = {
-                    PUID = "1000";
-                    PGID = "1000";
-                    TZ = "America/Chicago";
-                    WHISPER_MODEL = "small";
-                    NVIDIA_VISIBLE_DEVICES = "all";
-                    NVIDIA_DRIVER_CAPABILITIES = "compute,video,utility";
-                };
-                extraOptions = [
-                    "--label" "io.containers.autoupdate=registry"
-                    "--device=nvidia.com/gpu=all"
-                    "--security-opt=label=disable"
-                ];
-            };
-        };
+        extraOptions = [
+            "--label" "io.containers.autoupdate=registry"
+            "--device=nvidia.com/gpu=all"
+            "--security-opt=label=disable"
+        ];
     };
-}
 
+}
