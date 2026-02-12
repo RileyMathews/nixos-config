@@ -15,8 +15,6 @@
     ./../../modules/docker-registry
     ./../../modules/miniflux
     ./../../modules/karakeep
-    ./../../modules/audiobookshelf
-    ./../../modules/immich
     ./../../modules/joplin
     ./../../modules/buffer
     ./../../modules/podman-exporter
