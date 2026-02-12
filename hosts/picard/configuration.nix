@@ -250,6 +250,7 @@
       unstablePkgs.neovim
       unstablePkgs.opencode
       virtualglLib
+      vtsls
       waybar
       wl-clipboard
       wlr-which-key
