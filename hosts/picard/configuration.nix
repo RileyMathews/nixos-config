@@ -20,7 +20,7 @@
   '';
 
   environment.sessionVariables.AQ_DRM_DEVICES =
-    "/dev/dri/intel-igpu:/dev/dri/nvidia-dgpu";
+    "/dev/dri/nvidia-dgpu:/dev/dri/intel-igpu";
 
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
