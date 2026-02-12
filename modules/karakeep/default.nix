@@ -1,11 +1,9 @@
 {
     config,
-    modulesPath,
-    lib,
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
+    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["karakeep.rileymathews.com" "chrome-karakeep.rileymathews.com"];
 
@@ -18,25 +16,15 @@
         backendHost = "http://0.0.0.0:9222";
     };
 
-    systemd.mounts = [{
-        what = "nas:/main/karakeep";
-        where = "/mnt/karakeep";
-        type = "nfs";
-        options = "defaults";
-
-        # Make it wait for Tailscale
-        wantedBy = [ "multi-user.target" ];
-        after = [ "tailscale-ready.service" ];
-        requires = [ "tailscale-ready.service" ];
-    }];
-
-    systemd.services."podman-karakeep".unitConfig = {
-        Requires = [ "mnt-karakeep.mount" ];
-        After = [ "mnt-karakeep.mount" ];
-    };
-
     age.secrets.karakeep-credentials-file = {
         file =  ../../secrets/karakeep-credentials-file.age;
+    };
+
+    services.resticLocalAppdata = {
+        enable = true;
+        paths = [
+            "/var/lib/appdata/karakeep/data"
+        ];
     };
 
     virtualisation.oci-containers.backend = "podman";
@@ -44,7 +32,7 @@
     virtualisation.oci-containers.containers.karakeep = {
         image = "ghcr.io/karakeep-app/karakeep:0.30.0";
         ports = ["3000:3000"];
-        volumes = ["/mnt/karakeep/data:/data"];
+        volumes = ["/var/lib/appdata/karakeep/data:/data"];
         environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];
         # use network mode host because I couldn't figure out a way to get karakeep
         # to connect to chrome otherwise. It seems like karakeep does some internal

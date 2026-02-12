@@ -4,15 +4,13 @@ with lib;
 
 let
   cfg = config.services.resticLocalAppdata;
-  pathArgs = concatStringsSep " " (map escapeShellArg cfg.paths);
-  excludeArgs = concatStringsSep " " (map (p: "--exclude=" + escapeShellArg p) cfg.excludePatterns);
-  backupScriptTemplate = builtins.readFile ./backup.sh;
-  backupScriptContent = replaceStrings
-    [ "@EXCLUDE_ARGS@" "@PATH_ARGS@" "@AWS_SECRET_ACCESS_KEY_FILE@" "@RESTIC_PASSWORD_FILE@" ]
-    [ excludeArgs pathArgs config.age.secrets.aws-access-key.path config.age.secrets.restic-password.path ]
-    backupScriptTemplate;
-
-  backupScript = pkgs.writeShellScript "restic-local-appdata-backup.sh" backupScriptContent;
+  excludeArgs = concatMapStringsSep " " (p: "--exclude " + escapeShellArg p) cfg.excludePatterns;
+  backupScript = pkgs.writeShellScript "restic-local-appdata-subtask.sh" (builtins.readFile ./backup.sh);
+  backupRunner = pkgs.writeShellScript "restic-local-appdata-backup.sh" ''
+    set -euo pipefail
+    ${concatMapStringsSep "\n" (p: "${backupScript} backup-path --path " + escapeShellArg p + optionalString (excludeArgs != "") (" " + excludeArgs)) cfg.paths}
+    ${backupScript} prune-all
+  '';
 in
 {
   options.services.resticLocalAppdata = {
@@ -68,9 +66,15 @@ in
     systemd.services.restic-local-appdata-backup = {
       description = "Backup local app data to restic";
       path = with pkgs; [ restic curl ];
+      environment = {
+        AWS_SECRET_ACCESS_KEY_FILE = config.age.secrets.aws-access-key.path;
+        RESTIC_PASSWORD_FILE = config.age.secrets.restic-password.path;
+        RESTIC_CACHE_DIR = "/var/cache/restic-local-appdata";
+      };
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = backupScript;
+        ExecStart = backupRunner;
+        CacheDirectory = "restic-local-appdata";
       };
     };
 
@@ -81,8 +85,8 @@ in
         OnCalendar = "daily";
         Persistent = true;
         RandomizedDelaySec = "30m";
+        Unit = "restic-local-appdata-backup.service";
       };
-      unitConfig.Unit = "restic-local-appdata-backup.service";
     };
   };
 }
