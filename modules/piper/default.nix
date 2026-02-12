@@ -1,37 +1,27 @@
 { config, lib, ... }:
 {
     imports = [
-        ../nas-oci
         ../nginx-multi-proxy
         ../dns
+        ../restic-local-appdata
     ];
 
     networking.firewall.allowedTCPPorts = [10200];
 
-    services.nasOci = {
-        enable = true;
+    virtualisation.oci-containers.backend = "podman";
 
-        mounts.piper = {
-            mountPoint = "/mnt/piper";
-            device = "nas:/piper";
+    virtualisation.oci-containers.containers.piper = {
+        image = "lscr.io/linuxserver/piper:latest";
+        ports = [ "10200:10200" ];
+        volumes = [ "/var/lib/appdata/piper/config:/config:rw" ];
+        environment = {
+            PUID = "1000";
+            PGID = "1000";
+            TZ = "America/Chicago";
+            PIPER_VOICE = "en_US-lessac-medium";
         };
-
-        containers.piper = {
-            definition = {
-                image = "lscr.io/linuxserver/piper:latest";
-                ports = [ "10200:10200" ];
-                volumes = [ "/mnt/piper/config:/config:rw" ];
-                environment = {
-                    PUID = "1000";
-                    PGID = "1000";
-                    TZ = "America/Chicago";
-                    PIPER_VOICE = "en_US-lessac-medium";
-                };
-                extraOptions = [
-                    "--label" "io.containers.autoupdate=registry"
-                ];
-            };
-        };
+        extraOptions = [
+            "--label" "io.containers.autoupdate=registry"
+        ];
     };
 }
-
