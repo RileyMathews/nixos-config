@@ -155,7 +155,7 @@ ssh <host> "sudo du -sh <nas-source-path-1> <nas-source-path-2> 2>/dev/null"
 ssh <host> "systemctl status podman-<container-name>.service --no-pager"
 ```
 
-B1) Preflight on NAS (legacy backup list)
+B1) Preflight on NAS (legacy backup list) note you do not need sudo to read the etc directory on this host
 ```bash
 ssh <nas-host> "ls -la /etc/restic-backup"
 ssh <nas-host> "cat /etc/restic-backup/directories.txt"
