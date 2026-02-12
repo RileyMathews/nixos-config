@@ -1,14 +1,14 @@
 { config, lib, ... }:
 {
     imports = [
-        ../nginx-multi-proxy
+        ../caddy-multi-proxy
         ../dns
     ];
 
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = [ "joplin.rileymathews.com" ];
 
-    myNginx.proxies.joplin = {
+    myCaddy.proxies.joplin = {
         listenHost = "joplin.rileymathews.com";
         backendHost = "http://127.0.0.1:22300";
     };
@@ -31,4 +31,3 @@
         environmentFiles = [ config.age.secrets.joplin-credentials-file.path ];
     };
 }
-

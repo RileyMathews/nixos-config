@@ -2,11 +2,11 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../caddy-multi-proxy ../dns ../restic-local-appdata];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["registry.rileymathews.com"];
 
-    myNginx.proxies.registry = {
+    myCaddy.proxies.registry = {
         listenHost = "registry.rileymathews.com";
         backendHost = "http://127.0.0.1:5000";
     };
