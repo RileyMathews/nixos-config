@@ -29,9 +29,13 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager = {
+      url = "github:nix-community/home-manager?ref=release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager }:
     let
       system = "x86_64-linux";
 
@@ -53,6 +57,9 @@
         picard = [
           kolide.nixosModules.kolide-launcher
           auto-cpufreq.nixosModules.default
+        ];
+        laforge = [
+          home-manager.nixosModules.home-manager
         ];
         iso = [ ];
       };

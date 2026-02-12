@@ -32,13 +32,6 @@
       ExecStart = "${unstablePkgs.opencode}/bin/opencode web --hostname 127.0.0.1 --port 8081";
       Restart = "on-failure";
       RestartSec = 5;
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectSystem = "strict";
-      ProtectHome = false;
-      ProtectKernelTunables = true;
-      ProtectKernelModules = true;
-      ProtectControlGroups = true;
     };
   };
 }
