@@ -157,9 +157,9 @@ ssh <host> "systemctl status podman-<container-name>.service --no-pager"
 
 B1) Preflight on NAS (legacy backup list)
 ```bash
-ssh <nas-host> "sudo ls -la /etc/restic-backup"
-ssh <nas-host> "sudo cat /etc/restic-backup/directories.txt"
-ssh <nas-host> "sudo grep -Fx '/main/<app>' /etc/restic-backup/directories.txt && echo 'present' || echo 'missing'"
+ssh <nas-host> "ls -la /etc/restic-backup"
+ssh <nas-host> "cat /etc/restic-backup/directories.txt"
+ssh <nas-host> "grep -Fx '/main/<app>' /etc/restic-backup/directories.txt && echo 'present' || echo 'missing'"
 ```
 
 Recommended capacity guard
