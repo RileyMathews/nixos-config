@@ -3,15 +3,15 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../caddy-multi-proxy ../dns ../restic-local-appdata];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["karakeep.rileymathews.com" "chrome-karakeep.rileymathews.com"];
 
-    myNginx.proxies.karakeep = {
+    myCaddy.proxies.karakeep = {
         listenHost = "karakeep.rileymathews.com";
         backendHost = "http://127.0.0.1:3000";
     };
-    myNginx.proxies.karakeep-chrome = {
+    myCaddy.proxies.karakeep-chrome = {
         listenHost = "chrome-karakeep.rileymathews.com";
         backendHost = "http://0.0.0.0:9222";
     };

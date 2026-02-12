@@ -5,11 +5,11 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["miniflux.rileymathews.com"];
 
-    myNginx.proxies.miniflux = {
+    myCaddy.proxies.miniflux = {
         listenHost = "miniflux.rileymathews.com";
         backendHost = "http://127.0.0.1:9732";
     };
