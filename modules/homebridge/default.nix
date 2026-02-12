@@ -6,33 +6,20 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
+    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["homebridge.rileymathews.com"];
-    services.rpcbind.enable = true;
-    boot.kernelModules = [ "nfs" ];
-    boot.supportedFilesystems = [ "nfs" ];
 
     myNginx.proxies.homebridge = {
         listenHost = "homebridge.rileymathews.com";
         backendHost = "http://127.0.0.1:8581";
     };
 
-    systemd.mounts = [{
-        what = "nas:/main/homebridge";
-        where = "/mnt/homebridge";
-        type = "nfs";
-        options = "defaults";
-
-        # Make it wait for Tailscale
-        wantedBy = [ "multi-user.target" ];
-        after = [ "tailscale-ready.service" ];
-        requires = [ "tailscale-ready.service" ];
-    }];
-
-    systemd.services."podman-homebridge".unitConfig = {
-        Requires = [ "mnt-homebridge.mount" ];
-        After = [ "mnt-homebridge.mount" ];
+    services.resticLocalAppdata = {
+        enable = true;
+        paths = [
+            "/var/lib/appdata/homebridge"
+        ];
     };
 
     virtualisation.oci-containers.containers = {
@@ -44,7 +31,7 @@
                 "io.containers.autoupdate=registry"
             ];
             volumes = [ 
-                "/mnt/homebridge:/homebridge"
+                "/var/lib/appdata/homebridge:/homebridge"
                 "/var/run/dbus:/var/run/dbus"
                 "/var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket"
             ];
