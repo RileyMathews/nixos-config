@@ -10,7 +10,7 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
-    ./../../modules/nginx-single-proxy
+    ./../../modules/caddy-multi-proxy
     ./../../modules/tailscale
     ./../../modules/dns
   ];
@@ -26,11 +26,12 @@
   #   fsType = "nfs";
   #   options = ["defaults"];
   # };
-  myNginx = {
-    enable = true;
-    hostName = "git.rileymathews.com";
-    reverseProxyAddress = "http://127.0.0.1:3000";
+
+  myCaddy.proxies.forgejo = {
+    listenHost = "git.rileymathews.com";
+    backendHost = "http://127.0.0.1:3000";
   };
+
   services.cloudflare-dns = {
     enable = true;
     domains = [
