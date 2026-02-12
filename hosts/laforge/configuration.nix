@@ -11,8 +11,14 @@
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
+    ./../../modules/opencode
   ];
   networking.hostName = "laforge";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+  environment.systemPackages = with pkgs; [
+    vim
+    git
+  ];
+
 }
