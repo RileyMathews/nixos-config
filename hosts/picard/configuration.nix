@@ -11,6 +11,16 @@
     ./hardware-configuration.nix
   ];
   nixpkgs.config.allowUnfree = true;
+  services.udev.extraRules = ''
+    # Intel iGPU (your intelBusId is PCI:0:2:0 -> 0000:00:02.0)
+    SUBSYSTEM=="drm", KERNEL=="card*", KERNELS=="0000:00:02.0", SYMLINK+="dri/intel-igpu"
+
+    # NVIDIA dGPU (your nvidiaBusId is PCI:2:0:0 -> 0000:02:00.0)
+    SUBSYSTEM=="drm", KERNEL=="card*", KERNELS=="0000:02:00.0", SYMLINK+="dri/nvidia-dgpu"
+  '';
+
+  environment.sessionVariables.AQ_DRM_DEVICES =
+    "/dev/dri/intel-igpu:/dev/dri/nvidia-dgpu";
 
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
@@ -149,6 +159,7 @@
   };
 
   programs = {
+    niri.enable = true;
     firefox.enable = true;
     auto-cpufreq = {
       enable = true;
