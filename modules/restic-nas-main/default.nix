@@ -4,7 +4,12 @@ with lib;
 
 let
   cfg = config.services.resticNasMain;
+  excludeArgs = concatMapStringsSep " " (p: "--exclude " + escapeShellArg p) cfg.excludePatterns;
   backupScript = pkgs.writeShellScript "restic-nas-main-backup.sh" (builtins.readFile ./backup.sh);
+  backupRunner = pkgs.writeShellScript "restic-nas-main-backup-runner.sh" ''
+    set -euo pipefail
+    ${backupScript} ${excludeArgs}
+  '';
 in
 {
   options.services.resticNasMain = {
@@ -14,6 +19,15 @@ in
       type = types.str;
       default = "daily";
       description = "systemd OnCalendar schedule for NAS backups.";
+    };
+
+    excludePatterns = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [
+        "/mnt/nas-main/jellyfin/config/.aspnet/DataProtection-Keys/*"
+      ];
+      description = "Paths or globs to exclude from NAS backups.";
     };
   };
 
@@ -61,7 +75,7 @@ in
       };
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = backupScript;
+        ExecStart = backupRunner;
         CacheDirectory = "restic-nas-main";
       };
       unitConfig = {

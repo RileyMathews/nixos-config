@@ -42,6 +42,7 @@ for dataset_path in "$nas_root"/*; do
     --host "$hostname" \
     --tag nas-main \
     --tag "dataset:${dataset_name}" \
+    "$@" \
     "$dataset_path"
 done
 

@@ -112,5 +112,8 @@
 
   services.resticNasMain = {
     enable = true;
+    excludePatterns = [
+      "/mnt/nas-main/jellyfin/config/.aspnet/DataProtection-Keys/*"
+    ];
   };
 }
