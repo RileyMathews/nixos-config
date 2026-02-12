@@ -12,6 +12,7 @@
     ./../../modules/vms/basic-config.nix
     ./../../modules/tailscale
     ./../../modules/postgres-backup
+    ./../../modules/restic-nas-main
   ];
   networking.hostName = "backup-server";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -108,5 +109,8 @@
       }
     ];
   };
-}
 
+  services.resticNasMain = {
+    enable = true;
+  };
+}
