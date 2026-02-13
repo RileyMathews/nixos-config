@@ -1,4 +1,5 @@
 {
+  config,
   modulesPath,
   lib,
   pkgs,
@@ -15,4 +16,28 @@
   networking.hostName = "lab";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+
+  age.secrets.forgejo-runner-token-file = {
+    file = ../../secrets/forgejo-runner-token-file.age;
+    mode = "0400";
+  };
+
+  virtualisation.podman.enable = true;
+
+  services.gitea-actions-runner = {
+    package = pkgs.forgejo-runner;
+    instances.forgejo = {
+      enable = true;
+      name = "forgejo-runner-lab-01";
+      url = "https://git.rileymathews.com";
+      tokenFile = config.age.secrets.forgejo-runner-token-file.path;
+      labels = [
+        "docker:docker://node:22-bookworm"
+        "ubuntu-latest:docker://node:22-bookworm"
+      ];
+      settings = {
+        runner.capacity = 4;
+      };
+    };
+  };
 }

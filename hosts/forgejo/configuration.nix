@@ -68,30 +68,6 @@
     group = "git";
     mode = "0400";
   };
-  age.secrets.forgejo-runner-token-file = {
-    file = ../../secrets/forgejo-runner-token-file.age;
-    mode = "0400";
-  };
-
-  virtualisation.podman.enable = true;
-
-  services.gitea-actions-runner = {
-    package = pkgs.forgejo-runner;
-    instances.forgejo = {
-      enable = true;
-      name = "forgejo-runner-git-01";
-      url = "https://git.rileymathews.com";
-      tokenFile = config.age.secrets.forgejo-runner-token-file.path;
-      labels = [
-        "docker:docker://node:22-bookworm"
-        "ubuntu-latest:docker://node:22-bookworm"
-      ];
-      settings = {
-        runner.capacity = 4;
-      };
-    };
-  };
-
   systemd.services.forgejo = {
     unitConfig = {
       Requires = [ "mnt-forgejo.mount" ]; # Replace with your actual mount unit name
