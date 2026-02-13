@@ -24,7 +24,7 @@
 
         mounts.immich = {
             mountPoint = "/mnt/immich";
-            device = "nas:/main/immich";
+            device = "nas:/immich";
         };
 
         containers.immich = {
