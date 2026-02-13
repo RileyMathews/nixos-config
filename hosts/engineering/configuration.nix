@@ -17,6 +17,23 @@
   ];
   networking.hostName = "engineering";
   nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 25;
+    priority = 100;
+  };
+
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 8192;
+      priority = 10;
+    }
+  ];
+
+  boot.kernel.sysctl."vm.swappiness" = 15;
+
   myTailscale.enable = true;
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "grafana.rileymathews.com" ];
