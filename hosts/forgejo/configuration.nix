@@ -87,7 +87,7 @@
         "ubuntu-latest:docker://node:22-bookworm"
       ];
       settings = {
-        runner.capacity = 1;
+        runner.capacity = 4;
       };
     };
   };
