@@ -91,7 +91,7 @@ in
       timerConfig = {
         OnCalendar = cfg.onCalendar;
         Persistent = true;
-        RandomizedDelaySec = "30m";
+        RandomizedDelaySec = "2h";
         Unit = "restic-nas-main-backup.service";
       };
     };

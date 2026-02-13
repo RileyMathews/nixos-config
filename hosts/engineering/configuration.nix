@@ -87,6 +87,7 @@
             "backup-server:9002"
             "couchdb:9002"
             "relay:9002"
+            "yamato:9002"
           ];
         }];
       }

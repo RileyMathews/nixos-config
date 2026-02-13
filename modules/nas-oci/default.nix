@@ -8,10 +8,13 @@ let
     "proto=tcp"
     "_netdev"
     "nofail"
+    "x-systemd.automount"
+    "x-systemd.idle-timeout=5min"
+    "x-systemd.mount-timeout=30s"
 
     # Resilience: errors instead of indefinite hangs
     "soft"
-    "timeo=600"
+    "timeo=150"
     "retrans=2"
   ];
 
