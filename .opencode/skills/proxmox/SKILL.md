@@ -13,6 +13,7 @@ metadata:
 - Use repository scripts for routine Proxmox VM operations.
 - Prefer VMID-based actions for deterministic behavior.
 - Resolve VMIDs from names when needed before taking action.
+- Apply basic hardware config changes via repository scripts.
 
 ## When to use me
 
@@ -99,6 +100,42 @@ Examples:
 ./scripts/vm_status.py git
 ./scripts/vm_status.py --json engineering
 ```
+
+### `scripts/vm_set_memory.py`
+
+Update VM memory settings (MiB) by VMID or name fragment.
+
+Usage:
+
+```bash
+./scripts/vm_set_memory.py --memory-mib 4096 <vmid-or-name-fragment>
+./scripts/vm_set_memory.py --memory-mib 8192 --balloon-mib 4096 <vmid-or-name-fragment>
+```
+
+Behavior:
+
+- Updates VM config `memory` (required) and optional `balloon`.
+- `--balloon-mib 0` disables ballooning.
+- `--dry-run` prints intended changes without applying.
+- `--json` outputs structured metadata including the API response.
+
+### `scripts/vm_set_cpu.py`
+
+Update VM CPU config by VMID or name fragment.
+
+Usage:
+
+```bash
+./scripts/vm_set_cpu.py --cores 4 --sockets 1 <vmid-or-name-fragment>
+./scripts/vm_set_cpu.py --cpu-type host --vcpus 4 <vmid-or-name-fragment>
+```
+
+Behavior:
+
+- Updates any of `cores`, `sockets`, `vcpus`, or CPU `type` (`cpu`).
+- Requires at least one CPU option.
+- `--dry-run` prints intended changes without applying.
+- `--json` outputs structured metadata including the API response.
 
 ### `scripts/vm_exists.py`
 
