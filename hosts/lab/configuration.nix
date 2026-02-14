@@ -11,6 +11,7 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
+    ./../../modules/vms/swap-config.nix
     ./../../modules/tailscale
   ];
   networking.hostName = "lab";
@@ -36,7 +37,7 @@
         "ubuntu-latest:docker://node:22-bookworm"
       ];
       settings = {
-        runner.capacity = 4;
+        runner.capacity = 10;
       };
     };
   };
