@@ -27,6 +27,10 @@
     enable = true;
   };
 
+  networking.firewall.extraCommands = ''
+    iptables -A nixos-fw -i podman+ -p tcp --dport 8088 -j ACCEPT
+  '';
+
   services.gitea-actions-runner = {
     package = pkgs.forgejo-runner;
     instances.forgejo = {
@@ -39,6 +43,9 @@
       ];
       settings = {
         runner.capacity = 10;
+        cache.enable = true;
+        cache.host = "host.containers.internal";
+        cache.proxy_port = 8088;
       };
     };
   };
