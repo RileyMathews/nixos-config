@@ -23,7 +23,9 @@
     mode = "0400";
   };
 
-  virtualisation.podman.enable = true;
+  virtualisation.podman = {
+    enable = true;
+  };
 
   services.gitea-actions-runner = {
     package = pkgs.forgejo-runner;
@@ -33,7 +35,6 @@
       url = "https://git.rileymathews.com";
       tokenFile = config.age.secrets.forgejo-runner-token-file.path;
       labels = [
-        "docker:docker://node:22-bookworm"
         "ubuntu-latest:docker://node:22-bookworm"
       ];
       settings = {

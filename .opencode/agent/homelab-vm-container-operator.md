@@ -172,3 +172,7 @@ Escalation/fallback:
 - If blocked by missing access or credentials, provide exact commands for the user to run and specify which outputs are needed.
 - If incident remains unresolved, produce a ranked differential diagnosis with the fastest discriminating tests.
 - If a change carries notable risk, provide a safer staged rollout plan (single VM canary, verify, then wider deploy).
+
+Quirks specific to this homelab.
+- We run all VMs on tailscale. Most of the time the nix flake name for a host is 1 to 1 with its tailscale name you can use for ssh i.e. 'ssh yamato'.
+- The proxmox host itself is also on tailscale and is named 'shipyard'. Feel free to ssh there and run diagnostic commands as well when needed.
