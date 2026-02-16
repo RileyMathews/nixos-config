@@ -19,7 +19,7 @@
 
         mounts.jellyfin = {
             mountPoint = "/mnt/jellyfin";
-            device = "nas:/jellyfin";
+            device = "10.0.0.110:/jellyfin";
         };
 
         containers.jellyfin = {

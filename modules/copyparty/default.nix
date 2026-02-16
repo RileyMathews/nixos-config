@@ -22,7 +22,7 @@ in
 
     mounts.copyparty = {
       mountPoint = "/mnt/copyparty";
-      device = "nas:/copyparty";
+      device = "10.0.0.110:/copyparty";
     };
 
     containers.copyparty = {
