@@ -18,7 +18,7 @@
 
     virtualisation.oci-containers.containers = {
         davhome = {
-            image = "registry.rileymathews.com/rileymathews/davhome:0.0.9-alpha";
+            image = "registry.rileymathews.com/rileymathews/davhome:0.0.11-alpha";
             ports = ["4010:8000"];
             user = "1000:1000";
             environmentFiles = [ config.age.secrets.davhome-credentials-file.path ];
