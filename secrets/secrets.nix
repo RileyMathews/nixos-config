@@ -43,4 +43,5 @@ in
   "opecde-test-secrets-file.age".publicKeys = [riley];
   "restic-password.age".publicKeys = all;
   "forgejo-runner-token-file.age".publicKeys = [riley hostKeysByName.forgejo hostKeysByName.lab];
+  "davhome-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
 }

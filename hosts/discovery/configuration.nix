@@ -18,6 +18,7 @@
     ./../../modules/karakeep
     ./../../modules/joplin
     ./../../modules/buffer
+    ./../../modules/davhome
     ./../../modules/podman-exporter
   ];
   networking.hostName = "discovery";

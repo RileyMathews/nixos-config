@@ -97,6 +97,10 @@ endpoints:
     <<: *defaults
     url: "https://buffer.rileymathews.com"
 
+  - name: davhome
+    <<: *defaults
+    url: "https://davhome.rileymathews.com"
+
   - name: homebox
     <<: *defaults
     url: "https://homebox.rileymathews.com"
