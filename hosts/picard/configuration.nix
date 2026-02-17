@@ -209,7 +209,6 @@
     systemPackages = with pkgs; [
       alacritty
       bitwarden-cli
-      brave
       brightnessctl
       btop-cuda
       catppuccin-cursors.mochaDark
@@ -237,6 +236,7 @@
       nix-search-cli
       nodejs
       nvtopPackages.nvidia
+      google-chrome
       pavucontrol
       playerctl
       qutebrowser
