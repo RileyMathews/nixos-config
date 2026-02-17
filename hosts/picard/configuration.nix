@@ -230,6 +230,7 @@
       just
       keyutils
       lazygit
+      librewolf
       luajitPackages.lua-lsp
       mesa-demos
       mpv
