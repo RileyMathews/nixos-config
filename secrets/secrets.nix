@@ -42,4 +42,5 @@ in
   "openclaw-credentials-file.age".publicKeys = [riley hostKeysByName.openclaw];
   "opecde-test-secrets-file.age".publicKeys = [riley];
   "restic-password.age".publicKeys = all;
+  "forgejo-runner-token-file.age".publicKeys = [riley hostKeysByName.forgejo hostKeysByName.lab];
 }

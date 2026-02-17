@@ -2,6 +2,7 @@
 {
   imports = [
     ../nas-oci
+    ../restic-local-appdata
     ../nginx-multi-proxy
     ../dns
   ];
@@ -18,13 +19,15 @@
     file = ../../secrets/pinchflat-env-file.age;
   };
 
+  services.resticLocalAppdata = {
+    enable = true;
+    paths = [
+      "/var/lib/appdata/pinchflat/config"
+    ];
+  };
+
   services.nasOci = {
     enable = true;
-
-    mounts.pinchflat = {
-      mountPoint = "/mnt/pinchflat";
-      device = "nas:/pinchflat";
-    };
 
     containers.pinchflat = {
       definition = {
@@ -38,7 +41,7 @@
         };
         environmentFiles = [ config.age.secrets.pinchflat-env-file.path ];
         volumes = [
-          "/mnt/pinchflat/config:/config"
+          "/var/lib/appdata/pinchflat/config:/config"
           "/mnt/jellyfin/media/pinchflat:/downloads"
         ];
       };

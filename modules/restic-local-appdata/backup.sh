@@ -32,8 +32,8 @@ export AWS_ACCESS_KEY_ID="c735b0f700e602cbdb3af8d50977337c"
 export AWS_SECRET_ACCESS_KEY="$(cat "$AWS_SECRET_ACCESS_KEY_FILE")"
 export RESTIC_PASSWORD="$(cat "$RESTIC_PASSWORD_FILE")"
 
-if ! restic snapshots >/dev/null 2>&1; then
-  restic init
+if ! restic --retry-lock 5h snapshots >/dev/null 2>&1; then
+  restic --retry-lock 5h init
 fi
 
 cmd="${1:-}"
@@ -69,11 +69,11 @@ case "$cmd" in
       usage
     fi
 
-    restic backup --host "$hostname" --tag local-appdata "${excludes[@]}" "$backup_path"
+    restic --retry-lock 5h backup --host "$hostname" --tag local-appdata "${excludes[@]}" "$backup_path"
     ;;
 
   prune-all)
-    restic forget --prune \
+    restic --retry-lock 5h forget --prune \
       --host "$hostname" \
       --tag local-appdata \
       --keep-daily 7 \

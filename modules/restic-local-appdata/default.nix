@@ -84,7 +84,7 @@ in
       timerConfig = {
         OnCalendar = "daily";
         Persistent = true;
-        RandomizedDelaySec = "30m";
+        RandomizedDelaySec = "2h";
         Unit = "restic-local-appdata-backup.service";
       };
     };

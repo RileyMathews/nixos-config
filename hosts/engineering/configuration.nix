@@ -11,6 +11,7 @@
     ./../../modules/vms/basic-disk-config.nix
     ./../../modules/vms/basic-hardware-config.nix
     ./../../modules/vms/basic-config.nix
+    ./../../modules/vms/swap-config.nix
     ./../../modules/tailscale
     ./../../modules/dns
     ./../../modules/nginx-multi-proxy
@@ -87,6 +88,7 @@
             "backup-server:9002"
             "couchdb:9002"
             "relay:9002"
+            "yamato:9002"
           ];
         }];
       }
