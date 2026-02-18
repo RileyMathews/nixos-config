@@ -20,7 +20,7 @@
 
     virtualisation.oci-containers.containers = {
         miniflux = {
-            image = "miniflux/miniflux:2.2.16";
+            image = "miniflux/miniflux:2.2.17";
             ports = ["9732:8080"];
             user = "1000:1000";
             environmentFiles = [ config.age.secrets.miniflux-env-file.path ];
