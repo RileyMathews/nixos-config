@@ -60,5 +60,5 @@
     };
   };
 
-  systemPackages = with pkgs; [ nvtopPackages.nvidia ];
+  environment.systemPackages = with pkgs; [ nvtopPackages.nvidia ];
 }
