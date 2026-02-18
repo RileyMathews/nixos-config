@@ -26,7 +26,7 @@ in
 
     virtualisation.oci-containers.containers = {
         homeassistant = {
-            image = "linuxserver/homeassistant:version-2026.2.1";
+            image = "linuxserver/homeassistant:version-2026.2.2";
             extraOptions = [ "--network=host" ];
             volumes = [ 
                 "/var/lib/appdata/homeassistant/config:/config"
