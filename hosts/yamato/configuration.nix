@@ -24,4 +24,5 @@
   networking.hostName = "yamato";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+  virtualisation.podman.enable = true;
 }
