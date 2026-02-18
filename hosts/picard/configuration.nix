@@ -9,18 +9,9 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./nvidia-offload-config.nix
   ];
   nixpkgs.config.allowUnfree = true;
-  services.udev.extraRules = ''
-    # Intel iGPU (your intelBusId is PCI:0:2:0 -> 0000:00:02.0)
-    SUBSYSTEM=="drm", KERNEL=="card*", KERNELS=="0000:00:02.0", SYMLINK+="dri/intel-igpu"
-
-    # NVIDIA dGPU (your nvidiaBusId is PCI:2:0:0 -> 0000:02:00.0)
-    SUBSYSTEM=="drm", KERNEL=="card*", KERNELS=="0000:02:00.0", SYMLINK+="dri/nvidia-dgpu"
-  '';
-
-  environment.sessionVariables.AQ_DRM_DEVICES =
-    "/dev/dri/nvidia-dgpu:/dev/dri/intel-igpu";
 
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
@@ -33,17 +24,9 @@
     };
 
     initrd = {
-      kernelModules = [
-        "nvidia"
-        "nvidia_modeset"
-        "nvidia_uvm"
-        "nvidia_drm"
-      ];
       systemd.enable = true;
       luks.devices."luks-acc369d3-8fac-4a34-a4cd-b209e7710813".crypttabExtraOpts = [ "tpm2-device=auto" ];
     };
-
-    kernelParams = [ "nvidia-drm.modeset=1" ];
   };
 
   nix = {
@@ -83,25 +66,6 @@
         libvdpau-va-gl
       ];
     };
-    nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = true;
-      open = true;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
-      prime = {
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:2:0:0";
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-        sync = {
-          enable = false;
-        };
-      };
-    };
   };
 
   time.timeZone = "America/Chicago";
@@ -127,10 +91,6 @@
         layout = "us";
         variant = "";
       };
-      videoDrivers = [
-        "nvidia"
-        "modesetting"
-      ];
     };
 
     tailscale.enable = true;
@@ -236,7 +196,6 @@
       mpv
       nix-search-cli
       nodejs
-      nvtopPackages.nvidia
       google-chrome
       pavucontrol
       playerctl
