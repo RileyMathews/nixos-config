@@ -209,6 +209,7 @@
     systemPackages = with pkgs; [
       alacritty
       bitwarden-cli
+      brave
       brightnessctl
       btop-cuda
       catppuccin-cursors.mochaDark
