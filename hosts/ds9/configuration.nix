@@ -10,4 +10,9 @@
   home.packages = with pkgs; [
     fastfetch
   ];
+
+  programs.tmux = {
+    enable = true;
+    extraConfig = builtins.readFile ./tmux.conf;
+  };
 }
