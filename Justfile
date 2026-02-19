@@ -50,3 +50,15 @@ build-all:
     echo "========================================="
     echo "✓ All VMs built successfully!"
     echo "========================================="
+
+switch:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    host="$(cat /etc/hostname)"
+    if [[ -f /etc/NIXOS ]] || [[ -f /etc/os-release && "$(grep -i '^ID=' /etc/os-release || true)" =~ ^ID=nixos$ ]]; then
+      echo "Detected NixOS on '$host'; running nixos-rebuild switch"
+      sudo nixos-rebuild switch --flake ".#$host"
+    else
+      echo "Detected non-NixOS on '$host'; running Home Manager switch"
+      nix run home-manager -- switch --flake ".#$host"
+    fi
