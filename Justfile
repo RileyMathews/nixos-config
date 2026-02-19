@@ -34,3 +34,19 @@ deploy-all-vms:
     echo "✓ All VMs deployed successfully!"
     echo "========================================="
 
+build-all:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # Get VM list from flake and parse JSON array to space-separated list
+    vms=$(nix eval --json .#vmDeployments 2>/dev/null | jq -r '.[]')
+    for vm in $vms; do
+      echo ""
+      echo "========================================="
+      echo "building $vm..."
+      echo "========================================="
+      just build $vm
+    done
+    echo ""
+    echo "========================================="
+    echo "✓ All VMs built successfully!"
+    echo "========================================="
