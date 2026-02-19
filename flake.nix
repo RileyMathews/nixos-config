@@ -90,16 +90,32 @@
       hostNames =
         builtins.attrNames (builtins.readDir ./hosts);
 
-      # Keep only directories that contain configuration.nix
-      validHostNames =
+      homeHostNames = [
+        "ds9"
+      ];
+
+      # Keep only NixOS host directories that contain configuration.nix
+      validNixosHostNames =
         lib.filter (n:
           let t = (builtins.readDir ./hosts).${n};
-          in t == "directory" && builtins.pathExists (./hosts/${n}/configuration.nix)
+          in t == "directory" && !(lib.elem n homeHostNames) && builtins.pathExists (./hosts/${n}/configuration.nix)
         ) hostNames;
+
+      mkHome = hostName:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit system unstablePkgs; };
+          modules = [
+            ./hosts/${hostName}/configuration.nix
+          ];
+        };
 
     in {
       nixosConfigurations =
-        lib.genAttrs validHostNames mkHost;
+        lib.genAttrs validNixosHostNames mkHost;
+
+      homeConfigurations =
+        lib.genAttrs homeHostNames mkHome;
 
       # If you still want an explicit list for vmDeployments, keep it separate
       vmDeployments = [
