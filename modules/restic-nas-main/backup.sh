@@ -4,7 +4,7 @@ hostname="$(cat /etc/hostname)"
 nas_root="/mnt/nas-main"
 
 notify() {
-  curl -fsS -m 15 -d "$1" "https://ntfy.rileymathews.com/home-server-alerts" >/dev/null || true
+  curl -fsS -m 15 -H "Priority: high" -d "$1" "https://ntfy.rileymathews.com/home-server-alerts" >/dev/null || true
 }
 
 on_error() {
@@ -57,5 +57,3 @@ restic --retry-lock 5h forget --prune \
   --keep-daily 7 \
   --keep-weekly 4 \
   --keep-monthly 6
-
-notify "${hostname} nas main backup ran"

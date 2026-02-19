@@ -12,7 +12,7 @@ EOF
 }
 
 notify() {
-  curl -fsS -m 15 -d "$1" "https://ntfy.rileymathews.com/home-server-alerts" >/dev/null || true
+  curl -fsS -m 15 -H "Priority: high" -d "$1" "https://ntfy.rileymathews.com/home-server-alerts" >/dev/null || true
 }
 
 on_error() {
@@ -80,7 +80,6 @@ case "$cmd" in
       --keep-weekly 4 \
       --keep-monthly 6
 
-    notify "${hostname} local appdata backup ran"
     ;;
 
   *)
