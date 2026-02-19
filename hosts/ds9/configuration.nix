@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   home.username = "riley";
   home.homeDirectory = "/home/riley";
@@ -7,12 +7,12 @@
 
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [
-    fastfetch
-  ];
-
-  programs.tmux = {
-    enable = true;
-    extraConfig = builtins.readFile ./tmux.conf;
+  home.file = {
+    ".zshrc".text = ''
+      source ~/.config/zsh/zsh-entrypoint.sh
+    '';
+    ".config/zsh/zsh-entrypoint.sh".source = ./zsh-entrypoint.sh;
+    ".config/zsh/zsh-syntax-highligting-theme.sh".source = ./zsh-syntax-highligting-theme.sh;
+    ".tmux.conf".source = ./tmux.conf;
   };
 }
