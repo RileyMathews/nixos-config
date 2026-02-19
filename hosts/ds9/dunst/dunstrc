@@ -1,0 +1,38 @@
+[global]
+frame_color = "#74c7ec"  # Original: #8aadf4, added CC for ~80% opacity
+separator_color= frame      # This will now inherit the transparent frame_color
+separator_height = 1
+frame_width = 1
+width = (0, 400)
+padding = 16
+horizontal_padding = 32
+font = "Hack Nerd Font 12"
+background = "#11111b"    # Original: #313244, added CC for ~80% opacity
+foreground = "#cdd6f4"     # Foreground usually stays opaque for readability
+icon_position = left
+min_icon_size = 50
+max_icon_size = 60
+icon_path = $HOME/.local/share/icons/dunst
+mouse_right_click = context
+highlight = "#74c7ec" # Highlights can also have transparency if desired
+gap_size = 8
+offset = (0, 0)
+
+[urgency_critical]
+frame_color = "#f38ba8"
+foreground = "#f38ba8"
+
+[fullscreen_delay_everything]
+    fullscreen = delay
+[fullscreen_show_critical]
+    msg_urgency = critical
+    fullscreen = show
+[fullscreen_show_slack]
+    appname = "Slack"
+    fullscreen = show
+[fullscreen_show_volume]
+    appname = "Volume"
+    fullscreen = show
+[fullscreen_show_backlight]
+    appname = "Backlight"
+    fullscreen = show

@@ -1,5 +1,15 @@
 { ... }:
 {
+  imports = [
+    ./alacritty.nix
+    ./dunst.nix
+    ./hypr.nix
+    ./opencode.nix
+    ./rofi.nix
+    ./waybar.nix
+    ./wlr-which-key.nix
+  ];
+
   home.username = "riley";
   home.homeDirectory = "/home/riley";
 
