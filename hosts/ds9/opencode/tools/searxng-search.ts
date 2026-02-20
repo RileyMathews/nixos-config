@@ -1,4 +1,11 @@
-import { tool } from "@opencode-ai/plugin"
+import path from "node:path"
+
+const pluginEntry = path.join(
+  process.env.HOME ?? "/home/riley",
+  ".config/opencode/node_modules/@opencode-ai/plugin/dist/index.js"
+)
+
+const { tool } = await import(`file://${pluginEntry}`)
 
 interface SearchResult {
   title: string
@@ -26,7 +33,8 @@ interface FormattedResponse {
 }
 
 export default tool({
-  description: "Search the internet using SearXNG service. Returns up to 10 web search results with titles, URLs, and snippets.",
+  description:
+    "Search the internet using SearXNG service. Returns up to 10 web search results with titles, URLs, and snippets.",
   args: {
     query: tool.schema
       .string()
@@ -57,20 +65,13 @@ export default tool({
       .optional()
       .describe("Safe search level: 0 (off), 1 (moderate), 2 (strict)"),
   },
+
   async execute(args) {
-    const {
-      query,
-      categories,
-      language,
-      pageno = 1,
-      time_range,
-      safesearch,
-    } = args
+    const { query, categories, language, pageno = 1, time_range, safesearch } = args
 
     const searxngUrl = "https://search.rileymathews.com/search"
 
     try {
-      // Build query parameters
       const params = new URLSearchParams()
       params.append("q", query)
       params.append("format", "json")
@@ -84,25 +85,26 @@ export default tool({
 
       const fullUrl = `${searxngUrl}?${params.toString()}`
 
-      // Make the API request
+      // NOTE: Node's native fetch (undici) does NOT support `timeout:` option.
+      // Use AbortController for a real timeout.
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10_000)
+
       const response = await fetch(fullUrl, {
         method: "GET",
         headers: {
           "User-Agent": "OpenCode-SearXNG-Tool/1.0",
           Accept: "application/json",
         },
-        timeout: 10000, // 10 second timeout
-      })
+        signal: controller.signal,
+      }).finally(() => clearTimeout(timeoutId))
 
       if (!response.ok) {
-        throw new Error(
-          `SearXNG API error: ${response.status} ${response.statusText}`
-        )
+        throw new Error(`SearXNG API error: ${response.status} ${response.statusText}`)
       }
 
       const data = (await response.json()) as SearXNGResponse
 
-      // Extract and limit results to 10
       const limitedResults: SearchResult[] = (data.results || [])
         .slice(0, 10)
         .map((result) => ({
@@ -112,18 +114,15 @@ export default tool({
           engine: result.engine?.[0],
         }))
 
-      // Format results for human readability
-      let formattedResults = ""
-      if (limitedResults.length > 0) {
-        formattedResults = limitedResults
-          .map(
-            (result, index) =>
-              `${index + 1}. ${result.title}\n   URL: ${result.url}\n   ${result.snippet}`
-          )
-          .join("\n\n")
-      } else {
-        formattedResults = "No results found for the given query."
-      }
+      const formattedResults =
+        limitedResults.length > 0
+          ? limitedResults
+              .map(
+                (result, index) =>
+                  `${index + 1}. ${result.title}\n   URL: ${result.url}\n   ${result.snippet}`
+              )
+              .join("\n\n")
+          : "No results found for the given query."
 
       const response_data: FormattedResponse = {
         query,
@@ -134,8 +133,7 @@ export default tool({
 
       return JSON.stringify(response_data, null, 2)
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
       return JSON.stringify(
         {
           query,

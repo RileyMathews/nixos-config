@@ -29,7 +29,6 @@ in
     ".config/opencode/skills".source = ./opencode/skills;
     ".config/opencode/tools" = {
       source = ./opencode/tools;
-      recursive = true;
     };
   } // lib.optionalAttrs cfg.enableOhMyOpencodePlugin {
     ".config/opencode/oh-my-opencode.json".source = ./opencode/oh-my-opencode.json;
