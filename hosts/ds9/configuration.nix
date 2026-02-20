@@ -6,7 +6,7 @@
 
   opencode.ohMyOpencodeAgentModelMapping = {
     sisyphus = {
-      model = "opencode/kimi-k2.5-free";
+      model = "opencode/big-pickle";
     };
     hephaestus = {
       model = "openai/gpt-5.3-codex";
@@ -23,7 +23,7 @@
       model = "opencode/minimax-m2.5-free";
     };
     "multimodal-looker" = {
-      model = "opencode/kimi-k2.5-free";
+      model = "openai/gpt-5.2";
     };
     prometheus = {
       model = "openai/gpt-5.2";
@@ -38,7 +38,7 @@
       variant = "medium";
     };
     atlas = {
-      model = "opencode/kimi-k2.5-free";
+      model = "openai/gpt-5.2";
     };
   };
 
