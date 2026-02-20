@@ -246,7 +246,7 @@
         ../shared/home-manager/riley
       ];
 
-      opencode.enableOhMyOpencodePlugin = false;
+      opencode.enableOhMyOpencodePlugin = true;
     };
   };
 
