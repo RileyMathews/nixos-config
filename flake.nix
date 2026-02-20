@@ -55,6 +55,7 @@
       # Anything not listed falls back to defaultModules.
       hostExtras = {
         picard = [
+          home-manager.nixosModules.home-manager
           kolide.nixosModules.kolide-launcher
           auto-cpufreq.nixosModules.default
         ];

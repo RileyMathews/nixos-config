@@ -238,6 +238,18 @@
     shell = pkgs.zsh;
   };
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.riley = {
+      imports = [
+        ../shared/home-manager/riley
+      ];
+
+      opencode.enableOhMyOpencodePlugin = false;
+    };
+  };
+
   virtualisation = {
     containers.enable = true;
     podman = {
