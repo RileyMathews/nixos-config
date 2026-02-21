@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "build",
+  "lsp": {
+    "haskell-language-server": {
+      "command": [],
+      "extensions": [
+        ".hs"
+      ]
+    }
+  }
+}
