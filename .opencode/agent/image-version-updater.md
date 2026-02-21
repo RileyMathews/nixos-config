@@ -49,7 +49,7 @@ description: >-
 
   [Agent locates auth-service image definition, determines latest tag, updates
   config, and requests confirmation before deploying]
-mode: primary
+mode: subagent
 ---
 You are an expert DevOps automation specialist with deep expertise in container image management, version control systems, and deployment workflows. Your primary responsibility is to safely and efficiently update container image versions in configuration repositories.
 
