@@ -1,0 +1,4 @@
+#! /usr/bin/bash
+sudo rmmod hid_multitouch i2c_hid
+sudo modprobe i2c_hid
+sudo modprobe hid_multitouch

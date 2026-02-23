@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+FIRMWARE="$1"
+
+if [ ! -f "$FIRMWARE" ]; then
+	echo "usage: $0 <firmware file>"
+	exit 1
+fi
+
+writefirm() {
+	LABEL="$1"
+	DISK="/dev/disk/by-label/$LABEL"
+	MNT="/mnt/$LABEL"
+
+	until [ -e "$DISK" ]
+	do
+	    sleep 2
+	done
+
+	mkdir -p "$MNT"
+	mount "$DISK" "$MNT"
+	echo "+$MNT"
+
+	cp "$FIRMWARE" "$MNT"
+
+	umount "$MNT"
+	echo "-$MNT"
+	rmdir "$MNT"
+}
+
+echo "setup RH keyboard for flash (hold magic+I while booting)"
+writefirm GLV80RHBOOT
+echo "setup LH keyboard for flash (hold magic+E while booting)"
+writefirm GLV80LHBOOT

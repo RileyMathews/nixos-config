@@ -1,0 +1,50 @@
+#! /bin/bash
+
+set -euox pipefail
+
+rm -rf /tmp/snd-usb-audio-kmod
+rm -rf /tmp/snd-usb-audio-kmod.tar.xz
+rm -rf /tmp/fcp-support
+rm -rf /tmp/alsa-scarlett-gui
+mkdir -p /tmp/snd-usb-audio-kmod
+
+KERNEL_VERSION=$(uname -r | cut -d '-' -f 1)
+echo "Kernel version: ${KERNEL_VERSION}"
+
+# https://github.com/geoffreybennett/linux-fcp/releases/download/v6.12-f8/snd-usb-audio-kmod-v6.12.10-f8.tar.xz
+
+wget https://github.com/geoffreybennett/linux-fcp/releases/download/v6.12-f8/snd-usb-audio-kmod-v6.12.10-f8.tar.xz -O /tmp/snd-usb-audio-kmod.tar.xz
+tar -xf /tmp/snd-usb-audio-kmod.tar.xz -C /tmp/snd-usb-audio-kmod --strip-components=1
+rm -rf /tmp/snd-usb-audio-kmod.tar.xz
+cd /tmp/snd-usb-audio-kmod
+
+KSRCDIR=/lib/modules/$(uname -r)/build
+make -j4 -C $KSRCDIR M=$(pwd) clean
+make -j4 -C $KSRCDIR M=$(pwd)
+sudo make -j4 -C $KSRCDIR M=$(pwd) INSTALL_MOD_DIR=updates/snd-usb-audio modules_install
+sudo depmod
+
+cd /tmp
+rm -rf /tmp/snd-usb-audio-kmod
+
+cd /tmp
+git clone git@github.com:geoffreybennett/fcp-support.git
+cd fcp-support
+make
+sudo make install
+sudo systemctl daemon-reload
+sudo udevadm control --reload-rules
+
+cd /tmp
+rm -rf fcp-support
+
+git clone git@github.com:geoffreybennett/alsa-scarlett-gui.git
+cd alsa-scarlett-gui
+git checkout g4-big
+cd src
+
+make -j4
+sudo make install
+
+cd /tmp
+rm -rf alsa-scarlett-gui

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  linkdot RELATIVE_PATH
+
+Example:
+  linkdot .config/hypr
+  # links: ~/dotfiles/.config/hypr  ->  ~/.config/hypr
+
+Environment:
+  DOTFILES_DIR  Override dotfiles directory (default: ~/dotfiles)
+EOF
+}
+
+if [[ $# -ne 1 ]]; then
+  usage >&2
+  exit 2
+fi
+
+rel="${1#./}"                       # allow ".config/foo" or "./.config/foo"
+src="$DOTFILES_DIR/$rel"
+dst="$HOME/$rel"
+
+if [[ ! -d "$DOTFILES_DIR" ]]; then
+  echo "Error: dotfiles dir not found: $DOTFILES_DIR" >&2
+  exit 1
+fi
+
+if [[ ! -e "$src" ]]; then
+  echo "Error: source does not exist: $src" >&2
+  exit 1
+fi
+
+# Ensure parent dir exists at destination (e.g., ~/.config)
+mkdir -p "$(dirname "$dst")"
+
+# If destination exists, back it up (file/dir/symlink) before linking
+if [[ -e "$dst" || -L "$dst" ]]; then
+  # If it's already the correct symlink, do nothing
+  if [[ -L "$dst" ]] && [[ "$(readlink "$dst")" == "$src" ]]; then
+    echo "Already linked: $dst -> $src"
+    exit 0
+  fi
+
+  ts="$(date +%Y%m%d-%H%M%S)"
+  backup="${dst}.bak.${ts}"
+  mv -v -- "$dst" "$backup"
+fi
+
+ln -s -- "$src" "$dst"
+echo "Linked: $dst -> $src"

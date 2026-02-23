@@ -1,0 +1,7 @@
+#! /bin/bash
+
+echo "running paru update"
+paru
+
+echo "calling pacman-update to clear update tail file"
+pacman-updates

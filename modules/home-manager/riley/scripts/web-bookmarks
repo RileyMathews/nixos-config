@@ -1,0 +1,3 @@
+#!/bin/sh
+chosen=$(cat ~/.config/personal-data/bookmarks.txt | rofi -dmenu -i)
+xdg-open $chosen

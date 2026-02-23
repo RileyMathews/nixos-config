@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+for r in $(seq 0 20 255); do
+  for g in $(seq 0 20 255); do
+    for b in $(seq 0 20 255); do
+      printf "%02X%02X%02X\n" $r $g $b >> "/sys/class/leds/system76_acpi::kbd_backlight/color"
+      printf "%02X%02X%02X\n" $r $g $b # >> "/sys/class/leds/system76_acpi::kbd_backlight/color"
+    done
+  done
+done
+

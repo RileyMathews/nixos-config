@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Configuration
+# The branch to compare against. Change 'master' to 'main' if that's your default.
+BASE_BRANCH="master"
+
+echo "Comparing current branch with '$BASE_BRANCH' for changed files..."
+
+# Get the list of files that are Added (A), Modified (M), or Renamed (R)
+# compared to the base branch's merge-base with the current branch.
+# This ensures we only format files you've introduced or changed.
+CHANGED_FILES=$(git diff --name-only --diff-filter=AMR "$BASE_BRANCH"...)
+
+# Filter out files that don't exist or are commonly ignored by Prettier
+# (e.g., directories like node_modules, build outputs).
+# This is a basic filter; for a more comprehensive one, rely on .prettierignore.
+FILTERED_FILES=""
+for file in $CHANGED_FILES; do
+    if [ -f "$file" ] && [[ ! "$file" =~ ^(node_modules/|dist/|build/|coverage/|.git/) ]]; then
+        FILTERED_FILES="$FILTERED_FILES \"$file\""
+    fi
+done
+
+# Check if there are any files to format after filtering
+if [ -z "$FILTERED_FILES" ]; then
+    echo "No relevant files found to format between the current branch and '$BASE_BRANCH'."
+    exit 0
+fi
+
+echo "Running prettier --write on the following files:"
+# Print each file on a new line for readability
+printf '%s\n' $FILTERED_FILES | xargs -n 1 echo
+
+# Execute Prettier.
+# npx is used here to reliably find the locally installed prettier executable.
+# xargs ensures that if there are many files, it calls prettier efficiently.
+# We explicitly set a max-args to avoid command line limits for a huge number of files.
+echo $FILTERED_FILES | xargs -r -P 4 prettier --write
+
+# Check the exit status of the Prettier command
+if [ $? -eq 0 ]; then
+    echo "Successfully formatted changed files."
+else
+    echo "ERROR: Prettier encountered an issue while formatting files. Please check the output above."
+    exit 1
+fi

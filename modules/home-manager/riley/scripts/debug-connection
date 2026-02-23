@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+URL="${1:?usage: $0 <url-or-host>}"
+
+# If user passes a bare hostname, make it a URL so parsing works.
+if [[ "$URL" != *"://"* ]]; then
+  URL="https://$URL"
+fi
+
+HOST="$(python3 -c 'import sys, urllib.parse
+u = urllib.parse.urlparse(sys.argv[1])
+print(u.hostname or "")' "$URL")"
+
+if [[ -z "${HOST}" ]]; then
+  echo "Could not parse host from URL: $URL" >&2
+  exit 2
+fi
+
+OUT="repo-netdiag-$(date -Is | tr ':+' '__').log"
+exec > >(tee "$OUT") 2>&1
+
+echo "== repo-netdiag =="
+echo "time: $(date -Is)"
+echo "url:  $URL"
+echo "host: $HOST"
+echo
+
+echo "## routing"
+ip route get "$HOST" || true
+echo
+
+echo "## DNS (system)"
+resolvectl status 2>/dev/null | sed -n '1,200p' || true
+dig +short "$HOST" A || true
+dig +short "$HOST" AAAA || true
+echo
+
+echo "## DNS (1.1.1.1)"
+dig @1.1.1.1 +short "$HOST" A || true
+dig @1.1.1.1 +short "$HOST" AAAA || true
+echo
+
+echo "## curl timings (default)"
+curl -L --fail --output /dev/null \
+  --write-out $'remote_ip:%{remote_ip}\nhttp:%{http_version}\n'\
+$'dns:%{time_namelookup} connect:%{time_connect} tls:%{time_appconnect}\n'\
+$'ttfb:%{time_starttransfer} total:%{time_total}\n'\
+$'speed_Bps:%{speed_download}\n' \
+  "$URL" || true
+echo
+
+echo "## curl v4 vs v6"
+curl -4 -L --fail --output /dev/null -w 'v4 ip:%{remote_ip} speed_Bps:%{speed_download}\n' "$URL" || true
+curl -6 -L --fail --output /dev/null -w 'v6 ip:%{remote_ip} speed_Bps:%{speed_download}\n' "$URL" || true
+echo
+
+echo "## curl http2 vs http1.1"
+curl --http2   -L --fail --output /dev/null -w 'h2 ip:%{remote_ip} speed_Bps:%{speed_download}\n' "$URL" || true
+curl --http1.1 -L --fail --output /dev/null -w 'h1 ip:%{remote_ip} speed_Bps:%{speed_download}\n' "$URL" || true
+echo
+
+echo "## tracepath (pmtu hints)"
+tracepath -n "$HOST" | head -n 40 || true
+echo
+
+echo "## mtr (ICMP)"
+mtr -rw -c 100 "$HOST" || true
+echo
+
+echo "## mtr (TCP 443) — may require sudo"
+sudo mtr -rw -c 100 -T -P 443 "$HOST" || true
+echo
+
+echo "## interface stats"
+ip -s link || true
+echo
+
+echo "## tailscale (if installed)"
+command -v tailscale >/dev/null && { tailscale status || true; tailscale netcheck || true; } || true
+echo
+
+echo "log saved to: $OUT"
+

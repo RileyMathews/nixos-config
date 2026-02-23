@@ -1,0 +1,3 @@
+#! /bin/bash
+directory=$(command ls ~/code | fzf)
+_tmux_switch_or_activate ~/code/$directory $directory

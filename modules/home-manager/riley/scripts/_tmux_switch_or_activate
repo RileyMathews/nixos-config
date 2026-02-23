@@ -1,0 +1,14 @@
+#! zsh 
+directory=$1
+session_name=$2
+if [[ $TERM_PROGRAM == "tmux" ]]; then
+    command="switch"
+else
+    command="attach"
+fi
+
+if tmux ls | grep -q "^${session_name}:"; then
+else
+    tmux new-session -d -s $session_name -c $directory
+fi
+tmux $command -t $session_name

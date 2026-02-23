@@ -1,0 +1,34 @@
+#! /usr/bin/env bash
+
+set -e
+
+# Default save directory
+SAVE_DIR="$HOME/Pictures/Screenshots"
+
+# Ensure the save directory exists
+mkdir -p "$SAVE_DIR"
+
+# Dependencies: grim, slurp, wl-copy
+check_dependencies() {
+    for cmd in grim slurp wl-copy; do
+        if ! command -v $cmd &> /dev/null; then
+            echo "Error: $cmd is not installed. Please install it."
+            exit 1
+        fi
+    done
+}
+
+main() {
+    check_dependencies
+
+    local timestamp
+    timestamp=$(date +'%Y-%m-%d_%H-%M-%S')
+    local filepath="$SAVE_DIR/screenshot_$timestamp.png"
+
+    grim -g "$(slurp)" "$filepath"
+    wl-copy < "$filepath"
+
+    notify-send "Screenshot : " "$filepath saved and copied to clipboard."
+}
+
+main

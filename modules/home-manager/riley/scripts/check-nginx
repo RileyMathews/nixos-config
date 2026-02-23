@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Configuration
+REMOTE_USER="riley"
+REMOTE_HOST="gateway"
+REMOTE_LOG_DIR="/var/log/nginx"
+LOCAL_LOG_DIR="./nginx_logs"
+GOACCESS_PORT="7890"
+
+echo "=== Syncing nginx logs and starting GoAccess ==="
+
+# Create local log directory and sync logs
+mkdir -p "$LOCAL_LOG_DIR"
+
+echo "Syncing logs..."
+rsync -avz --rsync-path="sudo rsync" \
+    --include="access.log*" \
+    --exclude="*" \
+    "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_LOG_DIR}/" \
+    "$LOCAL_LOG_DIR/"
+
+echo "Starting GoAccess on http://localhost:${GOACCESS_PORT}"
+
+# Process all access logs (compressed and uncompressed) and pipe to GoAccess
+find "$LOCAL_LOG_DIR" -name "access.log*" -type f | sort | while read log_file; do
+    if [[ $log_file == *.gz ]]; then
+        zcat "$log_file"
+    else
+        cat "$log_file"
+    fi
+done | goaccess - \
+    --log-format=COMBINED \
+    --date-format=%d/%b/%Y \
+    --time-format=%H:%M:%S \
+    -o report.html
+
+xdg-open report.html

@@ -1,0 +1,7 @@
+#! /bin/sh
+echo current status
+cat /sys/class/drm/card1/device/power/runtime_status
+
+echo ""
+echo current power setting
+cat /sys/class/drm/card1/device/power/control

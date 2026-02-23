@@ -1,0 +1,817 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import datetime as _dt
+import os
+import re
+import shlex
+import shutil
+import socket
+import subprocess
+import sys
+import time
+import urllib.parse
+from dataclasses import dataclass
+from enum import Enum
+from typing import Optional, Tuple, List, Dict
+
+
+class Status(Enum):
+    OK = "OK"
+    WARN = "WARN"
+    FAIL = "FAIL"
+    SKIP = "SKIP"
+
+
+@dataclass
+class Result:
+    name: str
+    status: Status
+    summary: str
+    details: List[str]
+    duration_s: float
+
+
+ANSI = {
+    "reset": "\x1b[0m",
+    "red": "\x1b[31m",
+    "green": "\x1b[32m",
+    "yellow": "\x1b[33m",
+    "gray": "\x1b[90m",
+    "bold": "\x1b[1m",
+}
+
+
+def is_tty() -> bool:
+    return sys.stdout.isatty()
+
+
+def color(s: str, c: str, enabled: bool) -> str:
+    if not enabled:
+        return s
+    return f"{ANSI[c]}{s}{ANSI['reset']}"
+
+
+def symbol(status: Status) -> str:
+    return {
+        Status.OK: "✅",
+        Status.WARN: "⚠️",
+        Status.FAIL: "❌",
+        Status.SKIP: "⏭️",
+    }[status]
+
+
+def human_bps(bps: Optional[float]) -> str:
+    if bps is None:
+        return "n/a"
+    v = float(bps)
+    units = ["B/s", "KiB/s", "MiB/s", "GiB/s"]
+    for u in units:
+        if v < 1024.0 or u == units[-1]:
+            if u == "B/s":
+                return f"{v:.0f} {u}"
+            return f"{v:.1f} {u}"
+        v /= 1024.0
+    return f"{v:.1f} GiB/s"
+
+
+def now_stamp() -> str:
+    return _dt.datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def xdg_state_dir() -> str:
+    base = os.environ.get("XDG_STATE_HOME")
+    if not base:
+        base = os.path.expanduser("~/.local/state")
+    return base
+
+
+def which(cmd: str) -> Optional[str]:
+    return shutil.which(cmd)
+
+
+@dataclass
+class CmdOut:
+    cmd: List[str]
+    rc: int
+    stdout: str
+    stderr: str
+    duration_s: float
+    timed_out: bool
+
+
+def run_cmd(cmd: List[str], timeout_s: Optional[float], logf) -> CmdOut:
+    t0 = time.monotonic()
+    timed_out = False
+    try:
+        p = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+        rc = p.returncode
+        out = p.stdout
+        err = p.stderr
+    except subprocess.TimeoutExpired as e:
+        timed_out = True
+        rc = 124
+        out = e.stdout or ""
+        err = (e.stderr or "") + "\n[netdiag] timeout"
+    except FileNotFoundError:
+        rc = 127
+        out = ""
+        err = "[netdiag] command not found"
+    dt = time.monotonic() - t0
+
+    # Log everything (even OK cases) for forensics.
+    logf.write(f"\n$ {shlex.join(cmd)}\n")
+    if out:
+        logf.write(out if out.endswith("\n") else out + "\n")
+    if err:
+        logf.write(err if err.endswith("\n") else err + "\n")
+    logf.write(f"[netdiag] rc={rc} dur={dt:.3f}s\n")
+    logf.flush()
+
+    return CmdOut(cmd=cmd, rc=rc, stdout=out, stderr=err, duration_s=dt, timed_out=timed_out)
+
+
+def parse_target(target: str) -> Tuple[str, str, int]:
+    # Accept URL or hostname.
+    if "://" not in target:
+        target = "https://" + target
+
+    u = urllib.parse.urlparse(target)
+    if not u.hostname:
+        raise ValueError(f"Could not parse host from input: {target}")
+
+    scheme = u.scheme.lower()
+    port = u.port
+    if port is None:
+        port = 443 if scheme == "https" else 80 if scheme == "http" else 443
+
+    # Ensure URL has at least a path (curl treats bare https://host as fine, but keep consistent)
+    path = u.path if u.path else "/"
+    rebuilt = urllib.parse.urlunparse((scheme, u.netloc, path, u.params, u.query, u.fragment))
+    return rebuilt, u.hostname, port
+
+
+IP_RE = re.compile(r"^(?:\d{1,3}\.){3}\d{1,3}$")
+IP6_RE = re.compile(r"^[0-9a-fA-F:]+$")
+
+
+def ips_from_lines(lines: str) -> List[str]:
+    ips: List[str] = []
+    for line in lines.splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        # dig output may include CNAMEs; filter IPs only.
+        if IP_RE.match(s) or (":" in s and IP6_RE.match(s)):
+            ips.append(s)
+    # preserve order, unique
+    seen = set()
+    out = []
+    for ip in ips:
+        if ip not in seen:
+            seen.add(ip)
+            out.append(ip)
+    return out
+
+
+def resolve_getent(host: str, family: str, logf) -> List[str]:
+    # family: "v4" or "v6"
+    if which("getent"):
+        sub = "ahostsv4" if family == "v4" else "ahostsv6"
+        co = run_cmd(["getent", sub, host], timeout_s=4, logf=logf)
+        if co.rc == 0 and co.stdout.strip():
+            ips = []
+            for line in co.stdout.splitlines():
+                # first column is ip
+                parts = line.split()
+                if parts:
+                    ip = parts[0]
+                    if family == "v4" and IP_RE.match(ip):
+                        ips.append(ip)
+                    if family == "v6" and ":" in ip:
+                        ips.append(ip)
+            # unique
+            seen = set()
+            out = []
+            for ip in ips:
+                if ip not in seen:
+                    seen.add(ip)
+                    out.append(ip)
+            return out
+
+    # fallback: socket.getaddrinfo
+    fam = socket.AF_INET if family == "v4" else socket.AF_INET6
+    try:
+        infos = socket.getaddrinfo(host, None, fam, socket.SOCK_STREAM)
+        ips = []
+        for info in infos:
+            ip = info[4][0]
+            ips.append(ip)
+        seen = set()
+        out = []
+        for ip in ips:
+            if ip not in seen:
+                seen.add(ip)
+                out.append(ip)
+        return out
+    except socket.gaierror:
+        return []
+
+
+def parse_default_iface(logf) -> Optional[str]:
+    if not which("ip"):
+        return None
+    co = run_cmd(["ip", "route", "show", "default"], timeout_s=3, logf=logf)
+    if co.rc != 0:
+        return None
+    m = re.search(r"\bdev\s+(\S+)", co.stdout)
+    return m.group(1) if m else None
+
+
+def has_default_route_v6(logf) -> bool:
+    if not which("ip"):
+        return False
+    co = run_cmd(["ip", "-6", "route", "show", "default"], timeout_s=3, logf=logf)
+    return bool(co.stdout.strip()) and co.rc == 0
+
+
+def ipv6_globals_on_iface(dev: str, logf) -> List[str]:
+    if not which("ip"):
+        return []
+    co = run_cmd(["ip", "-6", "addr", "show", "dev", dev], timeout_s=3, logf=logf)
+    addrs = []
+    for line in co.stdout.splitlines():
+        line = line.strip()
+        if line.startswith("inet6") and "scope global" in line:
+            # inet6 <addr>/<prefix> scope global ...
+            parts = line.split()
+            if len(parts) >= 2:
+                addrs.append(parts[1])
+    return addrs
+
+
+def parse_ping_stats(out: str) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+    """
+    Returns (loss_pct, rtt_avg_ms, rtt_max_ms)
+    """
+    loss = None
+    avg = None
+    mx = None
+
+    for line in out.splitlines():
+        if "packet loss" in line:
+            m = re.search(r"(\d+(?:\.\d+)?)%\s*packet loss", line)
+            if m:
+                loss = float(m.group(1))
+        if "min/avg" in line or "round-trip" in line:
+            m = re.search(r"=\s*([\d\.]+)/([\d\.]+)/([\d\.]+)/", line)
+            if m:
+                avg = float(m.group(2))
+                mx = float(m.group(3))
+    return loss, avg, mx
+
+
+def ping(host: str, family: str, count: int, timeout_s: int, logf) -> Tuple[Status, str, List[str]]:
+    if not which("ping"):
+        return Status.SKIP, "ping not installed", []
+    cmd = ["ping", "-c", str(count), "-W", str(timeout_s)]
+    if family == "v4":
+        cmd.insert(1, "-4")
+    else:
+        cmd.insert(1, "-6")
+    cmd.append(host)
+
+    co = run_cmd(cmd, timeout_s=count * (timeout_s + 1) + 2, logf=logf)
+    loss, avg, mx = parse_ping_stats(co.stdout + "\n" + co.stderr)
+
+    if co.rc != 0:
+        return Status.FAIL, f"{family} ping failed", [
+            f"cmd: {shlex.join(cmd)}",
+            (co.stderr.strip() or co.stdout.strip() or "no output")[:400],
+        ]
+
+    if loss is None:
+        return Status.WARN, f"{family} ping: could not parse stats", []
+    if loss > 0.0:
+        return Status.WARN, f"{family} ping loss {loss:.1f}%", [
+            f"avg rtt: {avg:.1f} ms" if avg is not None else "avg rtt: n/a",
+            f"max rtt: {mx:.1f} ms" if mx is not None else "max rtt: n/a",
+        ]
+
+    s = f"{family} ping OK"
+    if avg is not None:
+        s += f" (avg {avg:.1f} ms, max {mx:.1f} ms)"
+    return Status.OK, s, []
+
+
+def curl_sample(url: str, family: str, sample_bytes: int, max_time_s: int, connect_timeout_s: int, logf) -> Tuple[Status, str, List[str], Dict[str, float | str] | None]:
+    if not which("curl"):
+        return Status.SKIP, "curl not installed", [], None
+
+    # Use Range to avoid downloading huge files, but make the sample big enough to be meaningful.
+    # Some servers ignore Range; we'll detect too-small downloads.
+    marker = "__CURLWOUT__"
+    wout = (
+        f"\n{marker} "
+        "remote_ip=%{remote_ip} "
+        "http=%{http_version} "
+        "dns=%{time_namelookup} "
+        "connect=%{time_connect} "
+        "tls=%{time_appconnect} "
+        "ttfb=%{time_starttransfer} "
+        "total=%{time_total} "
+        "size=%{size_download} "
+        "speed=%{speed_download}\n"
+    )
+
+    cmd = [
+        "curl",
+        "-sS",
+        "-L",
+        "--fail",
+        "--output",
+        "/dev/null",
+        "--max-time",
+        str(max_time_s),
+        "--connect-timeout",
+        str(connect_timeout_s),
+        "--range",
+        f"0-{sample_bytes-1}",
+        "-w",
+        wout,
+    ]
+    cmd.append("-4" if family == "v4" else "-6")
+    cmd.append(url)
+
+    co = run_cmd(cmd, timeout_s=max_time_s + connect_timeout_s + 5, logf=logf)
+
+    text = (co.stdout or "") + (co.stderr or "")
+    m = re.search(rf"{re.escape(marker)}\s+(.*)", text)
+    metrics: Dict[str, float | str] = {}
+    if m:
+        fields = m.group(1).strip().split()
+        for f in fields:
+            if "=" in f:
+                k, v = f.split("=", 1)
+                # numeric fields
+                if k in ("dns", "connect", "tls", "ttfb", "total", "size", "speed"):
+                    try:
+                        metrics[k] = float(v)
+                    except ValueError:
+                        metrics[k] = v
+                else:
+                    metrics[k] = v
+
+    if co.rc != 0:
+        details = [
+            f"cmd: {shlex.join(cmd)}",
+            ("curl output: " + (co.stderr.strip() or co.stdout.strip() or "no output"))[:500],
+        ]
+        return Status.FAIL, f"{family} curl failed", details, metrics if metrics else None
+
+    # Evaluate
+    remote_ip = metrics.get("remote_ip", "n/a")
+    httpv = metrics.get("http", "n/a")
+    size = float(metrics.get("size", 0.0) or 0.0)
+    speed = float(metrics.get("speed", 0.0) or 0.0)
+
+    summary = f"{family} curl OK ({human_bps(speed)}, {size/1024/1024:.1f} MiB, ip {remote_ip}, http {httpv})"
+    details: List[str] = []
+
+    # Heuristics: only WARN (not FAIL) for "slow", because baseline varies.
+    if size < 1_000_000:
+        details.append("Downloaded <1 MiB; throughput signal is weak. Use a real file URL for better results.")
+        return Status.WARN, summary, details, metrics
+
+    # Timing heuristics
+    dns = float(metrics.get("dns", 0.0) or 0.0)
+    conn = float(metrics.get("connect", 0.0) or 0.0)
+    tls = float(metrics.get("tls", 0.0) or 0.0)
+    ttfb = float(metrics.get("ttfb", 0.0) or 0.0)
+
+    if dns > 0.5:
+        details.append(f"Slow DNS lookup: {dns:.3f}s")
+    if conn > 1.0:
+        details.append(f"Slow TCP connect: {conn:.3f}s")
+    if tls > 1.0 and url.startswith("https://"):
+        details.append(f"Slow TLS handshake: {tls:.3f}s")
+    if ttfb > 1.5:
+        details.append(f"Slow time-to-first-byte: {ttfb:.3f}s")
+
+    # Throughput heuristic
+    if speed < 50_000:  # 50 KiB/s
+        details.append(f"Very low throughput observed: {human_bps(speed)} (may indicate loss/jitter/PMTU/congestion)")
+
+    if details:
+        return Status.WARN, summary, details, metrics
+
+    return Status.OK, summary, [], metrics
+
+
+def pmtu_probe_ipv4(logf) -> Result:
+    name = "PMTU probe (IPv4 DF ping 1472B to 1.1.1.1)"
+    t0 = time.monotonic()
+    if not which("ping"):
+        return Result(name, Status.SKIP, "ping not installed", [], 0.0)
+
+    # 1472 payload + 28 bytes headers = 1500 MTU
+    cmd = ["ping", "-4", "-c", "1", "-W", "1", "-M", "do", "-s", "1472", "1.1.1.1"]
+    co = run_cmd(cmd, timeout_s=3, logf=logf)
+    dt = time.monotonic() - t0
+
+    if co.rc == 0:
+        return Result(name, Status.OK, "OK", [], dt)
+
+    # This can be either real PMTU trouble OR filtered ICMP.
+    details = [
+        "This can indicate PMTU blackholing, OR simply ICMP 'frag needed' being blocked.",
+        "If you see repo downloads stall/crawl (esp. with VPNs), PMTU is a prime suspect.",
+        f"stderr: {(co.stderr.strip() or 'n/a')[:300]}",
+    ]
+    return Result(name, Status.WARN, "Probe failed", details, dt)
+
+
+def interface_counters(dev: str, logf) -> Result:
+    name = f"Interface counters ({dev})"
+    t0 = time.monotonic()
+    if not which("ip"):
+        return Result(name, Status.SKIP, "ip not installed", [], 0.0)
+
+    co = run_cmd(["ip", "-s", "link", "show", "dev", dev], timeout_s=3, logf=logf)
+    dt = time.monotonic() - t0
+    if co.rc != 0:
+        return Result(name, Status.WARN, "Could not read counters", [co.stderr.strip()[:300]], dt)
+
+    # crude parse: find RX/TX numeric lines after RX:/TX:
+    rx_err = rx_drop = tx_err = tx_drop = None
+    lines = co.stdout.splitlines()
+    for i, line in enumerate(lines):
+        if line.strip().startswith("RX:"):
+            if i + 1 < len(lines):
+                nums = lines[i + 1].split()
+                if len(nums) >= 4:
+                    rx_err = int(nums[2])
+                    rx_drop = int(nums[3])
+        if line.strip().startswith("TX:"):
+            if i + 1 < len(lines):
+                nums = lines[i + 1].split()
+                if len(nums) >= 4:
+                    tx_err = int(nums[2])
+                    tx_drop = int(nums[3])
+
+    if rx_err is None or tx_err is None:
+        return Result(name, Status.OK, "OK (unparsed)", [], dt)
+
+    if (rx_err or rx_drop or tx_err or tx_drop):
+        details = [
+            f"RX errors={rx_err} drops={rx_drop}",
+            f"TX errors={tx_err} drops={tx_drop}",
+            "Non-zero errors/drops can wreck bulk TCP downloads long before 'web browsing' looks broken.",
+            "If these are increasing during an incident: suspect cable/Wi‑Fi/router/switch/NIC issues.",
+        ]
+        return Result(name, Status.WARN, "Non-zero errors/drops", details, dt)
+
+    return Result(name, Status.OK, "OK (no errors/drops)", [], dt)
+
+
+def tailscale_netcheck(logf) -> Result:
+    name = "Tailscale netcheck"
+    t0 = time.monotonic()
+    if not which("tailscale"):
+        return Result(name, Status.SKIP, "tailscale not installed", [], 0.0)
+
+    co = run_cmd(["tailscale", "netcheck"], timeout_s=8, logf=logf)
+    dt = time.monotonic() - t0
+    if co.rc != 0:
+        return Result(name, Status.WARN, "netcheck failed", [(co.stderr.strip() or co.stdout.strip())[:300]], dt)
+
+    # Parse basic hints
+    v4 = v6 = None
+    for line in co.stdout.splitlines():
+        if line.strip().startswith("* IPv4:"):
+            v4 = line.split(":", 1)[1].strip()
+        if line.strip().startswith("* IPv6:"):
+            v6 = line.split(":", 1)[1].strip()
+
+    if v6 and v6.startswith("no"):
+        return Result(name, Status.WARN, f"IPv6: {v6}", ["This can reintroduce 'IPv6 advertised but broken' style issues."], dt)
+
+    return Result(name, Status.OK, f"OK (IPv4: {v4 or 'n/a'}, IPv6: {v6 or 'n/a'})", [], dt)
+
+
+def dig_compare(host: str, logf) -> Result:
+    name = "DNS steering check (system vs 1.1.1.1)"
+    t0 = time.monotonic()
+    if not which("dig"):
+        return Result(name, Status.SKIP, "dig not installed", [], 0.0)
+
+    sys_a = run_cmd(["dig", "+short", host, "A"], timeout_s=3, logf=logf)
+    cf_a = run_cmd(["dig", "@1.1.1.1", "+short", host, "A"], timeout_s=3, logf=logf)
+    sys_aaaa = run_cmd(["dig", "+short", host, "AAAA"], timeout_s=3, logf=logf)
+    cf_aaaa = run_cmd(["dig", "@1.1.1.1", "+short", host, "AAAA"], timeout_s=3, logf=logf)
+    dt = time.monotonic() - t0
+
+    sysA = set(ips_from_lines(sys_a.stdout))
+    cfA = set(ips_from_lines(cf_a.stdout))
+    sys6 = set(ips_from_lines(sys_aaaa.stdout))
+    cf6 = set(ips_from_lines(cf_aaaa.stdout))
+
+    details = []
+    warn = False
+    if sys_a.rc != 0 or cf_a.rc != 0:
+        return Result(name, Status.WARN, "dig failed", ["dig is installed but returned an error; see log."], dt)
+
+    if sysA != cfA and sysA and cfA:
+        warn = True
+        details.append(f"A differs: system={sorted(sysA)} vs 1.1.1.1={sorted(cfA)}")
+    if sys6 != cf6 and sys6 and cf6:
+        warn = True
+        details.append(f"AAAA differs: system={sorted(sys6)} vs 1.1.1.1={sorted(cf6)}")
+
+    if warn:
+        details.append("Different answers can mean different CDN POP selection. That can make repo downloads flaky.")
+        return Result(name, Status.WARN, "Different DNS answers", details, dt)
+
+    return Result(name, Status.OK, "OK (answers match)", [], dt)
+
+
+def mtr_final_hop(host: str, port: int, use_tcp: bool, logf) -> Result:
+    name = "Path quality (mtr to target)"
+    if use_tcp:
+        name += " [TCP]"
+    else:
+        name += " [ICMP]"
+
+    t0 = time.monotonic()
+    if not which("mtr"):
+        return Result(name, Status.SKIP, "mtr not installed", [], 0.0)
+
+    # TCP mtr often needs root. We will SKIP if not root for TCP.
+    if use_tcp and os.geteuid() != 0:
+        return Result(name, Status.SKIP, "Run with sudo for TCP mtr", [], 0.0)
+
+    cmd = ["mtr", "-rw", "-c", "30"]
+    if use_tcp:
+        cmd += ["-T", "-P", str(port)]
+    cmd.append(host)
+
+    co = run_cmd(cmd, timeout_s=40, logf=logf)
+    dt = time.monotonic() - t0
+    if co.rc != 0:
+        return Result(name, Status.WARN, "mtr failed", [(co.stderr.strip() or co.stdout.strip())[:300]], dt)
+
+    # Parse final hop line: it usually starts with N.|--
+    final = None
+    for line in co.stdout.splitlines()[::-1]:
+        if re.search(r"\|\-\-", line):
+            final = line.strip()
+            break
+    if not final:
+        return Result(name, Status.WARN, "Could not parse mtr output", [], dt)
+
+    # Extract loss% and avg latency from final hop
+    # Example: "  8.|-- 151.101.2.132  1.0%  30  11.2  136.2  10.1  1069.  337.1"
+    m = re.search(r"\s(\d+(?:\.\d+)?)%\s+\d+\s+\S+\s+(\d+(?:\.\d+)?)\s+", final)
+    loss = None
+    avg = None
+    if m:
+        loss = float(m.group(1))
+        avg = float(m.group(2))
+
+    if loss is None:
+        return Result(name, Status.WARN, "Unparsed final hop stats", [final], dt)
+
+    if loss >= 10.0:
+        return Result(name, Status.FAIL, f"High loss to destination: {loss:.1f}%", [final, "This will destroy bulk TCP throughput."], dt)
+    if loss >= 2.0:
+        return Result(name, Status.WARN, f"Loss to destination: {loss:.1f}%", [final], dt)
+
+    # avg latency spikes are not captured well here; mtr shows last/avg/best/wrst.
+    return Result(name, Status.OK, f"OK (loss {loss:.1f}%, avg {avg:.1f} ms)", [], dt)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        prog="netdiag",
+        description="Network diagnostics for flaky repo/CDN downloads (unit-test style output).",
+    )
+    ap.add_argument("target", help="URL or hostname (e.g. https://deb.debian.org/debian/ls-lR.gz or deb.debian.org)")
+    ap.add_argument("--bytes", type=int, default=10_000_000, help="curl sample bytes (default: 10,000,000)")
+    ap.add_argument("--max-time", type=int, default=20, help="curl max time seconds (default: 20)")
+    ap.add_argument("--connect-timeout", type=int, default=5, help="curl connect timeout seconds (default: 5)")
+    ap.add_argument("--only-issues", action="store_true", help="Only print warnings/failures (suppress ✅ lines)")
+    ap.add_argument("--no-color", action="store_true", help="Disable ANSI colors")
+    ap.add_argument("--no-log", action="store_true", help="Disable writing the full raw log file")
+    ap.add_argument("--no-dns-compare", action="store_true", help="Skip dig system vs 1.1.1.1 comparison")
+    ap.add_argument("--no-mtr", action="store_true", help="Skip mtr path tests")
+    args = ap.parse_args()
+
+    use_color = (not args.no_color) and is_tty()
+
+    # Log file
+    log_path = None
+    logf = None
+    if not args.no_log:
+        state = os.path.join(xdg_state_dir(), "netdiag")
+        os.makedirs(state, exist_ok=True)
+        log_path = os.path.join(state, f"netdiag-{_dt.datetime.now().strftime('%Y%m%d-%H%M%S')}.log")
+        logf = open(log_path, "w", encoding="utf-8")
+        logf.write(f"[netdiag] start {now_stamp()}\n")
+        logf.write(f"[netdiag] argv: {shlex.join(sys.argv)}\n")
+    else:
+        # dummy file-like
+        logf = open(os.devnull, "w", encoding="utf-8")
+
+    results: List[Result] = []
+
+    # Target parsing
+    try:
+        url, host, port = parse_target(args.target)
+    except Exception as e:
+        print(color("❌ invalid target: " + str(e), "red", use_color))
+        return 2
+
+    header = f"netdiag: {url} (host={host}, port={port})"
+    print(color(header, "bold", use_color))
+
+    # Dependencies (hard requirements)
+    needed = ["ip", "ping", "curl"]
+    missing = [c for c in needed if not which(c)]
+    if missing:
+        print(color(f"❌ missing required commands: {', '.join(missing)}", "red", use_color))
+        return 2
+
+    # Resolve
+    t0 = time.monotonic()
+    v4_ips = resolve_getent(host, "v4", logf)
+    v6_ips = resolve_getent(host, "v6", logf)
+    dt = time.monotonic() - t0
+
+    if not v4_ips and not v6_ips:
+        results.append(Result("DNS resolution", Status.FAIL, "No A/AAAA records resolved", [f"host={host}"], dt))
+    else:
+        summ = f"A={len(v4_ips)} AAAA={len(v6_ips)}"
+        det = []
+        if v4_ips:
+            det.append(f"A: {v4_ips[:4]}{' ...' if len(v4_ips) > 4 else ''}")
+        if v6_ips:
+            det.append(f"AAAA: {v6_ips[:4]}{' ...' if len(v6_ips) > 4 else ''}")
+        results.append(Result("DNS resolution", Status.OK, summ, [], dt))
+
+    # Default routes & iface
+    t0 = time.monotonic()
+    dev = parse_default_iface(logf)
+    v6_def = has_default_route_v6(logf)
+    dt = time.monotonic() - t0
+
+    if not dev:
+        results.append(Result("Default route (IPv4)", Status.FAIL, "No default IPv4 route detected", [], dt))
+    else:
+        results.append(Result("Default route (IPv4)", Status.OK, f"OK (dev {dev})", [], dt))
+
+    if v6_ips and not v6_def:
+        results.append(Result("Default route (IPv6)", Status.WARN, "No default IPv6 route (but AAAA exists)", [
+            "This is the classic 'IPv6 advertised but broken' scenario that makes repo downloads flaky.",
+            "Fix router/ISP IPv6 or prefer IPv4.",
+        ], 0.0))
+    else:
+        results.append(Result("Default route (IPv6)", Status.OK if v6_def else Status.OK, "OK" if v6_def else "OK (no v6 default route needed)", [], 0.0))
+
+    # IPv6 global addr on iface
+    if dev:
+        t0 = time.monotonic()
+        globals6 = ipv6_globals_on_iface(dev, logf)
+        dt = time.monotonic() - t0
+        if v6_def and not globals6:
+            results.append(Result("IPv6 address (global)", Status.WARN, f"No global IPv6 on {dev}", [
+                "You may only have link-local v6. Some setups misconfigure RA/DHCPv6/PD.",
+            ], dt))
+        else:
+            if globals6:
+                results.append(Result("IPv6 address (global)", Status.OK, f"OK ({globals6[0]})", [], dt))
+            else:
+                results.append(Result("IPv6 address (global)", Status.OK, "OK (none)", [], dt))
+
+    # Pings
+    st, summ, det = ping("1.1.1.1", "v4", count=3, timeout_s=1, logf=logf)
+    results.append(Result("Ping IPv4 (1.1.1.1)", st, summ, det, 0.0))
+
+    if v6_def:
+        st, summ, det = ping("2606:4700:4700::1111", "v6", count=3, timeout_s=1, logf=logf)
+        results.append(Result("Ping IPv6 (2606:4700:4700::1111)", st, summ, det, 0.0))
+    else:
+        results.append(Result("Ping IPv6 (2606:4700:4700::1111)", Status.SKIP, "No default IPv6 route", [], 0.0))
+
+    # Curl samples
+    st4, summ4, det4, m4 = curl_sample(url, "v4", args.bytes, args.max_time, args.connect_timeout, logf)
+    results.append(Result("HTTP sample over IPv4", st4, summ4, det4, 0.0))
+
+    if v6_ips or v6_def:
+        st6, summ6, det6, m6 = curl_sample(url, "v6", args.bytes, args.max_time, args.connect_timeout, logf)
+        results.append(Result("HTTP sample over IPv6", st6, summ6, det6, 0.0))
+    else:
+        m6 = None
+        results.append(Result("HTTP sample over IPv6", Status.SKIP, "No AAAA / no IPv6", [], 0.0))
+
+    # Compare v4 vs v6 throughput if both succeeded with metrics
+    if m4 and isinstance(m4.get("speed"), float) and m6 and isinstance(m6.get("speed"), float):
+        v4s = float(m4["speed"])
+        v6s = float(m6["speed"])
+        # Avoid noisy comparison on tiny transfers
+        if (float(m4.get("size", 0.0) or 0.0) >= 1_000_000) and (float(m6.get("size", 0.0) or 0.0) >= 1_000_000):
+            ratio = (max(v4s, v6s) / max(1.0, min(v4s, v6s)))
+            if ratio >= 5.0:
+                slower = "IPv6" if v6s < v4s else "IPv4"
+                results.append(Result("IPv4 vs IPv6 performance", Status.WARN,
+                                      f"{slower} is ≥5x slower",
+                                      [f"v4: {human_bps(v4s)}", f"v6: {human_bps(v6s)}",
+                                       "If this matches your repo slowness, you either fix the slower path or prefer the faster family."],
+                                      0.0))
+            else:
+                results.append(Result("IPv4 vs IPv6 performance", Status.OK, f"OK (v4 {human_bps(v4s)}, v6 {human_bps(v6s)})", [], 0.0))
+
+    # DNS compare (optional)
+    if not args.no_dns_compare:
+        results.append(dig_compare(host, logf))
+
+    # PMTU probe
+    results.append(pmtu_probe_ipv4(logf))
+
+    # Interface counters
+    if dev:
+        results.append(interface_counters(dev, logf))
+
+    # Tailscale (if present)
+    results.append(tailscale_netcheck(logf))
+
+    # mtr path tests (optional)
+    if not args.no_mtr:
+        results.append(mtr_final_hop(host, port, use_tcp=False, logf=logf))
+        results.append(mtr_final_hop(host, port, use_tcp=True, logf=logf))
+
+    # Print results
+    ok = warn = fail = skip = 0
+    issues: List[Result] = []
+
+    for r in results:
+        if r.status == Status.OK:
+            ok += 1
+        elif r.status == Status.WARN:
+            warn += 1
+            issues.append(r)
+        elif r.status == Status.FAIL:
+            fail += 1
+            issues.append(r)
+        else:
+            skip += 1
+
+        if args.only_issues and r.status == Status.OK:
+            continue
+
+        line = f"{symbol(r.status)} {r.name}: {r.summary}"
+        if r.status == Status.OK:
+            print(color(line, "green", use_color))
+        elif r.status == Status.WARN:
+            print(color(line, "yellow", use_color))
+        elif r.status == Status.FAIL:
+            print(color(line, "red", use_color))
+        else:
+            print(color(line, "gray", use_color))
+
+        if r.status in (Status.WARN, Status.FAIL) and r.details:
+            for d in r.details:
+                print("    " + d)
+
+    # Summary
+    print()
+    summary = f"Summary: {ok} OK, {warn} WARN, {fail} FAIL, {skip} SKIP"
+    if fail:
+        print(color(summary, "red", use_color))
+    elif warn:
+        print(color(summary, "yellow", use_color))
+    else:
+        print(color(summary, "green", use_color))
+
+    if issues:
+        print(color("What to look at:", "bold", use_color))
+        for r in issues:
+            print(f" - {r.name}: {r.summary}")
+
+    if log_path:
+        print(color(f"\nFull log: {log_path}", "gray", use_color))
+
+    if logf and logf is not sys.stdout:
+        logf.close()
+
+    return 2 if fail else 1 if warn else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

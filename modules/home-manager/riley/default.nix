@@ -8,6 +8,7 @@
     ./rofi.nix
     ./waybar.nix
     ./wlr-which-key.nix
+    ./scripts.nix
   ];
 
   home.username = "riley";

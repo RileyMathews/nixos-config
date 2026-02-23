@@ -1,0 +1,4 @@
+#! /bin/sh
+echo on | sudo tee /sys/class/drm/card1/device/power/control
+
+echo card set to on

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+hp_mac=$(pactl list | grep bluez_card -A2 | grep 'device.string' | awk '{print $3}' | head -n 1)
+hp_mac="${hp_mac%\"}"
+hp_mac="${hp_mac#\"}"
+
+index=$(pactl list | grep bluez_card | grep Name | awk '{print $2}')
+pactl set-card-profile "$index" off
+echo "Bluetooth headphones profile off"
+
+echo -e "disconnect $hp_mac\nquit" | bluetoothctl
+
+sleep 3
+
+echo -e "connect $hp_mac\nquit" | bluetoothctl
+
+sleep 8
+
+pactl set-card-profile "$index" a2dp-sink
+echo "Bluetooth headphones a2dp-sink"

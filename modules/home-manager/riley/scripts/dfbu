@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Hardcoded directories
+LOCAL_DIR="$HOME/.local/share/PillarsOfEternityII/SavedGames/"
+NAS_DIR="riley@nas:/main/deadfire/"
+BACKUP_DIR="$HOME/.local/game-backups"
+
+# Create backup directory if it doesn't exist
+mkdir -p "$BACKUP_DIR"
+echo "Backup directory created if it didn't exist."
+
+# Step 1: Backup local directory to backup_dir
+echo "Backing up $LOCAL_DIR to $BACKUP_DIR..."
+rsync --archive --verbose "$LOCAL_DIR" "$BACKUP_DIR"
+echo "Backup completed."
+
+# Step 2: Sync from local to NAS via SSH (using --ignore-existing)
+echo "Syncing from $LOCAL_DIR to $NAS_DIR..."
+rsync --archive --verbose --update -e ssh "$LOCAL_DIR" "$NAS_DIR"
+echo "Sync from local to NAS completed."
+
+# Step 3: Sync from NAS to local via SSH (using --ignore-existing)
+echo "Syncing from $NAS_DIR to $LOCAL_DIR..."
+rsync --archive --verbose --update -e ssh "$NAS_DIR" "$LOCAL_DIR"
+echo "Sync from NAS to local completed."
+
+echo "Script finished. Check for any errors above."

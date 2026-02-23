@@ -1,0 +1,330 @@
+#!/bin/sh
+
+# Create and manage desktop files for webapps wrapped in a browser
+
+DESKTOP_DIR="$HOME/.local/share/applications"
+ICON_DIR="$HOME/.local/share/icons/webapp-icons"
+
+resolve_browser_bin() {
+	case "$1" in
+		brave)
+			for bin in brave brave-browser; do
+				if command -v "$bin" >/dev/null 2>&1; then
+					echo "$bin"
+					return 0
+				fi
+			done
+			;;
+		chrome)
+			for bin in google-chrome-stable google-chrome chrome; do
+				if command -v "$bin" >/dev/null 2>&1; then
+					echo "$bin"
+					return 0
+				fi
+			done
+			;;
+	esac
+
+	return 1
+}
+
+browser_icon_name() {
+	case "$1" in
+		chrome) echo "google-chrome" ;;
+		*) echo "brave-browser" ;;
+	esac
+}
+
+# Function to detect file type by magic bytes
+detect_file_type() {
+	if [ ! -f "$1" ]; then
+		echo "not found"
+		return 1
+	fi
+	
+	# Read first few bytes to detect file type
+	head_bytes=$(od -An -t x1 -N 8 "$1" 2>/dev/null | tr -d ' \n')
+	
+	case "$head_bytes" in
+		89504e47*)  echo "PNG image data" ;;
+		ffd8ff*)    echo "JPEG image data" ;;
+		47494638*)  echo "GIF image data" ;;
+		00000100*)  echo "MS Windows icon resource" ;;
+		3c21444f*)  echo "HTML document" ;;  # <!DO (DOCTYPE uppercase)
+		3c21646f*)  echo "HTML document" ;;  # <!do (doctype lowercase)
+		3c68746d*)  echo "HTML document" ;;  # <htm (html lowercase)
+		3c48544d*)  echo "HTML document" ;;  # <HTM (HTML uppercase)
+		*)          echo "unknown" ;;
+	esac
+}
+
+show_help() {
+	cat <<-EOF
+		Usage: webapp <command> [args]
+
+		Commands:
+		  install <url> [name] [options]  Create a desktop file for a webapp
+		  uninstall                Select and remove a webapp desktop file
+		  help                     Show this help message
+
+		Install options:
+		  -b, --browser <name>     Browser to use (brave|chrome)
+		  -y, --yes                Overwrite existing desktop file
+
+		Examples:
+		  webapp install https://mail.google.com
+		  webapp install https://mail.google.com "Gmail"
+		  webapp install https://calendar.google.com "Calendar" --browser chrome
+		  webapp install https://chat.openai.com "ChatGPT" -b brave -y
+		  webapp uninstall
+	EOF
+}
+
+install_webapp() {
+	if [ -z "$1" ]; then
+		echo "Error: URL is required"
+		echo "Usage: webapp install <url> [name] [options]"
+		exit 1
+	fi
+
+	URL="$1"
+	shift
+
+	APP_NAME=""
+	BROWSER=""
+	OVERWRITE="false"
+
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			-y|--yes)
+				OVERWRITE="true"
+				;;
+			-b|--browser)
+				shift
+				if [ -z "$1" ]; then
+					echo "Error: --browser requires a value (brave|chrome)"
+					exit 1
+				fi
+				BROWSER="$1"
+				;;
+			--browser=*)
+				BROWSER="${1#*=}"
+				;;
+			*)
+				if [ -z "$APP_NAME" ]; then
+					APP_NAME="$1"
+				else
+					echo "Error: Unexpected argument '$1'"
+					echo "Usage: webapp install <url> [name] [options]"
+					exit 1
+				fi
+				;;
+		esac
+		shift
+	done
+
+	if [ -z "$BROWSER" ]; then
+		printf "Choose browser [brave/chrome] (default: brave): "
+		read -r BROWSER
+		[ -z "$BROWSER" ] && BROWSER="brave"
+	fi
+
+	BROWSER=$(printf "%s" "$BROWSER" | tr '[:upper:]' '[:lower:]')
+	case "$BROWSER" in
+		brave|chrome) ;;
+		*)
+			echo "Error: Unsupported browser '$BROWSER' (use brave or chrome)"
+			exit 1
+			;;
+	esac
+
+	BROWSER_BIN=$(resolve_browser_bin "$BROWSER")
+	if [ -z "$BROWSER_BIN" ]; then
+		echo "Error: Could not find a $BROWSER executable in PATH"
+		echo "Install it, or choose the other browser with --browser"
+		exit 1
+	fi
+
+	# Extract domain name for the desktop file name
+	DOMAIN=$(echo "$URL" | sed -E 's|https?://||' | sed -E 's|www\.||' | sed 's|/.*||' | sed 's|:.*||')
+
+	# Prompt for app name if not provided
+	if [ -z "$APP_NAME" ]; then
+		printf "Enter app name [%s]: " "$DOMAIN"
+		read -r APP_NAME
+		[ -z "$APP_NAME" ] && APP_NAME="$DOMAIN"
+	fi
+
+	# Create sanitized filename
+	FILENAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
+	DESKTOP_FILE="$DESKTOP_DIR/webapp-${FILENAME}.desktop"
+
+	# Check if file already exists
+	if [ -f "$DESKTOP_FILE" ]; then
+		if [ "$OVERWRITE" = "true" ]; then
+			:
+		else
+			# Interactive mode: prompt user
+			printf "Desktop file already exists. Overwrite? [y/N]: "
+			read -r CONFIRM
+			case "$CONFIRM" in
+				[yY]|[yY][eE][sS]) ;;
+				*) echo "Aborted."; exit 0;;
+			esac
+		fi
+	fi
+
+	# Ensure directories exist
+	mkdir -p "$DESKTOP_DIR"
+	mkdir -p "$ICON_DIR"
+
+	# Fetch icon
+	echo "Fetching icon for $DOMAIN..."
+	ICON_PATH="$ICON_DIR/webapp-${FILENAME}.png"
+	ICON_NAME=$(browser_icon_name "$BROWSER")
+
+	# Try to fetch favicon using Google's favicon service as fallback
+	if command -v curl >/dev/null 2>&1; then
+		# Extract base URL (protocol + domain)
+		BASE_URL=$(echo "$URL" | sed -E 's|(https?://[^/]+).*|\1|')
+		
+		# Try fetching from the website's root first
+		if curl -sS -L --max-time 10 "${BASE_URL}/favicon.ico" -o "$ICON_PATH.tmp" 2>/dev/null; then
+			if [ -f "$ICON_PATH.tmp" ] && [ -s "$ICON_PATH.tmp" ]; then
+				FILE_TYPE=$(detect_file_type "$ICON_PATH.tmp")
+				
+				if echo "$FILE_TYPE" | grep -qiE "^(PNG|JPEG|GIF|image data|.*icon.*resource)"; then
+					# Convert to PNG if needed (requires imagemagick)
+					if command -v convert >/dev/null 2>&1; then
+						if convert "$ICON_PATH.tmp" -resize 256x256 "$ICON_PATH" 2>/dev/null; then
+							ICON_NAME="$ICON_PATH"
+							echo "Icon downloaded and converted from favicon.ico"
+						fi
+					else
+						mv "$ICON_PATH.tmp" "$ICON_PATH"
+						ICON_NAME="$ICON_PATH"
+						echo "Icon downloaded from favicon.ico"
+					fi
+				fi
+			fi
+			rm -f "$ICON_PATH.tmp"
+		fi
+
+		# If that didn't work, try Google's favicon service
+		if [ "$ICON_NAME" = "brave-browser" ]; then
+			if curl -sS -L --max-time 10 "https://www.google.com/s2/favicons?domain=${DOMAIN}&sz=256" -o "$ICON_PATH" 2>/dev/null; then
+				if [ -f "$ICON_PATH" ] && [ -s "$ICON_PATH" ]; then
+					FILE_TYPE=$(detect_file_type "$ICON_PATH")
+					
+					if echo "$FILE_TYPE" | grep -qiE "^(PNG|JPEG|GIF|image data)"; then
+						ICON_NAME="$ICON_PATH"
+						echo "Icon downloaded from Google favicon service"
+					else
+						rm -f "$ICON_PATH"
+					fi
+				fi
+			fi
+		fi
+
+		if [ "$ICON_NAME" != "$ICON_PATH" ]; then
+			echo "Could not fetch icon, using default browser icon."
+		fi
+	else
+		echo "curl not found, using default browser icon."
+	fi
+
+	# Create the desktop file
+	cat > "$DESKTOP_FILE" <<-EOF
+		[Desktop Entry]
+		Version=1.0
+		Type=Application
+		Name=$APP_NAME
+		Comment=Web application for $URL
+		Exec=$BROWSER_BIN --app="$URL"
+		Icon=$ICON_NAME
+		Categories=Network;WebBrowser;
+		Terminal=false
+		StartupNotify=true
+	EOF
+
+	echo "Desktop file created: $DESKTOP_FILE"
+	echo "The webapp should now appear in your application launcher."
+}
+
+uninstall_webapp() {
+	# Check if fzf is available
+	if ! command -v fzf >/dev/null 2>&1; then
+		echo "Error: fzf is not installed"
+		exit 1
+	fi
+
+	# Find all webapp desktop files
+	WEBAPP_FILES=$(find "$DESKTOP_DIR" -maxdepth 1 -name "webapp-*.desktop" 2>/dev/null)
+
+	if [ -z "$WEBAPP_FILES" ]; then
+		echo "No webapp desktop files found."
+		exit 0
+	fi
+
+	# Select file with fzf (showing app names)
+	SELECTED=$(echo "$WEBAPP_FILES" | while read -r file; do
+		NAME=$(grep "^Name=" "$file" 2>/dev/null | cut -d= -f2-)
+		URL=$(grep "^Exec=" "$file" 2>/dev/null | sed -E 's/.*--app="([^"]+)".*/\1/')
+		printf "%s\t%s\t%s\n" "$(basename "$file")" "$NAME" "$URL"
+	done | fzf --delimiter='\t' --with-nth=2,3 --prompt="Select webapp to uninstall: " --header="Name / URL")
+
+	if [ -z "$SELECTED" ]; then
+		echo "No selection made."
+		exit 0
+	fi
+
+	# Extract filename from selection
+	FILENAME=$(echo "$SELECTED" | cut -f1)
+	DESKTOP_FILE="$DESKTOP_DIR/$FILENAME"
+
+	# Confirm deletion
+	APP_NAME=$(grep "^Name=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
+	printf "Remove '%s'? [y/N]: " "$APP_NAME"
+	read -r CONFIRM
+
+	case "$CONFIRM" in
+		[yY]|[yY][eE][sS])
+			# Get icon path before removing desktop file
+			ICON_PATH=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
+
+			# Remove desktop file
+			rm -f "$DESKTOP_FILE"
+			echo "Removed: $DESKTOP_FILE"
+
+			# Remove associated icon if it exists
+			if [ -f "$ICON_PATH" ] && echo "$ICON_PATH" | grep -q "$ICON_DIR"; then
+				rm -f "$ICON_PATH"
+				echo "Removed icon: $ICON_PATH"
+			fi
+			;;
+		*)
+			echo "Aborted."
+			exit 0
+			;;
+	esac
+}
+
+# Main command dispatcher
+case "$1" in
+	install)
+		shift
+		install_webapp "$@"
+		;;
+	uninstall)
+		uninstall_webapp
+		;;
+	help|--help|-h|"")
+		show_help
+		;;
+	*)
+		echo "Error: Unknown command '$1'"
+		echo ""
+		show_help
+		exit 1
+		;;
+esac

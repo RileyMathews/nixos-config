@@ -1,0 +1,51 @@
+#! /usr/bin/env python3
+
+import os
+import urllib.request
+import urllib.error
+import json
+
+QUTE_FIFO = os.getenv("QUTE_FIFO") or ""
+QUTE_URL = os.getenv("QUTE_URL") or ""
+KARAKEEP_TOKEN = os.getenv("KARAKEEP_TOKEN") or ""
+
+assert QUTE_URL != ""
+assert QUTE_FIFO != ""
+# assert KARAKEEP_TOKEN != ""
+
+def qute_log(message):
+    with open(QUTE_FIFO, 'w') as fifo:
+        fifo.write(f"message-info '{message}'\n")
+        fifo.flush()
+
+qute_log(QUTE_URL)
+
+
+# Prepare the data
+data = {
+    "type": "link",
+    "url": QUTE_URL,
+}
+
+# Convert data to JSON and encode as bytes
+json_data = json.dumps(data).encode('utf-8')
+
+# Create the request
+url = 'https://karakeep.rileymathews.com/api/v1/bookmarks'
+req = urllib.request.Request(url, data=json_data, method='POST')
+
+# Set headers
+req.add_header('Content-Type', 'application/json')
+req.add_header('Accept', 'application/json')
+req.add_header('Authorization', f'Bearer {KARAKEEP_TOKEN}')
+
+# Make the request
+try:
+    with urllib.request.urlopen(req) as response:
+        response_data = response.read().decode('utf-8')
+        qute_log(f"sasved {QUTE_URL} to karakeep")
+except urllib.error.HTTPError as e:
+    qute_log(f"HTTP Error: {e.code} - {e.reason}")
+    qute_log(f"Response: {e.read().decode('utf-8')}")
+except urllib.error.URLError as e:
+    qute_log(f"URL Error: {e.reason}")

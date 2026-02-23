@@ -1,0 +1,23 @@
+#! /bin/zsh
+
+set -eux
+
+# Detect session type
+if [ "$XDG_SESSION_TYPE" = "wayland" ] || [ "$XDG_SESSION_TYPE" = "hyprland" ]; then
+    # Wayland session
+    # Add your Wayland-specific screen layout code here
+    chosen=$(hyprmonad list | rofi -dmenu -i)
+    hyprmonad load $chosen
+else
+    # Xorg session - use existing code
+    chosen=$(autorandr --list | rofi -dmenu -i)
+
+    autorandr --load $chosen --skip-options crtc
+    # if pollybar is running, restart it
+    if  pgrep -x "polybar"; then
+        echo "restarting polybar"
+        sleep 2
+        ~/.config/polybar/launch_polybar.sh
+    fi
+    nitrogen --restore
+fi

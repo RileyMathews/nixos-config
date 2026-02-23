@@ -1,0 +1,6 @@
+#!/bin/sh
+
+scp -r . riley@nas:/main/paperless/consume
+
+# backup to dropbox
+rclone copy . dropbox:scan-backups
