@@ -1,0 +1,24 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "nixos-config-types",
+      "devDependencies": {
+        "@opencode-ai/plugin": "1.1.64",
+        "@types/node": "^24.6.0",
+      },
+    },
+  },
+  "packages": {
+    "@opencode-ai/plugin": ["@opencode-ai/plugin@1.1.64", "", { "dependencies": { "@opencode-ai/sdk": "1.1.64", "zod": "4.1.8" } }, "sha512-3UAChQQf9L2uZPxGLgn9dFS7d9gtMeW1VEKPWfRV16ZgraaBT0bxjGqt4vc9Ne8mZgntAe/qpBfqY4BSpfZQbA=="],
+
+    "@opencode-ai/sdk": ["@opencode-ai/sdk@1.1.64", "", {}, "sha512-g+bZGx/86JlRTKyPWsD1oFu1SoENIHeKK4LhzWWFToPv4tpN3MSLVGSUsoTSi2XqSd9JzkfPBHPdTeFvqcbzMA=="],
+
+    "@types/node": ["@types/node@24.10.13", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-oH72nZRfDv9lADUBSo104Aq7gPHpQZc4BTx38r9xf9pg5LfP6EzSyH2n7qFmmxRQXh7YlUXODcYsg6PuTDSxGg=="],
+
+    "undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
+
+    "zod": ["zod@4.1.8", "", {}, "sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ=="],
+  }
+}

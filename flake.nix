@@ -139,7 +139,9 @@
         buildInputs = with pkgs; [
           agenix.packages.${system}.default
           ansible
+          bun
           jq
+          nodejs
           python3
           python3Packages.requests
         ];

@@ -1,0 +1,8 @@
+{
+  "name": "nixos-config-types",
+  "private": true,
+  "devDependencies": {
+    "@opencode-ai/plugin": "1.1.64",
+    "@types/node": "^24.6.0"
+  }
+}

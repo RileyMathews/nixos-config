@@ -1,5 +1,6 @@
 .direnv
 .envrc.secret
+node_modules/
 result
 age
 
