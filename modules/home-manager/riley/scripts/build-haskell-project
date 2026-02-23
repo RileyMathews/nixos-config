@@ -38,7 +38,7 @@ elapsed=0
 while [ $elapsed -lt $timeout ]; do
     last_line=$(tail -n 1 "$filename")
 
-    if echo "$last_line" | grep -q -E "(• All good! Finished reloading in|Reloading failed in)"; then
+    if echo "$last_line" | rg -q "(• All good! Finished|Reloading failed in|[0-9]+ examples?, [0-9]+ failures?)"; then
         show_reload_output
         exit 0
     fi

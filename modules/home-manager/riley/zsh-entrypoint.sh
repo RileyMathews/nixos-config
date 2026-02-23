@@ -75,6 +75,9 @@ precmd() {
 
 eval "$(fzf --zsh)"
 
+autoload edit-command-line
+zle -N edit-command-line
+
 HISTSIZE=5000
 HISTFILE=~/.cache/.zsh_history
 SAVEHIST=$HISTSIZE

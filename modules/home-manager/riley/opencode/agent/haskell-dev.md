@@ -86,6 +86,7 @@ I have a custom way of running and building haskell projects that is more ideal 
 ### Running tests
 - Ignore any specific project instructions for running tests.
 - To run tests add the `-- $> hspec spec` magic comment to a file then `build-haskell-project` will run that test file for you.
+- NEVER use the 'test-by-module' command to run tests. It is not compatible with my workflow and will cause problems. Always use the `-- $> hspec spec` magic comment instead.
 
 
 ## Technical Expertise
