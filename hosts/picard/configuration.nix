@@ -182,6 +182,7 @@
       gh
       git
       git-prole
+      google-chrome
       grim
       i3
       impala
@@ -196,9 +197,9 @@
       mpv
       nix-search-cli
       nodejs
-      google-chrome
       pavucontrol
       playerctl
+      podman-compose
       qutebrowser
       ripgrep
       rofi
