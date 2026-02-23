@@ -6,13 +6,12 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr '*'
 zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:git:*' formats ' %F{blue}(%b%u%c)'
-add-zsh-hook precmd vcs_info
 setopt PROMPT_SUBST
 
-PS1='%B%{$fg[green]%}%~%b${vcs_info_msg_0_}%{$fg[green]%} > %{$reset_color%}'
+PS1='%B%{$fg[green]%}%~%b${vcs_info_msg_0_} %(?.%{$fg[green]%}>.%{$fg[red]%}x)%{$reset_color%} '
 if [[ -n "$SSH_CONNECTION" ]]; then
   REMOTE_ICON=" 󰑔 "
-  PS1='%B%{$fg[green]%}󰑔 %~%b${vcs_info_msg_0_}%{$fg[green]%} > %{$reset_color%}'
+  PS1='%B%{$fg[green]%}󰑔 %~%b${vcs_info_msg_0_} %(?.%{$fg[green]%}>.%{$fg[red]%}x)%{$reset_color%} '
 fi
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -70,7 +69,10 @@ zle -N zle-line-init
 echo -ne '\e[6 q'
 
 precmd() {
+  local last_status=$?
   echo -ne '\e[6 q'
+  vcs_info
+  return $last_status
 }
 
 eval "$(fzf --zsh)"
