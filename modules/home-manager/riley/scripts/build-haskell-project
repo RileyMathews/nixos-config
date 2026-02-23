@@ -1,4 +1,4 @@
-#!/bin/bash
+#! bash
 
 # This script is designed to be run by LLMs as a fake build command. It waits for ghciwatch to complete its
 # reload cycle and then provides the output from the last reload attempt. This allows LLMs to understand
