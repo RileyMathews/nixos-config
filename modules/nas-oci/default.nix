@@ -9,11 +9,11 @@ let
     "_netdev"
     "nofail"
     "x-systemd.automount"
-    "x-systemd.idle-timeout=5min"
     "x-systemd.mount-timeout=30s"
 
-    # Resilience: errors instead of indefinite hangs
-    "soft"
+    # Resilience: return timeout errors instead of hanging forever.
+    "softerr"
+    "softreval"
     "timeo=150"
     "retrans=2"
   ];
