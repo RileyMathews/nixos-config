@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# This script is designed to be run by LLMs as a fake build command. It waits for ghciwatch to complete its
+# reload cycle and then provides the output from the last reload attempt. This allows LLMs to understand
+# compilation results, test outcomes, and any errors while getting the benefits of ghciwatch
+#
+# First run: make ghciwatch warn=true static_ls=1 2>&1 | tee .devel-logs/ghciwatch-output
+# Then have the LLM run this script to wait for and display the results.
+
+# Here's what I have in CLAUDE.local.md to use this tool:
+# - The project docs are wrong about how to build the projects and run tests. Instead, we have a custom build tool called check_reload_status.sh. When you run this bash tool, it'll build the project and run tests for you. It may take many minutes, but if you time out the first time and call it again it should work
+# - Always fix warnings first, then compile errors, then test failures
+# - To test changes, use the check_reload_status.sh workflow
+
+sleep 1
+
+filename=".devel-logs/ghciwatch-output"
+
+show_reload_output() {
+    echo "Output from last 'Reloading ghci':"
+    last_reload_line=$(grep -n "Reloading ghci" "$filename" | tail -n 1 | cut -d: -f1)
+    if [ -n "$last_reload_line" ]; then
+        tail -n +$last_reload_line "$filename"
+    else
+        echo "No 'Reloading ghci' found, showing last 100 lines:"
+        cat "$filename"
+    fi
+}
+
+if [ ! -f "$filename" ]; then
+    echo "File not found: $filename"
+    exit 1
+fi
+
+timeout=300
+elapsed=0
+
+while [ $elapsed -lt $timeout ]; do
+    last_line=$(tail -n 1 "$filename")
+
+    if echo "$last_line" | grep -q -E "(• All good! Finished reloading in|Reloading failed in)"; then
+        show_reload_output
+        exit 0
+    fi
+
+    sleep 1
+    elapsed=$((elapsed + 1))
+done
+
+echo "TIMEOUT: No reload status found after 5 minutes"
+exit 2

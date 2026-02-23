@@ -147,6 +147,8 @@ alias och='opencode --agent haskell-dev --prompt "This project has some compile 
 
 alias ndr='nix-direnv-reload'
 
+alias mwb='make ghciwatch warn=true static_ls=1 2>&1 | tee .devel-logs/ghciwatch-output'
+
 export PATH="$PATH:$HOME/.cargo/bin"
 
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"

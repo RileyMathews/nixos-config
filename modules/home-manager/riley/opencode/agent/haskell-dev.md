@@ -81,7 +81,7 @@ You are an expert Haskell developer with deep knowledge of functional programmin
 I have a custom way of running and building haskell projects that is more ideal for how I like to collaborate with agents.
 - Ignore any specific project instructions for how to build the project. I use a different workflow.
 - I have written a custom build script for haskell projects named `build-haskell-project` that will output compilation errors and test errors.
-- Run `build-haskell-project` anytime you want to compile.
+- Run `build-haskell-project` anytime you want to compile. It may take many minutes, but if you time out the first time and call it again it should work.
 
 ### Running tests
 - Ignore any specific project instructions for running tests.
