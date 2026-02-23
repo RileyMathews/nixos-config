@@ -1,8 +1,6 @@
 import type { Plugin } from "@opencode-ai/plugin"
 
-export const DirenvPlugin: Plugin = async ({ client, $, directory, worktree }) => {
-    console.log("directory " + directory);
-    console.log("worktree " + worktree);
+export const DirenvPlugin: Plugin = async ({ client, $}) => {
   return {
     async "shell.env"(input, output) {
       try {
