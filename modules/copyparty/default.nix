@@ -45,13 +45,6 @@ in
           "--rproxy=1"
           "--site=https://copyparty.rileymathews.com/"
         ];
-        extraOptions = [
-          "--health-cmd=wget --spider -q http://127.0.0.1:3923/?reset=/._ || exit 1"
-          "--health-interval=60s"
-          "--health-timeout=5s"
-          "--health-retries=5"
-          "--health-start-period=15s"
-        ];
       };
     };
   };
