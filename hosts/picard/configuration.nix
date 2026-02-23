@@ -243,7 +243,7 @@
     useUserPackages = true;
     users.riley = {
       imports = [
-        ../shared/home-manager/riley
+        ../../modules/home-manager/riley
       ];
 
     };

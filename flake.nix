@@ -107,7 +107,7 @@
           inherit pkgs;
           extraSpecialArgs = { inherit system unstablePkgs; };
           modules = [
-            ./hosts/${hostName}/configuration.nix
+            ./modules/home-manager/riley
           ];
         };
 
