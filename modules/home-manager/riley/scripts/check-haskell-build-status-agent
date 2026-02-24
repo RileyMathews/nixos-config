@@ -12,23 +12,46 @@
 # - Always fix warnings first, then compile errors, then test failures
 # - To test changes, use the check_reload_status.sh workflow
 
+set -o errexit
+set -o nounst
+set -o pipefail
+
+ghciwatch_not_running() {
+    echo "ghciwatch is not running. Please stop your work and tell the operator to start ghciwatch."
+    exit 1
+}
+
+# Check preconditions and tell agent something is wrong if they aren't met
+if [[ -f .ghciwatch.pid ]]; then
+    if ! ps -o pid= -p "$(cat .ghciwatch.pid)" > /dev/null 2>&1; then
+        ghciwatch_not_running
+    fi
+else
+    ghciwatch_not_running
+fi
+
+if [[ ! -d .devel-logs ]]; then
+    echo "Directory .devel-logs does not exist. Please stop your work and tell the operator to fix the issue."
+    exit 1
+fi
+
 sleep 1
 
-filename=".devel-logs/ghciwatch-output"
+output_filename=".devel-logs/ghciwatch-output"
 
 show_reload_output() {
     echo "Output from last 'Reloading ghci':"
-    last_reload_line=$(grep -n "Reloading ghci" "$filename" | tail -n 1 | cut -d: -f1)
+    last_reload_line=$(grep -n "Reloading ghci" "$output_filename" | tail -n 1 | cut -d: -f1)
     if [ -n "$last_reload_line" ]; then
-        tail -n +$last_reload_line "$filename"
+        tail -n +$last_reload_line "$output_filename"
     else
         echo "No 'Reloading ghci' found, showing last 100 lines:"
-        cat "$filename"
+        cat "$output_filename"
     fi
 }
 
-if [ ! -f "$filename" ]; then
-    echo "File not found: $filename"
+if [ ! -f "$output_filename" ]; then
+    echo "File not found: $output_filename"
     exit 1
 fi
 
@@ -36,7 +59,7 @@ timeout=300
 elapsed=0
 
 while [ $elapsed -lt $timeout ]; do
-    last_line=$(tail -n 1 "$filename")
+    last_line=$(tail -n 1 "$output_filename")
 
     if echo "$last_line" | rg -q "(• All good! Finished|Reloading failed in|[0-9]+ examples?, [0-9]+ failures?)"; then
         show_reload_output
