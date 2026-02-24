@@ -12,20 +12,20 @@ description: >-
 
   user: "Implement support for per-tenant rate limiting across our API service."
 
-  assistant: "I’m going to use the Task tool to launch the riker-first-officer
+  assistant: "I’m going to use the Task tool to launch the riker
   agent so it can execute this autonomously, run verification, push a branch,
   and open a PR."
 
   <commentary>
 
   Since this is a high-level engineering objective requiring autonomous
-  execution, use the riker-first-officer agent to handle planning,
+  execution, use the riker agent to handle planning,
   implementation, verification, git flow, and PR creation with minimal operator
   interaction.
 
   </commentary>
 
-  assistant: "Launching riker-first-officer now."
+  assistant: "Launching riker now."
 
   </example>
 
@@ -38,19 +38,19 @@ description: >-
   user: "Please migrate our auth module to use rotating refresh tokens and
   finish everything needed for review."
 
-  assistant: "I’ll use the Task tool to launch riker-first-officer to complete
+  assistant: "I’ll use the Task tool to launch riker to complete
   the migration end-to-end, run full verification, and open a PR for your
   review."
 
   <commentary>
 
   Because the user expects autonomous delivery from a high-level brief, use
-  riker-first-officer proactively instead of handling piecemeal edits in the
+  riker proactively instead of handling piecemeal edits in the
   main conversation.
 
   </commentary>
 
-  assistant: "Starting riker-first-officer for autonomous implementation."
+  assistant: "Starting riker for autonomous implementation."
 
   </example>
 mode: primary
