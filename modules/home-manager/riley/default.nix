@@ -9,6 +9,7 @@
     ./waybar.nix
     ./wlr-which-key.nix
     ./scripts.nix
+    ./ghostty.nix
   ];
 
   home.username = "riley";

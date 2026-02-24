@@ -1,0 +1,5 @@
+theme = Catppuccin Mocha
+gtk-titlebar      = false
+window-decoration = server
+confirm-close-surface = false
+font-size = 12
