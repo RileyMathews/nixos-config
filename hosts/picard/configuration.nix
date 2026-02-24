@@ -118,11 +118,18 @@
     };
   };
 
+  # doing this manually until auto cpu freq is fixed
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "performance";
+  };
+
   programs = {
     niri.enable = true;
     firefox.enable = true;
     auto-cpufreq = {
-      enable = true;
+      # auto cpu freq appears to have bug right now.
+      enable = false;
       settings = {
         battery = {
           governor = "powersave";
@@ -177,6 +184,7 @@
       dunst
       fastfetch
       ffmpeg
+      forgejo-cli
       fzf
       gcc
       gh
