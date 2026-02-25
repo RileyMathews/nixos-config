@@ -188,7 +188,10 @@
       fzf
       gcc
       gh
+      ghostty
+      python3
       git
+      libnotify
       git-prole
       google-chrome
       grim
