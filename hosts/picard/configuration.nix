@@ -191,6 +191,7 @@
       gh
       ghostty
       git
+      tree-sitter
       kitty
       wezterm
       git-prole
