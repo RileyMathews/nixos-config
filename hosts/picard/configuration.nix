@@ -180,6 +180,7 @@
       brightnessctl
       btop-cuda
       catppuccin-cursors.mochaDark
+      sqlite
       curl
       dunst
       fastfetch
@@ -189,9 +190,9 @@
       gcc
       gh
       ghostty
-      python3
       git
-      libnotify
+      kitty
+      wezterm
       git-prole
       google-chrome
       grim
@@ -202,6 +203,7 @@
       just
       keyutils
       lazygit
+      libnotify
       librewolf
       luajitPackages.lua-lsp
       mesa-demos
@@ -211,6 +213,7 @@
       pavucontrol
       playerctl
       podman-compose
+      python3
       qutebrowser
       ripgrep
       rofi

@@ -1,4 +1,5 @@
 [global]
+monitor=-2
 frame_color = "#74c7ec"  # Original: #8aadf4, added CC for ~80% opacity
 separator_color= frame      # This will now inherit the transparent frame_color
 separator_height = 1
