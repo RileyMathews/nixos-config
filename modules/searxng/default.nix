@@ -15,10 +15,13 @@
         backendHost = "http://127.0.0.1:8000";
     };
 
+    environment.etc."searxng/settings.yml".text = builtins.readFile ./settings.yml;
+
     virtualisation.oci-containers.containers = {
         searxng = {
             image = "docker.io/searxng/searxng:latest";
             ports = ["8000:8080"];
+            volumes = ["/etc/searxng/settings.yml:/etc/searxng/settings.yml:ro"];
             extraOptions = [
                 "--label" "io.containers.autoupdate=registry"
             ];

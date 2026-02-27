@@ -1,0 +1,10 @@
+use_default_settings: true
+
+server:
+  base_url: https://search.rileymathews.com/
+  secret_key: "this-shouldnt-matter-unless-this-intance-is-exposed-publically-someday"
+
+search:
+  formats:
+    - html
+    - json
