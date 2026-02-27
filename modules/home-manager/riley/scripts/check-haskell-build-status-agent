@@ -13,7 +13,7 @@
 # - To test changes, use the check_reload_status.sh workflow
 
 set -o errexit
-set -o nounst
+set -o nounset
 set -o pipefail
 
 ghciwatch_not_running() {
