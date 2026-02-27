@@ -3,6 +3,7 @@
   pkgs,
   unstablePkgs,
   lib,
+  pr-tracker,
   ...
 }:
 
@@ -260,8 +261,9 @@
     users.riley = {
       imports = [
         ../../modules/home-manager/riley
+        pr-tracker.homeManagerModules.default
       ];
-
+      services.pr-tracker-sync.enable = true;
     };
   };
 

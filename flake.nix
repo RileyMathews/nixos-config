@@ -2,6 +2,7 @@
   description = "Flake for nixos configuration";
 
   inputs = {
+    pr-tracker.url = "github:rileymathews/pr-tracker-rust";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -35,7 +36,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker }:
     let
       system = "x86_64-linux";
 
@@ -83,7 +84,7 @@
         in
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit system unstablePkgs; };
+          specialArgs = { inherit system unstablePkgs pr-tracker; };
           inherit modules;
         };
 
