@@ -1,0 +1,198 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i python
+#! nix-shell -p python3 python3Packages.requests
+
+"""
+Run from a local git repo directory. Creates the repo on Forgejo and GitHub,
+sets up a push mirror from Forgejo to GitHub, and points the local origin
+at the Forgejo SSH URL.
+"""
+
+import os
+import subprocess
+import sys
+import requests
+
+# ── Configuration ────────────────────────────────────────────────────────────
+
+FORGEJO_URL      = "https://git.rileymathews.com"  # No trailing slash
+FORGEJO_TOKEN    = os.getenv("FORGEJO_TOKEN")
+FORGEJO_USERNAME = "riley"
+FORGEJO_SSH_HOST = "git.rileymathews.com"  # Just the hostname for SSH URL
+
+GITHUB_TOKEN    = os.getenv("GITHUB_TOKEN")
+GITHUB_USERNAME = "rileymathews"
+
+GITHUB_API_URL = "https://api.github.com"
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def forgejo_headers():
+    return {"Authorization": f"token {FORGEJO_TOKEN}", "Content-Type": "application/json"}
+
+def github_headers():
+    return {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+
+def prompt(question, valid=None):
+    while True:
+        answer = input(question).strip()
+        if valid is None or answer.lower() in valid:
+            return answer.lower() if valid else answer
+        print(f"  Please enter one of: {', '.join(valid)}")
+
+
+def run(cmd, cwd=None):
+    result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  [error] Command failed: {' '.join(cmd)}")
+        print(f"          {result.stderr.strip()}")
+        sys.exit(1)
+    return result.stdout.strip()
+
+
+def get_repo_name_from_dir(cwd):
+    return os.path.basename(cwd)
+
+
+def ensure_git_repo(cwd):
+    if not os.path.isdir(os.path.join(cwd, ".git")):
+        print("  No .git directory found — initialising git repo...")
+        run(["git", "init"], cwd=cwd)
+        print("  [ok] git init done")
+
+
+def create_forgejo_repo(name, description, private):
+    payload = {
+        "name":        name,
+        "description": description,
+        "private":     private,
+        "auto_init":   False,
+    }
+    r = requests.post(
+        f"{FORGEJO_URL}/api/v1/user/repos",
+        headers=forgejo_headers(),
+        json=payload,
+    )
+    if r.status_code == 409:
+        print(f"  [warn] Forgejo repo '{name}' already exists — using it.")
+        return
+    if r.status_code >= 400:
+        print(f"  [debug] Forgejo error: {r.text}")
+    r.raise_for_status()
+    print(f"  [ok] Created Forgejo repo ({'private' if private else 'public'})")
+
+
+def create_github_repo(name, private):
+    description = f"Mirror of {FORGEJO_URL}/{FORGEJO_USERNAME}/{name}"
+    payload = {
+        "name":        name,
+        "description": description,
+        "private":     private,
+        "auto_init":   False,
+    }
+    r = requests.post(
+        f"{GITHUB_API_URL}/user/repos",
+        headers=github_headers(),
+        json=payload,
+    )
+    if r.status_code == 422:
+        print(f"  [warn] GitHub repo '{name}' already exists — using it.")
+        return
+    if r.status_code >= 400:
+        print(f"  [debug] GitHub error: {r.text}")
+    r.raise_for_status()
+    print(f"  [ok] Created GitHub repo ({'private' if private else 'public'})")
+
+
+def add_push_mirror(repo_name):
+    payload = {
+        "remote_address":  f"https://github.com/{GITHUB_USERNAME}/{repo_name}.git",
+        "remote_username": GITHUB_USERNAME,
+        "remote_password": GITHUB_TOKEN,
+        "sync_on_commit":  True,
+        "interval":        "8h",
+    }
+    r = requests.post(
+        f"{FORGEJO_URL}/api/v1/repos/{FORGEJO_USERNAME}/{repo_name}/push_mirrors",
+        headers=forgejo_headers(),
+        json=payload,
+    )
+    if r.status_code != 200:
+        print(f"  [debug] Mirror response: {r.text}")
+    r.raise_for_status()
+    print(f"  [ok] Push mirror registered (Forgejo → GitHub)")
+
+
+def set_git_origin(repo_name, cwd):
+    ssh_url = f"git@{FORGEJO_SSH_HOST}:{FORGEJO_USERNAME}/{repo_name}.git"
+    # Check if origin already exists
+    result = subprocess.run(
+        ["git", "remote", "get-url", "origin"],
+        cwd=cwd, capture_output=True, text=True
+    )
+    if result.returncode == 0:
+        existing = result.stdout.strip()
+        if existing == ssh_url:
+            print(f"  [skip] origin already set to {ssh_url}")
+            return
+        print(f"  [info] Updating origin from {existing}")
+        run(["git", "remote", "set-url", "origin", ssh_url], cwd=cwd)
+    else:
+        run(["git", "remote", "add", "origin", ssh_url], cwd=cwd)
+    print(f"  [ok] origin → {ssh_url}")
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    cwd = os.getcwd()
+    repo_name = get_repo_name_from_dir(cwd)
+
+    print(f"Setting up repo: {repo_name}")
+    print(f"Directory      : {cwd}\n")
+
+    # Prompt for visibility
+    choice = prompt("Visibility — public or private? [pub/priv]: ", valid=["pub", "priv", "public", "private"])
+    private = choice.startswith("priv")
+
+    # Prompt for description (optional)
+    description = prompt("Description (leave blank to skip): ") or ""
+
+    print()
+
+    # Ensure we have a git repo locally
+    ensure_git_repo(cwd)
+
+    # Create on Forgejo
+    print("[1/4] Creating Forgejo repo...")
+    create_forgejo_repo(repo_name, description, private)
+
+    # Create on GitHub
+    print("[2/4] Creating GitHub repo...")
+    create_github_repo(repo_name, private)
+
+    # Set up push mirror on Forgejo
+    print("[3/4] Registering push mirror...")
+    add_push_mirror(repo_name)
+
+    # Point local origin at Forgejo SSH
+    print("[4/4] Setting git origin...")
+    set_git_origin(repo_name, cwd)
+
+    print(f"""
+── Done ─────────────────────────────────────────────────
+  Forgejo : {FORGEJO_URL}/{FORGEJO_USERNAME}/{repo_name}
+  GitHub  : https://github.com/{GITHUB_USERNAME}/{repo_name}  (mirror)
+  Origin  : git@{FORGEJO_SSH_HOST}:{FORGEJO_USERNAME}/{repo_name}.git
+
+  Push to Forgejo as normal — GitHub will sync automatically.
+""")
+
+
+if __name__ == "__main__":
+    main()
