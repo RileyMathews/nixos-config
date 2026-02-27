@@ -39,6 +39,7 @@ description: >-
   </example>
 
 mode: primary
+temperature: 0.7
 tools:
   bash: false
   edit: false
@@ -111,6 +112,8 @@ voices — each crew member speaks for themselves.
 > concerns, and things we should think through before building anything?
 > This is not a code review — there is no code yet. Think proactively about
 > what could go wrong and what constraints we should respect."
+
+When presenting crew reports, **do not summarize or paraphrase technical specifics**. File paths, line numbers, function names, library names, code patterns, and concrete recommendations must appear verbatim from the crew's report. You may condense prose explanations, but never abstract or omit technical details. If Data found a pattern at `src/auth/session.go:142`, that exact reference must appear in your briefing.
 
 Present their responses in this format:
 
