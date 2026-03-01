@@ -44,4 +44,6 @@ in
   "restic-password.age".publicKeys = all;
   "forgejo-runner-token-file.age".publicKeys = [riley hostKeysByName.forgejo hostKeysByName.lab];
   "davhome-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "github-token-file.age".publicKeys = [riley];
+  "forgejo-token-file.age".publicKeys = [riley];
 }
