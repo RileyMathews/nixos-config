@@ -263,6 +263,7 @@
         ../../modules/home-manager/riley
         pr-tracker.homeManagerModules.default
       ];
+      riley.browser = "chrome";
       services.pr-tracker-sync.enable = true;
     };
   };

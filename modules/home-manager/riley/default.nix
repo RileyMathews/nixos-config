@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 {
   imports = [
     ./alacritty.nix
@@ -12,28 +12,41 @@
     ./ghostty.nix
   ];
 
-  home.username = "riley";
-  home.homeDirectory = "/home/riley";
-
-  home.stateVersion = "25.11";
-
-  programs.home-manager.enable = true;
-
-  age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
-  age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
-
-  home.file = {
-    ".zshrc".text = ''
-      source ~/.config/zsh/zsh-entrypoint.sh
-      export GITHUB_TOKEN=$(cat ${config.age.secrets.github-token-file.path})
-      export FORGEJO_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
-    '';
-    ".config/zsh/zsh-entrypoint.sh".source = ./zsh-entrypoint.sh;
-    ".config/zsh/zsh-syntax-highligting-theme.sh".source = ./zsh-syntax-highligting-theme.sh;
-    ".tmux.conf".source = ./tmux.conf;
+  options.riley.browser = lib.mkOption {
+    type = lib.types.nullOr lib.types.str;
+    default = "librewolf";
+    description = "Default browser command for Riley's shell environment on this host.";
   };
 
-  home.packages = with pkgs; [
-    pgcli
-  ];
+  config = {
+    home.username = "riley";
+    home.homeDirectory = "/home/riley";
+
+    home.stateVersion = "25.11";
+
+    home.sessionVariables = lib.optionalAttrs (config.riley.browser != null) {
+      BROWSER = config.riley.browser;
+      GH_BROWSER = config.riley.browser;
+    };
+
+    programs.home-manager.enable = true;
+
+    age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
+    age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
+
+    home.file = {
+      ".zshrc".text = ''
+        source ~/.config/zsh/zsh-entrypoint.sh
+        export GITHUB_TOKEN=$(cat ${config.age.secrets.github-token-file.path})
+        export FORGEJO_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
+      '';
+      ".config/zsh/zsh-entrypoint.sh".source = ./zsh-entrypoint.sh;
+      ".config/zsh/zsh-syntax-highligting-theme.sh".source = ./zsh-syntax-highligting-theme.sh;
+      ".tmux.conf".source = ./tmux.conf;
+    };
+
+    home.packages = with pkgs; [
+      pgcli
+    ];
+  };
 }
