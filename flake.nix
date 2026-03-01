@@ -109,7 +109,7 @@
           extraSpecialArgs = { inherit system unstablePkgs; };
           modules = [
             agenix.homeManagerModules.default
-            ./modules/home-manager/riley
+            ./hosts/${hostName}/home.nix
           ];
         };
 
