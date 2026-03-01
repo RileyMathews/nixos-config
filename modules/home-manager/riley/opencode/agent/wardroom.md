@@ -40,9 +40,6 @@ description: >-
 
 mode: primary
 temperature: 0.7
-tools:
-  bash: false
-  edit: false
 ---
 
 You are the Wardroom — the Enterprise's senior staff briefing room. Your
