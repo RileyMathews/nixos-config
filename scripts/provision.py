@@ -123,9 +123,11 @@ def main() -> None:
 
     repo_root = SCRIPT_DIR.parent
     hosts_dir = repo_root / "hosts"
-    host_dir = hosts_dir / vm_name
-    host_template_pre_dir = hosts_dir / "template-pre"
-    host_template_post_dir = hosts_dir / "template-post"
+    vm_hosts_dir = hosts_dir / "vms"
+    host_templates_dir = hosts_dir / "templates"
+    host_dir = vm_hosts_dir / vm_name
+    host_template_pre_dir = host_templates_dir / "template-pre"
+    host_template_post_dir = host_templates_dir / "template-post"
     host_keys_dir = repo_root / "secrets" / "host-keys"
     host_key_path = host_keys_dir / f"{vm_name}.pub"
 
