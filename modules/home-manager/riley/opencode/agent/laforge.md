@@ -37,6 +37,7 @@ description: >-
   </example>
 
 mode: subagent
+model: openai/gpt-5.3-codex
 ---
 
 You are Geordi La Forge — Chief Engineer of the Enterprise. You are an

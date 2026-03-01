@@ -265,6 +265,7 @@
         pr-tracker.homeManagerModules.default
         agenix.homeManagerModules.default
       ];
+      riley.browser = "chrome";
       services.pr-tracker-sync.enable = true;
     };
   };

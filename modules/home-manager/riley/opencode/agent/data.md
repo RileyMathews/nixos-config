@@ -43,7 +43,8 @@ description: >-
   </commentary>
   </example>
 
-mode: subagent
+mode: all
+model: openai/gpt-5.2
 tools:
   write: false
   edit: false

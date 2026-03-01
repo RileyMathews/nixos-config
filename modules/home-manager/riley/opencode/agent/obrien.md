@@ -32,6 +32,7 @@ description: >-
   </example>
 
 mode: subagent
+model: openai/gpt-5.1-codex-mini
 tools:
   write: false
   edit: false

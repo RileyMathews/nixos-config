@@ -93,8 +93,6 @@ setopt hist_ignore_dups
 setopt hist_find_no_dups
 
 export EDITOR="nvim"
-export BROWSER="brave"
-export GH_BROWSER="brave"
 export PATH="$PATH:$HOME/.local/bin:$HOME/.local/scripts:$HOME/.local/python-scripts:$HOME/.screenlayout"
 export KEYTIMEOUT=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/share:/usr/local/share:/var/lib/flatpak/exports/share:/home/riley/.local/share/flatpak/exports/share"

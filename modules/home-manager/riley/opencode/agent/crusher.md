@@ -35,6 +35,7 @@ description: >-
   </example>
 
 mode: subagent
+model: openai/gpt-5.3-codex
 tools:
   write: false
   edit: false
