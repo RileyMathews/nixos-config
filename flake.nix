@@ -116,22 +116,7 @@
         };
       };
 
-      # If you still want an explicit list for vmDeployments, keep it separate
-      vmDeployments = [
-        "pg17"
-        "worf"
-        "forgejo"
-        "backup-server"
-        "defiant"
-        "bridge"
-        "discovery"
-        "relay"
-        "data"
-        "redis"
-        "engineering"
-        "enterprise"
-        "yamato"
-      ];
+      vmDeployments = vmHostNames;
 
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = with pkgs; [
