@@ -21,7 +21,7 @@ Use this skill when a task asks to create or update PostgreSQL users/databases o
 
 ## Why this works
 
-`hosts/pg17/configuration.nix` sets:
+`hosts/vms/pg17/configuration.nix` sets:
 
 - `services.postgresql.enableTCPIP = true`
 - `local all all trust`

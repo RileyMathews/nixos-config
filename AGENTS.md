@@ -10,8 +10,9 @@ I make use of tailscale for my hosts. The flake output names match 1 to 1 with t
 If you ever need to ssh into a host for diagnostic purposes you can do so with its tailscale name. Example: `ssh enterprise`.
 
 # Nixos module layout
-The overall file layout I try to stick with here is that hosts are defined in the `flake.nix` file and import a single entrypoint that lives
-at `./hosts/<hostname>/configuration.nix`. The hosts `configuration.nix` file may declare some things that are truly specific to that VM
+The overall file layout I try to stick with here is that VM hosts are discovered from `./hosts/vms/<hostname>/configuration.nix`.
+Desktop hosts are defined statically in `flake.nix` and live under `./hosts/desktops/`, and the ISO config lives at `./hosts/iso/configuration.nix`.
+Host `configuration.nix` files may declare some things that are truly specific to that machine
 but for the most part we try to make shareable modules in the `./modules` directory. The vast majority of the modules there are just
 modules that setup a containerized application but there are some other ones as well for other host level services i.e. postgres, nginx, caddy, redis etc...
 
@@ -42,4 +43,3 @@ on its own. It does consume a home manager module that is shared with my desktop
 
 ## ds9
 `ds9` is my gaming PC that runs archlinux. It's only declared here to export a home manager module so that I can share my dotfiles between my hosts via home manager.
-

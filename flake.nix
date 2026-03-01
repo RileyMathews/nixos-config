@@ -52,73 +52,68 @@
 
       lib = nixpkgs.lib;
 
-      # Optional: define per-host extra modules here.
-      # Anything not listed falls back to defaultModules.
-      hostExtras = {
-        picard = [
-          home-manager.nixosModules.home-manager
-          kolide.nixosModules.kolide-launcher
-          auto-cpufreq.nixosModules.default
-        ];
-        laforge = [
-          home-manager.nixosModules.home-manager
-        ];
-        iso = [ ];
-      };
-
-      # Optional: define per-host "base modules" you want on most machines
-      defaultModules = [
+      vmDefaultModules = [
         disko.nixosModules.disko
         agenix.nixosModules.default
       ];
 
-      mkHost = hostName:
-        let
-          hostPath = ./hosts/${hostName}/configuration.nix;
-          extras = hostExtras.${hostName} or [ ];
-          modules =
-            # If you want *some* hosts (like iso) to NOT get default modules,
-            # just set hostExtras.iso = [] and move iso to a "noDefaults" set,
-            # or keep a hostDefaults map. Simplest: special-case here:
-            (if hostName == "iso" then [ hostPath ] else defaultModules ++ [ hostPath ] ++ extras);
-        in
+      mkNixosHost = {
+        hostPath,
+        extraModules ? [ ],
+        includeDefaults ? true,
+      }:
         lib.nixosSystem {
           inherit system;
           specialArgs = { inherit system unstablePkgs pr-tracker agenix; };
-          inherit modules;
+          modules =
+            (if includeDefaults then vmDefaultModules else [ ])
+            ++ [ hostPath ]
+            ++ extraModules;
         };
 
-      # Discover directories under ./hosts automatically
-      hostNames =
-        builtins.attrNames (builtins.readDir ./hosts);
+      mkVmHost = hostName:
+        mkNixosHost {
+          hostPath = ./hosts/vms/${hostName}/configuration.nix;
+        };
 
-      homeHostNames = [
-        "ds9"
-      ];
-
-      # Keep only NixOS host directories that contain configuration.nix
-      validNixosHostNames =
+      vmHostNames =
+        let
+          vmEntries = builtins.readDir ./hosts/vms;
+        in
         lib.filter (n:
-          let t = (builtins.readDir ./hosts).${n};
-          in t == "directory" && !(lib.elem n homeHostNames) && builtins.pathExists (./hosts/${n}/configuration.nix)
-        ) hostNames;
+          vmEntries.${n} == "directory" && builtins.pathExists (./hosts/vms/${n}/configuration.nix)
+        ) (builtins.attrNames vmEntries);
 
-      mkHome = hostName:
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit system unstablePkgs; };
-          modules = [
-            agenix.homeManagerModules.default
-            ./hosts/${hostName}/home.nix
-          ];
-        };
+      vmNixosConfigurations = lib.genAttrs vmHostNames mkVmHost;
 
     in {
       nixosConfigurations =
-        lib.genAttrs validNixosHostNames mkHost;
+        vmNixosConfigurations // {
+          picard = mkNixosHost {
+            hostPath = ./hosts/desktops/picard/configuration.nix;
+            extraModules = [
+              home-manager.nixosModules.home-manager
+              kolide.nixosModules.kolide-launcher
+              auto-cpufreq.nixosModules.default
+            ];
+          };
+          iso = mkNixosHost {
+            hostPath = ./hosts/iso/configuration.nix;
+            includeDefaults = false;
+          };
+        };
 
       homeConfigurations =
-        lib.genAttrs homeHostNames mkHome;
+        {
+          ds9 = home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            extraSpecialArgs = { inherit system unstablePkgs; };
+            modules = [
+              agenix.homeManagerModules.default
+              ./hosts/desktops/ds9/home.nix
+            ];
+          };
+        };
 
       # If you still want an explicit list for vmDeployments, keep it separate
       vmDeployments = [
