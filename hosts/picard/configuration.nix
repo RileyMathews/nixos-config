@@ -4,6 +4,7 @@
   unstablePkgs,
   lib,
   pr-tracker,
+  agenix,
   ...
 }:
 
@@ -262,8 +263,9 @@
       imports = [
         ../../modules/home-manager/riley
         pr-tracker.homeManagerModules.default
+        agenix.homeManagerModules.default
       ];
-      riley.browser = "chrome";
+      riley.browser = "google-chrome-stable";
       services.pr-tracker-sync.enable = true;
     };
   };

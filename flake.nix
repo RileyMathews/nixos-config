@@ -84,7 +84,7 @@
         in
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit system unstablePkgs pr-tracker; };
+          specialArgs = { inherit system unstablePkgs pr-tracker agenix; };
           inherit modules;
         };
 
