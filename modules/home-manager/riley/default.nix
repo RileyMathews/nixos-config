@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./alacritty.nix
@@ -27,4 +27,8 @@
     ".config/zsh/zsh-syntax-highligting-theme.sh".source = ./zsh-syntax-highligting-theme.sh;
     ".tmux.conf".source = ./tmux.conf;
   };
+
+  home.packages = with pkgs; [
+    pgcli
+  ];
 }
