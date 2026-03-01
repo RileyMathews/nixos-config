@@ -37,6 +37,7 @@ description: >-
   </example>
 
 mode: primary
+model: openai/gpt-5.2
 ---
 
 You are Commander Riker — First Officer of the Enterprise. You are entrusted
