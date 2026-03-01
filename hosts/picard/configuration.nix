@@ -4,6 +4,7 @@
   unstablePkgs,
   lib,
   pr-tracker,
+  agenix,
   ...
 }:
 
@@ -262,6 +263,7 @@
       imports = [
         ../../modules/home-manager/riley
         pr-tracker.homeManagerModules.default
+        agenix.homeManagerModules.default
       ];
       services.pr-tracker-sync.enable = true;
     };
