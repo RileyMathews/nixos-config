@@ -87,33 +87,34 @@
       vmNixosConfigurations = lib.genAttrs vmHostNames mkVmHost;
 
     in {
-      nixosConfigurations =
-        vmNixosConfigurations // {
-          picard = mkNixosHost {
-            hostPath = ./hosts/desktops/picard/configuration.nix;
-            extraModules = [
-              home-manager.nixosModules.home-manager
-              kolide.nixosModules.kolide-launcher
-              auto-cpufreq.nixosModules.default
-            ];
-          };
-          iso = mkNixosHost {
-            hostPath = ./hosts/iso/configuration.nix;
-            includeDefaults = false;
-          };
+      nixosConfigurations = {
+
+        picard = mkNixosHost {
+          hostPath = ./hosts/desktops/picard/configuration.nix;
+          extraModules = [
+            home-manager.nixosModules.home-manager
+            kolide.nixosModules.kolide-launcher
+            auto-cpufreq.nixosModules.default
+          ];
         };
 
-      homeConfigurations =
-        {
-          ds9 = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            extraSpecialArgs = { inherit system unstablePkgs; };
-            modules = [
-              agenix.homeManagerModules.default
-              ./hosts/desktops/ds9/home.nix
-            ];
-          };
+        iso = mkNixosHost {
+          hostPath = ./hosts/iso/configuration.nix;
+          includeDefaults = false;
         };
+
+      } // vmNixosConfigurations;
+
+      homeConfigurations = {
+        ds9 = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit system unstablePkgs; };
+          modules = [
+            agenix.homeManagerModules.default
+            ./hosts/desktops/ds9/home.nix
+          ];
+        };
+      };
 
       # If you still want an explicit list for vmDeployments, keep it separate
       vmDeployments = [
