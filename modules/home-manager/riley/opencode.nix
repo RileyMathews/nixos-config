@@ -14,8 +14,8 @@ let
 
   modelProfiles = {
     personal = {
-      wardroom = "opencode/claude-opus-4-6";
-      riker = "opencode/claude-opus-4-6";
+      wardroom = "opencode/claude-haiku-4-6";
+      riker = "opencode/claude-haiku-4-6";
       data = "opencode/claude-sonnet-4-6";
       worf = "opencode/claude-haiku-4-6";
       troi = "opencode/gpt-5-nano";
