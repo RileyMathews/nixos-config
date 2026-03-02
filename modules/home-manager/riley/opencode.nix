@@ -14,15 +14,15 @@ let
 
   modelProfiles = {
     personal = {
-      wardroom = "openai/gpt-5.2";
-      riker = "openai/gpt-5.2";
-      data = "openai/gpt-5.2";
-      worf = "openai/gpt-5.2";
-      troi = "openai/gpt-5.2";
+      wardroom = "opencode/claude-opus-4-6";
+      riker = "opencode/claude-opus-4-6";
+      data = "opencode/claude-sonnet-4-6";
+      worf = "opencode/claude-haiku-4-6";
+      troi = "opencode/gpt-5-nano";
       laforge = "openai/gpt-5.3-codex";
-      q = "openai/gpt-5.3-codex";
-      crusher = "openai/gpt-5.3-codex";
-      obrien = "openai/gpt-5.1-codex-mini";
+      q = "opencode/claude-haiku-4-6";
+      crusher = "opencode/gpt-5.2";
+      obrien = "openai/gpt-5-nano";
     };
 
     work = {
