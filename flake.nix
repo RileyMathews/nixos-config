@@ -34,9 +34,13 @@
       url = "github:nix-community/home-manager?ref=release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    opencode = {
+      url = "github:anomalyco/opencode?ref=v1.2.15";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode }:
     let
       system = "x86_64-linux";
 
@@ -64,7 +68,7 @@
       }:
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit system unstablePkgs pr-tracker agenix; };
+          specialArgs = { inherit system unstablePkgs pr-tracker agenix opencode; };
           modules =
             (if includeDefaults then vmDefaultModules else [ ])
             ++ [ hostPath ]

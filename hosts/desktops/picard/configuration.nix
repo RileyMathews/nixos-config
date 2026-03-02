@@ -5,6 +5,7 @@
   lib,
   pr-tracker,
   agenix,
+  opencode,
   ...
 }:
 
@@ -13,7 +14,16 @@
     ./hardware-configuration.nix
     ./nvidia-offload-config.nix
   ];
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    config.allowUnfree = true;
+    hostPlatform = {
+      system = "x86_64-linux";
+    };
+  };
+
+  environment.variables = {
+    GHC_JOBS = "16";
+  };
 
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
@@ -25,10 +35,30 @@
       efi.canTouchEfiVariables = true;
     };
 
+    kernel = {
+      sysctl = {
+        "vm.swappiness" = 10;
+        "vm.max_map_count" = 2622144;
+        "fs.inotify.max_user_watches" = 524288;
+        "vm.dirty_ratio" = 10;
+        "vm.dirty_background_ratio" = 5;
+      };
+    };
+
+    tmp = {
+      useTmpfs = true;
+      tmpfsSize = "50%";
+    };
+
     initrd = {
       systemd.enable = true;
       luks.devices."luks-acc369d3-8fac-4a34-a4cd-b209e7710813".crypttabExtraOpts = [ "tpm2-device=auto" ];
     };
+  };
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 25;
   };
 
   nix = {
@@ -87,12 +117,20 @@
   };
 
   services = {
+    scx = {
+      enable = true;
+      scheduler = "scx_bpfland";
+    };
     xserver = {
       xkb = {
         layout = "us";
         variant = "";
       };
     };
+
+    udev.extraRules = ''
+      ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
+    '';
 
     power-profiles-daemon.enable = true;
     thermald.enable = true;
@@ -212,10 +250,10 @@
       tldr
       tmux
       tpm2-tools
+      opencode.packages.${pkgs.system}.opencode
       unstablePkgs.claude-code
       unstablePkgs.hyprcursor
       unstablePkgs.neovim
-      unstablePkgs.opencode
       virtualglLib
       vtsls
       waybar
