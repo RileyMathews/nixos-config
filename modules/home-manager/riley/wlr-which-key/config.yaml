@@ -40,9 +40,24 @@ menu:
       - key: "o"
         desc: Off
         cmd: poweroff
-  - key: "g"
-    desc: Window Group Management
+  - key: "h"
+    desc: Hyprland
     submenu:
-      - key: "t"
-        desc: Toggle group from currently focused window
-        cmd: hyprctl dispatch togglegroup
+      - key: "g"
+        desc: Window Group Management
+        submenu:
+          - key: "t"
+            desc: Toggle group from currently focused window
+            cmd: hyprctl dispatch togglegroup
+      - key: "c"
+        desc: Column Management
+        submenu:
+          - key: "f"
+            desc: Full size
+            cmd: hyprctl dispatch layoutmsg colresize 1
+          - key: "h"
+            desc: Half size
+            cmd: hyprctl dispatch layoutmsg colresize 0.5
+          - key: "q"
+            desc: Half size
+            cmd: hyprctl dispatch layoutmsg colresize 0.25
