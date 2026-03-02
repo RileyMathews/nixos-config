@@ -19,9 +19,9 @@ let
       data = "opencode/claude-sonnet-4-6";
       worf = "opencode/claude-haiku-4-5";
       troi = "opencode/gpt-5-nano";
-      laforge = "opencode/gpt-5.3-codex";
+      laforge = "opencode/kimi-k2.5";
       q = "opencode/claude-haiku-4-5";
-      crusher = "opencode/gpt-5.2";
+      crusher = "opencode/claude-haiku-4-5";
       obrien = "opencode/gpt-5-nano";
     };
 
