@@ -2,24 +2,45 @@ set -euo pipefail
 
 hostname="$(cat /etc/hostname)"
 
-usage() {
-  cat >&2 <<'EOF'
-Usage:
-  backup.sh backup-path --path <absolute-path> [--exclude <pattern> ...]
-  backup.sh prune-all
-EOF
-  exit 2
-}
-
 notify() {
   curl -fsS -m 15 -H "Priority: high" -d "$1" "https://ntfy.rileymathews.com/home-server-alerts" >/dev/null || true
 }
 
-on_error() {
-  notify "${hostname} local appdata backup failed"
+gatus_heartbeat() {
+  local status="$1"
+  local error="${2:-}"
+
+  if [[ -z "${GATUS_HEALTHCHECK_ID:-}" ]]; then
+    return
+  fi
+
+  local token=""
+  if [[ -n "${GATUS_PUSH_TOKEN:-}" ]]; then
+    token="$GATUS_PUSH_TOKEN"
+  elif [[ -n "${GATUS_PUSH_TOKEN_FILE:-}" ]]; then
+    token="$(grep -v '^export ' "$GATUS_PUSH_TOKEN_FILE" | grep -oP '^GATUS_PUSH_TOKEN=\K.*' || true)"
+  fi
+
+  if [[ -z "$token" ]]; then
+    return
+  fi
+
+  local url="${GATUS_URL:-https://gatus.rileymathews.com}/api/v1/endpoints/${GATUS_HEALTHCHECK_ID}/external?success=${status}"
+  if [[ -n "$error" ]]; then
+    url+="&error=$(echo "$error" | jq -Rs .)"
+  fi
+
+  curl -fsS -m 15 -X POST -H "Authorization: Bearer ${GATUS_PUSH_TOKEN}" "$url" >/dev/null 2>&1 || true
 }
 
-trap on_error ERR
+on_error() {
+  local error="${1:-backup failed}"
+  notify "${hostname} local appdata backup failed: $error"
+  gatus_heartbeat "false" "$error"
+  exit 1
+}
+
+trap 'on_error "$BASH_COMMAND"' ERR
 
 if [[ -z "${AWS_SECRET_ACCESS_KEY_FILE:-}" || -z "${RESTIC_PASSWORD_FILE:-}" ]]; then
   echo "AWS_SECRET_ACCESS_KEY_FILE and RESTIC_PASSWORD_FILE must be set" >&2
@@ -36,53 +57,16 @@ if ! restic --retry-lock 5h snapshots >/dev/null 2>&1; then
   restic --retry-lock 5h init
 fi
 
-cmd="${1:-}"
-if [[ -z "$cmd" ]]; then
-  usage
-fi
-shift
+IFS=':' read -ra PATHS <<< "${BACKUP_PATHS:-}"
+for path in "${PATHS[@]}"; do
+  restic --retry-lock 5h backup --host "$hostname" --tag local-appdata ${EXCLUDE_ARGS:-} "$path"
+done
 
-case "$cmd" in
-  backup-path)
-    backup_path=""
-    excludes=()
+restic --retry-lock 5h forget --prune \
+  --host "$hostname" \
+  --tag local-appdata \
+  --keep-daily 7 \
+  --keep-weekly 4 \
+  --keep-monthly 6
 
-    while [[ $# -gt 0 ]]; do
-      case "$1" in
-        --path)
-          [[ $# -ge 2 ]] || usage
-          backup_path="$2"
-          shift 2
-          ;;
-        --exclude)
-          [[ $# -ge 2 ]] || usage
-          excludes+=("--exclude" "$2")
-          shift 2
-          ;;
-        *)
-          usage
-          ;;
-      esac
-    done
-
-    if [[ -z "$backup_path" || "$backup_path" != /* ]]; then
-      usage
-    fi
-
-    restic --retry-lock 5h backup --host "$hostname" --tag local-appdata "${excludes[@]}" "$backup_path"
-    ;;
-
-  prune-all)
-    restic --retry-lock 5h forget --prune \
-      --host "$hostname" \
-      --tag local-appdata \
-      --keep-daily 7 \
-      --keep-weekly 4 \
-      --keep-monthly 6
-
-    ;;
-
-  *)
-    usage
-    ;;
-esac
+gatus_heartbeat "true"

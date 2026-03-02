@@ -23,5 +23,6 @@
       paths = [
           "/var/lib/thegenerosityco/database"
       ];
+      gatusHealthcheckId = "backups_thegenerosityco-staging-backup";
   };
 }
