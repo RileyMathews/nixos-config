@@ -23,6 +23,7 @@ let
       q = "opencode/claude-haiku-4-5";
       crusher = "opencode/claude-haiku-4-5";
       obrien = "opencode/gpt-5-nano";
+      haskell = "opencode/kimi-k2.5";
     };
 
     work = {
@@ -35,6 +36,7 @@ let
       q = "anthropic/claude-opus-4-6";
       crusher = "anthropic/claude-opus-4-6";
       obrien = "anthropic/claude-opus-4-6";
+      haskell = "anthropic/claude-opus-4-6";
     };
   };
 
