@@ -122,12 +122,6 @@
     };
   };
 
-  # doing this manually until auto cpu freq is fixed
-  powerManagement = {
-    enable = true;
-    cpuFreqGovernor = "performance";
-  };
-
   programs = {
     niri.enable = true;
     firefox.enable = true;
