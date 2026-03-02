@@ -123,6 +123,7 @@ let
   renderedAgentFiles =
     if canRender then
       lib.genAttrs canonicalAgents (agent: {
+        force = true;
         source = pkgs.replaceVars (templatePath agent) {
           MODEL = selectedModels.${agent};
         };
