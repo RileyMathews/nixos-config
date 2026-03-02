@@ -22,7 +22,7 @@ description: >-
   </example>
 
 mode: subagent
-model: openai/gpt-5.2
+model: @MODEL@
 tools:
   write: false
   edit: false

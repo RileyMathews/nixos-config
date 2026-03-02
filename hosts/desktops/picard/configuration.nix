@@ -266,6 +266,7 @@
         agenix.homeManagerModules.default
       ];
       riley.browser = "google-chrome-stable";
+      riley.opencode.profile = "work";
       services.pr-tracker-sync.enable = true;
     };
   };

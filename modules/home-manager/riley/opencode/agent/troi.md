@@ -34,7 +34,7 @@ description: >-
   </example>
 
 mode: subagent
-model: openai/gpt-5.2
+model: @MODEL@
 tools:
   bash: false
 ---

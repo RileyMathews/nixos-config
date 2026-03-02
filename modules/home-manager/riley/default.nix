@@ -18,6 +18,15 @@
     description = "Default browser command for Riley's shell environment on this host.";
   };
 
+  options.riley.opencode.profile = lib.mkOption {
+    type = lib.types.enum [
+      "personal"
+      "work"
+    ];
+    default = "personal";
+    description = "OpenCode model profile for Riley's agents on this host.";
+  };
+
   config = {
     home.username = "riley";
     home.homeDirectory = "/home/riley";

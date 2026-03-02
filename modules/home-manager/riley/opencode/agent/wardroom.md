@@ -39,7 +39,7 @@ description: >-
   </example>
 
 mode: primary
-model: openai/gpt-5.2
+model: @MODEL@
 temperature: 0.7
 ---
 

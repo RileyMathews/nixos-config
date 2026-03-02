@@ -44,7 +44,7 @@ description: >-
   </example>
 
 mode: all
-model: openai/gpt-5.2
+model: @MODEL@
 tools:
   write: false
   edit: false

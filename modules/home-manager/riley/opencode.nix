@@ -1,12 +1,166 @@
-{ ... }:
-{
-  home.file = {
-    ".config/opencode/opencode.json".source = ./opencode/opencode.json;
-    ".config/opencode/agent".source = ./opencode/agent;
-    ".config/opencode/skills".source = ./opencode/skills;
-    ".config/opencode/tools".source = ./opencode/tools;
-    ".config/opencode/plugins".source = ./opencode/plugins;
-    ".config/opencode/AGENT.md".source = ./opencode/AGENT.md;
-    ".config/opencode/peon-ping/config.json".source = ./opencode/peon-ping/config.json;
+{ pkgs, config, lib, ... }:
+let
+  canonicalAgents = [
+    "wardroom"
+    "riker"
+    "data"
+    "worf"
+    "troi"
+    "laforge"
+    "q"
+    "crusher"
+    "obrien"
+  ];
+
+  modelProfiles = {
+    personal = {
+      wardroom = "openai/gpt-5.2";
+      riker = "openai/gpt-5.2";
+      data = "openai/gpt-5.2";
+      worf = "openai/gpt-5.2";
+      troi = "openai/gpt-5.2";
+      laforge = "openai/gpt-5.3-codex";
+      q = "openai/gpt-5.3-codex";
+      crusher = "openai/gpt-5.3-codex";
+      obrien = "openai/gpt-5.1-codex-mini";
+    };
+
+    work = {
+      wardroom = "openai/gpt-5.3";
+      riker = "openai/gpt-5.3";
+      data = "openai/gpt-5.3";
+      worf = "openai/gpt-5.3";
+      troi = "openai/gpt-5.3";
+      laforge = "openai/gpt-5.3-codex";
+      q = "openai/gpt-5.3-codex";
+      crusher = "openai/gpt-5.3-codex";
+      obrien = "openai/gpt-5.3-codex";
+    };
   };
+
+  selectedProfile = config.riley.opencode.profile;
+  selectedModels = modelProfiles.${selectedProfile};
+
+  templateDir = ./opencode/agent;
+  templatePath = agent: templateDir + "/${agent}.md";
+
+  canonicalTemplateFiles = map (agent: "${agent}.md") canonicalAgents;
+  templateFiles =
+    lib.attrNames
+      (lib.filterAttrs (name: fileType: fileType != "directory" && lib.hasSuffix ".md" name) (builtins.readDir templateDir));
+
+  missingTemplateFiles = lib.filter (name: !(lib.elem name templateFiles)) canonicalTemplateFiles;
+  extraTemplateFiles = lib.filter (name: !(lib.elem name canonicalTemplateFiles)) templateFiles;
+
+  formatList = values:
+    if values == [ ] then
+      "(none)"
+    else
+      lib.concatStringsSep ", " values;
+
+  profileModelAssertions =
+    lib.concatMap
+      (
+        profileName:
+        let
+          profileModels = modelProfiles.${profileName};
+          profileKeys = lib.attrNames profileModels;
+          missingKeys = lib.filter (name: !(lib.elem name profileKeys)) canonicalAgents;
+          extraKeys = lib.filter (name: !(lib.elem name canonicalAgents)) profileKeys;
+        in
+        [
+          {
+            assertion = missingKeys == [ ];
+            message = "riley.opencode profile '${profileName}' is missing agent model mappings for: ${formatList missingKeys}";
+          }
+          {
+            assertion = extraKeys == [ ];
+            message = "riley.opencode profile '${profileName}' has unexpected agent model mappings for: ${formatList extraKeys}";
+          }
+        ]
+      )
+      (lib.attrNames modelProfiles);
+
+  selectedProfileKeys = lib.attrNames selectedModels;
+  selectedProfileMissingKeys = lib.filter (name: !(lib.elem name selectedProfileKeys)) canonicalAgents;
+  selectedProfileExtraKeys = lib.filter (name: !(lib.elem name canonicalAgents)) selectedProfileKeys;
+
+  canRender =
+    missingTemplateFiles == [ ]
+    && extraTemplateFiles == [ ]
+    && selectedProfileMissingKeys == [ ]
+    && selectedProfileExtraKeys == [ ];
+
+  templateModelLineAssertions =
+    if canRender then
+      lib.concatMap
+        (
+          agent:
+          let
+            templateFile = templatePath agent;
+            templateText = builtins.readFile templateFile;
+            templateLines = lib.splitString "\n" templateText;
+            modelLines = lib.filter (line: builtins.match "^[[:space:]]*model:[[:space:]]*.*$" line != null) templateLines;
+            placeholderLines = lib.filter (line: line == "model: @MODEL@") templateLines;
+            modelLineCount = builtins.length modelLines;
+            placeholderLineCount = builtins.length placeholderLines;
+          in
+          [
+            {
+              assertion = modelLineCount == 1;
+              message = "riley.opencode template '${agent}.md' must contain exactly one model: line; found ${toString modelLineCount}";
+            }
+            {
+              assertion = placeholderLineCount == 1;
+              message = "riley.opencode template '${agent}.md' must contain exactly one 'model: @MODEL@' line";
+            }
+          ]
+        )
+        canonicalAgents
+    else
+      [ ];
+
+  renderedAgentFiles =
+    if canRender then
+      lib.genAttrs canonicalAgents (agent: {
+        source = pkgs.replaceVars (templatePath agent) {
+          MODEL = selectedModels.${agent};
+        };
+      })
+    else
+      { };
+in
+{
+  assertions =
+    [
+      {
+        assertion = missingTemplateFiles == [ ];
+        message = "riley.opencode agent templates are missing required files: ${formatList missingTemplateFiles}";
+      }
+      {
+        assertion = extraTemplateFiles == [ ];
+        message = "riley.opencode agent template directory has unexpected *.md files: ${formatList extraTemplateFiles}";
+      }
+      {
+        assertion = selectedProfileMissingKeys == [ ];
+        message = "riley.opencode selected profile '${selectedProfile}' is missing agent model mappings for: ${formatList selectedProfileMissingKeys}";
+      }
+      {
+        assertion = selectedProfileExtraKeys == [ ];
+        message = "riley.opencode selected profile '${selectedProfile}' has unexpected agent model mappings for: ${formatList selectedProfileExtraKeys}";
+      }
+    ]
+    ++ profileModelAssertions
+    ++ (if canRender then templateModelLineAssertions else [ ]);
+
+  home.file =
+    {
+      ".config/opencode/opencode.json".source = ./opencode/opencode.json;
+      ".config/opencode/skills".source = ./opencode/skills;
+      ".config/opencode/tools".source = ./opencode/tools;
+      ".config/opencode/plugins".source = ./opencode/plugins;
+      ".config/opencode/AGENT.md".source = ./opencode/AGENT.md;
+      ".config/opencode/peon-ping/config.json".source = ./opencode/peon-ping/config.json;
+    }
+    // lib.mapAttrs' (agent: value: lib.nameValuePair ".config/opencode/agent/${agent}.md" value) renderedAgentFiles;
 }

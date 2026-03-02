@@ -2,7 +2,10 @@
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "build",
   "disabled_providers": [
-    "github-models"
+    "github-models",
+    "github-copilot",
+    "github-copilot-enterprise",
+    "amazon-bedrock"
   ],
   "lsp": {
     "haskell-language-server": {
