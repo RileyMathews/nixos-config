@@ -26,15 +26,15 @@ let
     };
 
     work = {
-      wardroom = "openai/gpt-5.3";
-      riker = "openai/gpt-5.3";
-      data = "openai/gpt-5.3";
-      worf = "openai/gpt-5.3";
-      troi = "openai/gpt-5.3";
-      laforge = "openai/gpt-5.3-codex";
-      q = "openai/gpt-5.3-codex";
-      crusher = "openai/gpt-5.3-codex";
-      obrien = "openai/gpt-5.3-codex";
+      wardroom = "anthropic/claude-opus-4-6";
+      riker = "anthropic/claude-opus-4-6";
+      data = "anthropic/claude-opus-4-6";
+      worf = "anthropic/claude-opus-4-6";
+      troi = "anthropic/claude-opus-4-6";
+      laforge = "anthropic/claude-opus-4-6";
+      q = "anthropic/claude-opus-4-6";
+      crusher = "anthropic/claude-opus-4-6";
+      obrien = "anthropic/claude-opus-4-6";
     };
   };
 
