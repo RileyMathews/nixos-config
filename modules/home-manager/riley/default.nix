@@ -40,11 +40,11 @@
 
     home.file = {
       ".zshrc".text = ''
-        source ~/.config/zsh/zsh-entrypoint.sh
         export GITHUB_TOKEN=$(cat ${config.age.secrets.github-token-file.path})
         export FORGEJO_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
         export BROWSER=${config.riley.browser};
         export GH_BROWSER=${config.riley.browser};
+        source ~/.config/zsh/zsh-entrypoint.sh
       '';
       ".config/zsh/zsh-entrypoint.sh".source = ./zsh-entrypoint.sh;
       ".config/zsh/zsh-syntax-highligting-theme.sh".source = ./zsh-syntax-highligting-theme.sh;
