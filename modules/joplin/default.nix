@@ -18,7 +18,7 @@
     };
 
     virtualisation.oci-containers.containers.joplin = {
-        image = "joplin/server:3.6.3";
+        image = "joplin/server:3.5.13";
         ports = [ "22300:22300" ];
         environment = {
             DB_CLIENT = "pg";
