@@ -18,7 +18,7 @@
 
     virtualisation.oci-containers.containers = {
         paperless = {
-            image = "ghcr.io/paperless-ngx/paperless-ngx:2.20.7";
+            image = "ghcr.io/paperless-ngx/paperless-ngx:2.20.9";
             ports = ["8008:8000"];
             volumes = [ 
                 "/var/lib/appdata/paperless/data:/usr/src/paperless/data"

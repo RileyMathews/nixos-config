@@ -30,7 +30,7 @@
     virtualisation.oci-containers.backend = "podman";
 
     virtualisation.oci-containers.containers.karakeep = {
-        image = "ghcr.io/karakeep-app/karakeep:0.30.0";
+        image = "ghcr.io/karakeep-app/karakeep:0.31.0";
         ports = ["3000:3000"];
         volumes = ["/var/lib/appdata/karakeep/data:/data"];
         environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];
