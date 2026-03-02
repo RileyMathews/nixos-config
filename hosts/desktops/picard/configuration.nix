@@ -58,7 +58,6 @@
     system76 = {
       firmware-daemon.enable = true;
       kernel-modules.enable = true;
-      power-daemon.enable = true;
     };
     bluetooth.enable = true;
     graphics = {
@@ -95,6 +94,9 @@
       };
     };
 
+    power-profiles-daemon.enable = true;
+    thermald.enable = true;
+
     tailscale.enable = true;
     kolide-launcher.enable = true;
     pulseaudio.enable = false;
@@ -129,20 +131,6 @@
   programs = {
     niri.enable = true;
     firefox.enable = true;
-    auto-cpufreq = {
-      # auto cpu freq appears to have bug right now.
-      enable = false;
-      settings = {
-        battery = {
-          governor = "powersave";
-          turbo = "never";
-        };
-        charger = {
-          governor = "performance";
-          turbo = "auto";
-        };
-      };
-    };
     obs-studio.enable = true;
     hyprland = {
       enable = true;
