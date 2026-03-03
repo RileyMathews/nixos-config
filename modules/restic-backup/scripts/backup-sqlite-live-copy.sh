@@ -71,7 +71,7 @@ main() {
 
     echo "Creating live copy of $db_name..."
     # Use sqlite3 .backup command for safe live copying
-    if sqlite3 "$db_path" ".backup to '${temp_copy}'"; then
+    if sqlite3 "$db_path" ".backup ${temp_copy}"; then
       copied_dbs="${copied_dbs}:${temp_copy}"
     else
       echo "ERROR: Failed to create live copy of $db_path" >&2
