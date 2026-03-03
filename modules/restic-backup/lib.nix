@@ -27,10 +27,6 @@ let
         BACKUP_TYPE = backupConfig.type;
         BACKUP_TAG = backupName;
         GATUS_HEALTHCHECK_ID = backupConfig.gatusHealthcheckId;
-        RESTIC_CACHE_DIR = "${cfg.cacheDir}/${backupName}";
-        # Credential file paths (created by setup.sh)
-        AWS_SHARED_CREDENTIALS_FILE = "${cfg.cacheDir}/${backupName}/aws-credentials";
-        RESTIC_PASSWORD_FILE = "${cfg.cacheDir}/${backupName}/restic-password";
       };
 
       # Pattern-specific variables

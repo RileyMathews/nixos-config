@@ -114,12 +114,6 @@ in
   options.services.resticBackup = {
     enable = mkEnableOption "unified restic backup service";
 
-    cacheDir = mkOption {
-      type = types.str;
-      default = "/var/cache/restic-backup";
-      description = "Base directory for restic cache (per-backup subdirs will be created).";
-    };
-
     backups = mkOption {
       type = types.attrsOf backupSubmodule;
       default = {};
@@ -219,9 +213,6 @@ in
         description = "Restic backup: ${name}";
         path = with pkgs; [ restic curl jq sqlite ];
         environment = {
-          # These are consumed by setup.sh
-          BACKUP_NAME = name;
-          CACHE_DIR = cfg.cacheDir;
           AWS_ACCESS_KEY_ID = "c735b0f700e602cbdb3af8d50977337c";
           AWS_SECRET_ACCESS_KEY_FILE = config.age.secrets.aws-access-key.path;
           RESTIC_PASSWORD_FILE_SOURCE = config.age.secrets.restic-password.path;
@@ -229,13 +220,10 @@ in
         };
         serviceConfig = {
           Type = "oneshot";
-          # Setup credentials in ExecStartPre
-          ExecStartPre = "${backupLib.backupScripts}/bin/setup.sh";
           ExecStart = "${backupLib.backupScripts}/bin/wrapper.sh";
           EnvironmentFile = "${envFile}";
           User = "backup";
           Group = "backup";
-          CacheDirectory = "restic-backup-${name}";
         };
       }
     ) cfg.backups;
