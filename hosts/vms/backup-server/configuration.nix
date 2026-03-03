@@ -12,7 +12,7 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/tailscale
     ./../../../modules/postgres-backup
-    ./../../../modules/restic-nas-main
+    ./../../../modules/restic-backup
   ];
   networking.hostName = "backup-server";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -110,10 +110,15 @@
     ];
   };
 
-  services.resticNasMain = {
+  services.resticBackup = {
     enable = true;
-    excludePatterns = [
-      "/mnt/nas-main/jellyfin/config/.aspnet/DataProtection-Keys/*"
-    ];
+    backups.nas-main = {
+      type = "directory-children";
+      gatusHealthcheckId = "nas-main-backup";
+      rootPath = "/mnt/nas-main";
+      excludePatterns = [
+        "/mnt/nas-main/jellyfin/config/.aspnet/DataProtection-Keys/*"
+      ];
+    };
   };
 }
