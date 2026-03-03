@@ -27,31 +27,15 @@ if [[ ! -f "${RESTIC_PASSWORD_FILE_SOURCE:-}" ]]; then
 fi
 
 # ==============================================================================
-# Create credentials in a temporary directory for this run
-# ==============================================================================
-
-CREDS_DIR=$(mktemp -d)
-trap "rm -rf '$CREDS_DIR'" EXIT
-
-# Read AWS secret and create credentials file
-AWS_SECRET=$(cat "$AWS_SECRET_ACCESS_KEY_FILE")
-cat > "${CREDS_DIR}/aws-creds" << EOF
-[default]
-aws_access_key_id = ${AWS_ACCESS_KEY_ID}
-aws_secret_access_key = ${AWS_SECRET}
-EOF
-chmod 600 "${CREDS_DIR}/aws-creds"
-
-# Copy restic password file
-cp "$RESTIC_PASSWORD_FILE_SOURCE" "${CREDS_DIR}/restic-password"
-chmod 600 "${CREDS_DIR}/restic-password"
-
-# ==============================================================================
 # Set environment variables for restic
 # ==============================================================================
 
-export AWS_SHARED_CREDENTIALS_FILE="${CREDS_DIR}/aws-creds"
-export RESTIC_PASSWORD_FILE="${CREDS_DIR}/restic-password"
+# Read AWS secret and export it directly
+export AWS_SECRET_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY=$(cat "$AWS_SECRET_ACCESS_KEY_FILE")
+
+# Point restic to password file
+export RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE_SOURCE}"
 
 # ==============================================================================
 # Source shared functions and hardcoded configuration
