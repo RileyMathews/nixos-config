@@ -111,7 +111,7 @@ A phase may have multiple outputs which will each be on their own line
 
 **Prerequisites**: Phase 1 complete, immich backup verified
 
-- [ ] 2.1 Stop immich API server on `yamato`
+- [x] 2.1 Stop immich API server on `yamato`
   - Command: `systemctl stop podman-immich`
   - Verify: `systemctl status podman-immich` shows inactive
   - Done when: Service is stopped and logs show clean shutdown
@@ -232,12 +232,14 @@ A phase may have multiple outputs which will each be on their own line
     - `sudo zpool export <poolname>` (cleanly export the pool)
   - Record: **Pool name**: `[to be filled in]`, **Hostid**: `[to be filled in]`
   - Done when: Pool info is documented and pool is exported
+  -- output: pool name is 'main'
+  -- output: hostid was a mangled file. Not sure if this is required?
 
-- [ ] 4.3 Build NixOS Image on a Separate Machine
+- [x] 4.3 Build NixOS Image on a Separate Machine
   - Command: `nix build --no-write-lock-file 'github:Mic92/nixos-aarch64-images#cm3588NAS'`
   - Done when: Build completes successfully and `result` directory exists
 
-- [ ] 4.4 Add SSH Key to the Image
+- [x] 4.4 Add SSH Key to the Image
   - Commands:
     ```bash
     sudo losetup -fP ./result
@@ -253,7 +255,7 @@ A phase may have multiple outputs which will each be on their own line
     ```
   - Done when: SSH key is added to the image without errors
 
-- [ ] 4.5 Write Image to SD Card
+- [x] 4.5 Write Image to SD Card
   - **Option A** (if you have SD reader on build machine):
     - Command: `sudo dd if=./result of=/dev/sdX bs=16M status=progress` (replace sdX with your SD card)
   - **Option B** (transfer to CM3588 and write there):
