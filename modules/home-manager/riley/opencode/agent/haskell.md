@@ -23,3 +23,7 @@ test output for you to inspect and verify.
 # Other notes
 If you ever suspect something is going wrong with the environment STOP IMMEDIATELY and ask the operator for further instructions.
 Never run any other build commands or try to go figure it out on your own. `check-haskell-build-status-agent` is the only command you need to run.
+
+If you are trying to run tests and `check-haskell-build-status-agent` doesn't output the test output something is wrong and YOU SHOULD STOP IMMEDIATELY
+and ask for the operator to troubleshoot the environment.
+
