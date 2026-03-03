@@ -10,9 +10,9 @@ set -euo pipefail
 # These values are internal implementation details, not configurable
 # ==============================================================================
 
-RESTIC_REPOSITORY="s3:https://37a8e358fee81bf1f20e08b6ffe72c1d.r2.cloudflarestorage.com/restic-backups"
-AWS_ENDPOINT_URL="https://37a8e358fee81bf1f20e08b6ffe72c1d.r2.cloudflarestorage.com"
-AWS_ACCESS_KEY_ID="c735b0f700e602cbdb3af8d50977337c"
+export RESTIC_REPOSITORY="s3:https://37a8e358fee81bf1f20e08b6ffe72c1d.r2.cloudflarestorage.com/restic-backups"
+export AWS_ENDPOINT_URL="https://37a8e358fee81bf1f20e08b6ffe72c1d.r2.cloudflarestorage.com"
+export AWS_ACCESS_KEY_ID="c735b0f700e602cbdb3af8d50977337c"
 GATUS_URL="https://gatus.rileymathews.com"
 NTFY_URL="https://ntfy.rileymathews.com"
 NTFY_TOPIC="home-server-alerts"
@@ -22,7 +22,6 @@ NTFY_TOPIC="home-server-alerts"
 # ==============================================================================
 : "${AWS_SHARED_CREDENTIALS_FILE:=}"
 : "${RESTIC_PASSWORD_FILE:=}"
-: "${RESTIC_CACHE_DIR:=/var/cache/restic}"
 : "${GATUS_HEALTHCHECK_ID:=}"
 : "${GATUS_PUSH_TOKEN_FILE:=}"
 : "${BACKUP_TAG:=}"
