@@ -116,3 +116,10 @@ endpoints:
   - name: copyparty
     <<: *defaults
     url: "https://copyparty.rileymathews.com"
+
+external-endpoints:
+  - name: thegenerosityco-staging-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h

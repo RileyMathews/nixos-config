@@ -3,7 +3,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../caddy-multi-proxy ../dns ../restic-backup];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["karakeep.rileymathews.com" "chrome-karakeep.rileymathews.com"];
 
@@ -20,17 +20,21 @@
         file =  ../../secrets/karakeep-credentials-file.age;
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/karakeep/data"
-        ];
+        backups.karakeep-data = {
+            type = "path-list";
+            gatusHealthcheckId = "karakeep-backup";
+            paths = [
+                "/var/lib/appdata/karakeep/data"
+            ];
+        };
     };
 
     virtualisation.oci-containers.backend = "podman";
 
     virtualisation.oci-containers.containers.karakeep = {
-        image = "ghcr.io/karakeep-app/karakeep:0.30.0";
+        image = "ghcr.io/karakeep-app/karakeep:0.31.0";
         ports = ["3000:3000"];
         volumes = ["/var/lib/appdata/karakeep/data:/data"];
         environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];

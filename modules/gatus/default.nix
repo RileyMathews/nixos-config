@@ -33,7 +33,14 @@ lib,
     owner = "gatus";
     group = "gatus";
   };
+  age.secrets.gatus-push-token = {
+    file = ../../secrets/gatus-push-token.age;
+    mode = "0400";
+    owner = "gatus";
+    group = "gatus";
+  };
   services.gatus.environmentFile = config.age.secrets.gatus-credentials.path;
+  systemd.services."gatus".serviceConfig.EnvironmentFile = config.age.secrets.gatus-push-token.path;
   systemd.services."gatus".after = [ "network.target" "run-agenix.d.mount" ];
   systemd.services."gatus".requires = [ "run-agenix.d.mount" ];
 }

@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["homebridge.rileymathews.com"];
 
@@ -15,11 +15,15 @@
         backendHost = "http://127.0.0.1:8581";
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/homebridge"
-        ];
+        backups.homebridge-data = {
+            type = "path-list";
+            gatusHealthcheckId = "homebridge-backup";
+            paths = [
+                "/var/lib/appdata/homebridge"
+            ];
+        };
     };
 
     virtualisation.oci-containers.containers = {

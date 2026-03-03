@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [ ../restic-local-appdata ];
+    imports = [ ../restic-backup ];
 
     networking.firewall.allowedTCPPorts = [8222];
 
@@ -19,7 +19,7 @@
 
     virtualisation.oci-containers.containers = {
         vaultwarden = {
-            image = "vaultwarden/server:1.35.3";
+            image = "vaultwarden/server:1.35.4";
             ports = ["8222:8222"];
             volumes = [ "/var/lib/appdata/vaultwarden/data:/data" ];
             user = "1000:1000";
@@ -33,10 +33,14 @@
         };
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/vaultwarden/data"
-        ];
+        backups.vaultwarden-data = {
+            type = "path-list";
+            gatusHealthcheckId = "vaultwarden-backup";
+            paths = [
+                "/var/lib/appdata/vaultwarden/data"
+            ];
+        };
     };
 }

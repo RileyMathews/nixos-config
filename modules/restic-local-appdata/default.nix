@@ -5,12 +5,7 @@ with lib;
 let
   cfg = config.services.resticLocalAppdata;
   excludeArgs = concatMapStringsSep " " (p: "--exclude " + escapeShellArg p) cfg.excludePatterns;
-  backupScript = pkgs.writeShellScript "restic-local-appdata-subtask.sh" (builtins.readFile ./backup.sh);
-  backupRunner = pkgs.writeShellScript "restic-local-appdata-backup.sh" ''
-    set -euo pipefail
-    ${concatMapStringsSep "\n" (p: "${backupScript} backup-path --path " + escapeShellArg p + optionalString (excludeArgs != "") (" " + excludeArgs)) cfg.paths}
-    ${backupScript} prune-all
-  '';
+  backupScript = pkgs.writeShellScript "restic-local-appdata-backup.sh" (builtins.readFile ./backup.sh);
 in
 {
   options.services.resticLocalAppdata = {
@@ -34,6 +29,13 @@ in
         "/var/lib/appdata/homeassistant/media/doorbell_captures"
       ];
       description = "Paths or globs to exclude from backup.";
+    };
+
+    gatusHealthcheckId = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "my-backup";
+      description = "Gatus external endpoint ID for heartbeat monitoring.";
     };
   };
 
@@ -63,18 +65,32 @@ in
       group = "root";
     };
 
+    age.secrets.gatus-push-token = {
+      file = ../../secrets/gatus-push-token.age;
+      mode = "0400";
+      owner = "root";
+      group = "root";
+    };
+
     systemd.services.restic-local-appdata-backup = {
       description = "Backup local app data to restic";
-      path = with pkgs; [ restic curl ];
+      path = with pkgs; [ restic curl jq ];
       environment = {
         AWS_SECRET_ACCESS_KEY_FILE = config.age.secrets.aws-access-key.path;
         RESTIC_PASSWORD_FILE = config.age.secrets.restic-password.path;
         RESTIC_CACHE_DIR = "/var/cache/restic-local-appdata";
+        GATUS_URL = "https://gatus.rileymathews.com";
+        BACKUP_PATHS = concatStringsSep ":" cfg.paths;
+        EXCLUDE_ARGS = excludeArgs;
+      }
+      // optionalAttrs (cfg.gatusHealthcheckId != null) {
+        GATUS_HEALTHCHECK_ID = cfg.gatusHealthcheckId;
       };
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = backupRunner;
+        ExecStart = "${backupScript}";
         CacheDirectory = "restic-local-appdata";
+        EnvironmentFile = config.age.secrets.gatus-push-token.path;
       };
     };
 

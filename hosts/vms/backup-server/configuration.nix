@@ -12,11 +12,28 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/tailscale
     ./../../../modules/postgres-backup
-    ./../../../modules/restic-nas-main
+    ./../../../modules/restic-backup
   ];
   networking.hostName = "backup-server";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+
+  # NFS mount for NAS backups
+  fileSystems."/mnt/nas-main" = {
+    device = "nas:/";
+    fsType = "nfs";
+    options = [
+      "vers=4.2"
+      "proto=tcp"
+      "_netdev"
+      "nofail"
+      "soft"
+      "timeo=600"
+      "retrans=2"
+      "x-systemd.requires=tailscale-ready.service"
+      "x-systemd.after=tailscale-ready.service"
+    ];
+  };
 
   age.secrets.pg17-admin-password-file = {
     file = ../../../secrets/pg17-admin-password-file.age;
@@ -110,10 +127,15 @@
     ];
   };
 
-  services.resticNasMain = {
+  services.resticBackup = {
     enable = true;
-    excludePatterns = [
-      "/mnt/nas-main/jellyfin/config/.aspnet/DataProtection-Keys/*"
-    ];
+    backups.nas-main = {
+      type = "directory-children";
+      gatusHealthcheckId = "nas-main-backup";
+      rootPath = "/mnt/nas-main";
+      excludePatterns = [
+        "/mnt/nas-main/jellyfin/config/.aspnet/DataProtection-Keys/*"
+      ];
+    };
   };
 }

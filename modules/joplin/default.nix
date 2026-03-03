@@ -18,7 +18,7 @@
     };
 
     virtualisation.oci-containers.containers.joplin = {
-        image = "joplin/server:3.5.2";
+        image = "docker.io/joplin/server:latest";
         ports = [ "22300:22300" ];
         environment = {
             DB_CLIENT = "pg";
@@ -29,5 +29,8 @@
             APP_BASE_URL = "https://joplin.rileymathews.com";
         };
         environmentFiles = [ config.age.secrets.joplin-credentials-file.path ];
+        extraOptions = [
+            "--label" "io.containers.autoupdate=registry"
+        ];
     };
 }
