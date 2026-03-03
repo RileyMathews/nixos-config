@@ -54,7 +54,7 @@
 
   users.users = {
     git = {
-      home = "/mnt/forgejo";
+      home = "/var/lib/forgejo";
       useDefaultShell = true;
       group = "git";
       isSystemUser = true;
@@ -79,7 +79,7 @@
     enable = true;
     user = "git";
     group = "git";
-    stateDir = "/mnt/forgejo";
+    stateDir = "/var/lib/forgejo";
     package = pkgs.forgejo;
     settings = {
       server = {
