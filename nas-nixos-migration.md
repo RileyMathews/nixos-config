@@ -213,43 +213,141 @@ Migrate the physical ARM NAS host from Debian to NixOS while keeping the immich 
   - Includes: ZFS pool `main` with all datasets, NFS server config, Tailscale, bootloader for CM3588
   - Done when: Configuration file is complete and tested (in separate wardroom session)
 
-- [ ] 4.2 Choose CM3588 installation path
-  - What: Decide between Path A (U-Boot), Path B (UEFI), or Path C (Vendor kernel)
-  - Recommendation: Path B (UEFI) for standard NixOS workflow
-  - Done when: Path is chosen and materials are gathered
+- [ ] 4.2 Gather ZFS Pool Info from Current Debian System
+  - **⚠️ Do this FIRST, before any changes to the NAS**
+  - Commands (on current Debian NAS):
+    - `zpool list` (get pool name)
+    - `cat /etc/hostid` (get ZFS hostid — you'll need this for NixOS)
+    - `lsblk` (confirm drive layout; eMMC is likely mmcblk2)
+    - `sudo zpool export <poolname>` (cleanly export the pool)
+  - Record: **Pool name**: `[to be filled in]`, **Hostid**: `[to be filled in]`
+  - Done when: Pool info is documented and pool is exported
 
-- [ ] 4.3 Install NixOS on CM3588
-  - What: Follow chosen installation path to install NixOS on the physical NAS
-  - Done when: NAS boots successfully into NixOS and is accessible via SSH
+- [ ] 4.3 Build NixOS Image on a Separate Machine
+  - Command: `nix build --no-write-lock-file 'github:Mic92/nixos-aarch64-images#cm3588NAS'`
+  - Done when: Build completes successfully and `result` directory exists
 
-- [ ] 4.4 SSH into new NAS via Tailscale
-  - Command: `ssh root@nas` (via Tailscale hostname)
+- [ ] 4.4 Add SSH Key to the Image
+  - Commands:
+    ```bash
+    sudo losetup -fP ./result
+    LOOP=$(losetup -l | grep result | awk '{print $1}')
+    sudo mkdir -p /mnt/nixos-image
+    sudo mount ${LOOP}p3 /mnt/nixos-image
+    sudo mkdir -p /mnt/nixos-image/root/.ssh
+    sudo cp ~/.ssh/id_ed25519.pub /mnt/nixos-image/root/.ssh/authorized_keys
+    sudo chmod 700 /mnt/nixos-image/root/.ssh
+    sudo chmod 600 /mnt/nixos-image/root/.ssh/authorized_keys
+    sudo umount /mnt/nixos-image
+    sudo losetup -d $LOOP
+    ```
+  - Done when: SSH key is added to the image without errors
+
+- [ ] 4.5 Write Image to SD Card
+  - **Option A** (if you have SD reader on build machine):
+    - Command: `sudo dd if=./result of=/dev/sdX bs=16M status=progress` (replace sdX with your SD card)
+  - **Option B** (transfer to CM3588 and write there):
+    - Command: `rsync -avP ./result root@cm3588:/tmp/nixos.img` (on build machine)
+    - Then on CM3588: `sudo dd if=/tmp/nixos.img of=/dev/mmcblk1 bs=16M status=progress`
+  - Done when: Image is written to SD card without errors
+
+- [ ] 4.6 Boot from SD Card and SSH into Installer
+  - What: Insert SD card into CM3588 and reboot
+  - Command: `ssh root@<cm3588-ip>` (from build machine)
+  - Done when: SSH connection to NixOS installer is successful
+
+- [ ] 4.7 Confirm Drive Layout
+  - Command: `lsblk` (on NixOS installer)
+  - Verify: eMMC is mmcblk2 (NOT your ZFS drives!)
+  - Done when: You've confirmed which device is eMMC
+
+- [ ] 4.8 Wipe and Partition eMMC
+  - Commands (on NixOS installer):
+    ```bash
+    wipefs -a /dev/mmcblk2
+    parted -s --align optimal /dev/mmcblk2 mklabel gpt
+    parted -s --align optimal /dev/mmcblk2 mkpart 'BOOT' fat32 16MB 512MB
+    parted -s --align optimal /dev/mmcblk2 set 1 esp on
+    parted -s --align optimal /dev/mmcblk2 mkpart 'ROOT' ext4 512MB 100%
+    mkfs.vfat -F32 /dev/mmcblk2p1
+    mkfs.ext4 /dev/mmcblk2p2
+    ```
+  - Done when: Filesystems are created without errors
+
+- [ ] 4.9 Mount and Generate NixOS Config
+  - Commands (on NixOS installer):
+    ```bash
+    mount /dev/mmcblk2p2 /mnt
+    mkdir -p /mnt/boot
+    mount /dev/mmcblk2p1 /mnt/boot
+    nixos-generate-config --root /mnt
+    ```
+  - Done when: Config is generated at `/mnt/etc/nixos/configuration.nix`
+
+- [ ] 4.10 Edit Configuration with ZFS Support
+  - File: `/mnt/etc/nixos/configuration.nix` (on NixOS installer)
+  - What: Add ZFS support and your pool configuration
+  - Key changes to add:
+    ```nix
+    boot.loader.grub.enable = false;
+    boot.loader.generic-extlinux-compatible.enable = true;
+    
+    boot.supportedFilesystems = [ "zfs" ];
+    boot.zfs.extraPools = [ "<poolname>" ];  # from step 4.2
+    networking.hostId = "<hostid>";  # from step 4.2
+    
+    networking.hostName = "nas";
+    networking.networkmanager.enable = true;
+    
+    services.openssh.enable = true;
+    users.users.root.openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAA... your-key"
+    ];
+    
+    system.stateVersion = "24.11";
+    ```
+  - Done when: Configuration is updated with ZFS pool name and hostid
+
+- [ ] 4.11 Run nixos-install
+  - Command: `nixos-install` (on NixOS installer)
+  - What: Install NixOS to eMMC
+  - Done when: Installation completes and you set a root password
+
+- [ ] 4.12 Reboot into NixOS on eMMC
+  - Command: `reboot` (on NixOS installer)
+  - What: Remove SD card during boot so system boots from eMMC
+  - Expected: System boots into NixOS on eMMC
+  - Done when: NixOS boots successfully and you can SSH in
+
+- [ ] 4.13 SSH into NixOS on eMMC
+  - Command: `ssh root@nas` (via Tailscale hostname) or `ssh root@<cm3588-ip>`
   - Done when: SSH connection is successful
 
-- [ ] 4.5 Document NAS IP address
+- [ ] 4.14 Verify ZFS Pool Imported
+  - Commands (on NAS):
+    - `zpool status` (should show pool online)
+    - If not imported: `zpool import <poolname>`
+    - `zfs list` (should show all datasets: main, main/immich, main/jellyfin, etc.)
+  - Done when: Pool is online and all datasets are present
+
+- [ ] 4.15 Document NAS IP Address
   - Command: `ip addr show` or `hostname -I` (on the NAS)
   - Record: **NAS IP Address**: `[to be filled in]`
   - Purpose: Fallback if Tailscale hostname resolution has issues
   - Done when: IP is documented
 
-- [ ] 4.6 Verify Tailscale connectivity
-  - Commands: `systemctl status tailscale` and `tailscale ip`
+- [ ] 4.16 Verify Tailscale Connectivity
+  - Commands (on NAS): `systemctl status tailscale` and `tailscale ip`
   - Done when: Tailscale is active and IP is shown
 
-- [ ] 4.7 Verify ZFS pool and datasets
-  - Commands:
-    - `zpool status` (should show `main` pool)
-    - `zfs list` (should show main, main/immich, main/jellyfin, etc.)
-  - Done when: All expected datasets are present
-
-- [ ] 4.8 Verify NFS server is running
-  - Commands:
+- [ ] 4.17 Verify NFS Server Configuration
+  - Commands (on NAS):
     - `systemctl status nfs-server` (should be active)
     - `exportfs -a` (apply exports)
     - `showmount -e localhost` (list exports)
   - Done when: NFS server is active and exports are listed
 
-- [ ] 4.9 Test NFS mount from `yamato`
+- [ ] 4.18 Test NFS Mount from `yamato`
   - Commands (on yamato):
     - `showmount -e nas` (query NAS exports)
     - `mount -t nfs -o vers=4.2 nas:/main /tmp/test-mount` (test mount)
