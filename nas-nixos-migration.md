@@ -116,12 +116,12 @@ A phase may have multiple outputs which will each be on their own line
   - Verify: `systemctl status podman-immich` shows inactive
   - Done when: Service is stopped and logs show clean shutdown
 
-- [ ] 2.2 Stop immich transcoding on `data` VM
+- [x] 2.2 Stop immich transcoding on `data` VM
   - Command: SSH to `data`, then `systemctl stop podman-transcoding`
   - Verify: `systemctl status podman-transcoding` shows inactive
   - Done when: Service is stopped
 
-- [ ] 2.3 Stop immich ML on `data` VM
+- [x] 2.3 Stop immich ML on `data` VM
   - Command: SSH to `data`, then `systemctl stop podman-immich-ml`
   - Verify: `systemctl status podman-immich-ml` shows inactive
   - Done when: Service is stopped
