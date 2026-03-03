@@ -236,12 +236,6 @@ in
           User = "backup";
           Group = "backup";
           CacheDirectory = "restic-backup-${name}";
-          # Security hardening
-          PrivateTmp = true;
-          NoNewPrivileges = true;
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          ReadWritePaths = [ "${cfg.cacheDir}/${name}" ];
         };
       }
     ) cfg.backups;
