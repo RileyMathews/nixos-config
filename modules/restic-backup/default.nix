@@ -192,13 +192,13 @@ in
     };
 
     # Create backup user for running backups
-    users.users.backup = {
+    users.users.backup = mkIf cfg.enable {
       isSystemUser = true;
       group = "backup";
-      description = "Restic backup service user";
+      description = mkDefault "Restic backup service user";
     };
 
-    users.groups.backup = {};
+    users.groups.backup = mkIf cfg.enable {};
 
     # =============================================================================
     # Systemd services and timers for each backup
