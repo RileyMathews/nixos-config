@@ -2,7 +2,7 @@
 
 ## Goal
 
-Migrate the physical ARM NAS host from Debian to NixOS while keeping the immich application running continuously. The immich upload data (~200GB) will be temporarily moved to a 6TB spinning disk attached to the `yamato` VM, allowing the NAS to be rebuilt offline with zero data loss.
+Migrate the physical ARM NAS host from Debian to NixOS while keeping the immich application running continuously. The immich upload data (~200GB) will be temporarily moved to a 1TB spinning disk attached to the `yamato` VM, allowing the NAS to be rebuilt offline with zero data loss.
 
 ---
 
@@ -61,24 +61,34 @@ Migrate the physical ARM NAS host from Debian to NixOS while keeping the immich 
 
 ## Tasks
 
-### Phase 1: Prepare Temporary Storage
-**Objective**: Set up the 6TB disk on `yamato` VM, ready to receive immich data
+NOTE FOR AGENTS
+when phases have outputs that should be documented
+for use in further steps those outputs will be added
+with the convention 
+-- output: <output here>
+A phase may have multiple outputs which will each be on their own line
 
-- [ ] 1.1 Physically attach 6TB disk to proxmox host (shipyard)
-  - What: Connect the 6TB spinning drive to the proxmox host
+### Phase 1: Prepare Temporary Storage
+**Objective**: Set up the 1TB disk on `yamato` VM, ready to receive immich data
+
+- [x] 1.1 Physically attach 1TB disk to proxmox host (shipyard)
+  - What: Connect the 1TB spinning drive to the proxmox host
   - Done when: Disk is visible in proxmox hardware
 
-- [ ] 1.2 Attach disk to `yamato` VM via Proxmox UI/API
-  - What: Add the 6TB disk as a new SCSI device (will appear as `/dev/vdb`)
-  - Proxmox: VM Hardware → Add → Hard Disk → select the 6TB disk
+- [x] 1.2 Attach disk to `yamato` VM via Proxmox UI/API
+  - What: Add the 1TB disk as a new SCSI device (will appear as `/dev/vdb`)
+  - Proxmox: VM Hardware → Add → Hard Disk → select the 1TB disk
   - Done when: Disk appears in VM as `/dev/vdb` (verify with `lsblk`)
+  -- output: disk is /dev/sdb
 
-- [ ] 1.3 Identify disk by-id path
+- [x] 1.3 Identify disk by-id path
   - What: SSH to `yamato`, run `lsblk -o NAME,SERIAL` to get disk serial
   - Command: `ls -la /dev/disk/by-id/ | grep <serial>`
-  - Done when: You have the full `/dev/disk/by-id/...` path for the 6TB disk
+  - Done when: You have the full `/dev/disk/by-id/...` path for the 1TB disk
+  -- output: drive serial is `drive-scsi1`
+  -- output: drive path is `/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1`
 
-- [ ] 1.4 Add disk mount to `yamato` NixOS config
+- [x] 1.4 Add disk mount to `yamato` NixOS config
   - Files: `hosts/vms/yamato/configuration.nix`
   - What: Add `fileSystems."/mnt/temp-immich"` entry with:
     - device: `/dev/disk/by-id/...` (from step 1.3)
@@ -86,13 +96,13 @@ Migrate the physical ARM NAS host from Debian to NixOS while keeping the immich 
     - options: `["defaults" "nofail"]`
   - Done when: Config file updated and ready to deploy
 
-- [ ] 1.5 Deploy config to `yamato` VM
+- [x] 1.5 Deploy config to `yamato` VM
   - What: `just deploy yamato` from the repo root
   - Done when: Deployment completes without errors and mount point is active
 
 - [ ] 1.6 Verify mount is active
   - Commands: `df -h /mnt/temp-immich` and `mount | grep temp-immich`
-  - Done when: Mount shows ~6TB available and is listed in mount output
+  - Done when: Mount shows ~1TB available and is listed in mount output
 
 ---
 
@@ -480,7 +490,7 @@ Migrate the physical ARM NAS host from Debian to NixOS while keeping the immich 
   - Command: `just deploy yamato`
   - Done when: Deployment completes without errors
 
-- [ ] 7.6 Detach 6TB disk from `yamato` VM via Proxmox
+- [ ] 7.6 Detach 1TB disk from `yamato` VM via Proxmox
   - Proxmox: VM Hardware → Remove the `scsi1` device
   - Verify: `lsblk` on `yamato` no longer shows the disk
   - Done when: Disk is detached and no longer visible in VM
