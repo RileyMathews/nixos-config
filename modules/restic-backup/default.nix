@@ -173,32 +173,25 @@ in
     age.secrets.aws-access-key = {
       file = ../../secrets/aws-access-key.age;
       mode = "0400";
-      owner = "backup";
-      group = "backup";
+      owner = mkDefault "root";
+      group = mkDefault "root";
     };
 
     age.secrets.restic-password = {
       file = ../../secrets/restic-password.age;
       mode = "0400";
-      owner = "backup";
-      group = "backup";
+      owner = mkDefault "root";
+      group = mkDefault "root";
     };
 
     age.secrets.gatus-push-token = {
       file = ../../secrets/gatus-push-token.age;
       mode = "0400";
-      owner = "backup";
-      group = "backup";
+      owner = mkDefault "root";
+      group = mkDefault "root";
     };
 
-    # Create backup user for running backups
-    users.users.backup = mkIf cfg.enable {
-      isSystemUser = true;
-      group = "backup";
-      description = mkDefault "Restic backup service user";
-    };
 
-    users.groups.backup = mkIf cfg.enable {};
 
     # =============================================================================
     # Systemd services and timers for each backup
@@ -222,8 +215,8 @@ in
           Type = "oneshot";
           ExecStart = "${backupLib.backupScripts}/bin/wrapper.sh";
           EnvironmentFile = "${envFile}";
-          User = "backup";
-          Group = "backup";
+          User = "root";
+          Group = "root";
         };
       }
     ) cfg.backups;
