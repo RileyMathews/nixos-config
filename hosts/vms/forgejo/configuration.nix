@@ -13,6 +13,7 @@
     ./../../../modules/caddy-multi-proxy
     ./../../../modules/tailscale
     ./../../../modules/dns
+    ./../../../modules/restic-backup
   ];
   networking.hostName = "git";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -95,4 +96,16 @@
       createDatabase = false;
     };
   };
+  
+  services.resticBackup = {
+      enable = true;
+      backups.forgejo-data = {
+          type = "path-list";
+          gatusHealthcheckId = "forgejo-backup";
+          paths = [
+              "/var/lib/forgejo"
+          ];
+      };
+  };
+
 }
