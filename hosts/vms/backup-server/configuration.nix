@@ -18,6 +18,23 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
 
+  # NFS mount for NAS backups
+  fileSystems."/mnt/nas-main" = {
+    device = "nas:/";
+    fsType = "nfs";
+    options = [
+      "vers=4.2"
+      "proto=tcp"
+      "_netdev"
+      "nofail"
+      "soft"
+      "timeo=600"
+      "retrans=2"
+      "x-systemd.requires=tailscale-ready.service"
+      "x-systemd.after=tailscale-ready.service"
+    ];
+  };
+
   age.secrets.pg17-admin-password-file = {
     file = ../../../secrets/pg17-admin-password-file.age;
     mode = "0400";
