@@ -11,18 +11,21 @@
     ./../../../modules/vms/basic-hardware-config.nix
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/tailscale
-    ./../../../modules/restic-local-appdata
+    ./../../../modules/restic-backup
   ];
   networking.hostName = "thegenerosityco-staging";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
   virtualisation.docker.enable = true;
   virtualisation.docker.logDriver = "json-file";
-  services.resticLocalAppdata = {
-      enable = true;
-      paths = [
-          "/var/lib/thegenerosityco/database"
-      ];
+  services.resticBackup = {
+    enable = true;
+    backups.thegenerosityco-database = {
+      type = "sqlite-live-copy";
       gatusHealthcheckId = "backups_thegenerosityco-staging-backup";
+      databases = [
+        "/var/lib/thegenerosityco/database/db.sqlite3"
+      ];
+    };
   };
 }
