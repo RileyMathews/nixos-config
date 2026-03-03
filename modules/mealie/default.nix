@@ -3,7 +3,7 @@
     imports = [
         ../nginx-multi-proxy
         ../dns
-        ../restic-local-appdata
+        ../restic-backup
     ];
 
     services.cloudflare-dns.enable = true;
@@ -18,11 +18,15 @@
         file = ../../secrets/mealie-credentials-file.age;
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/mealie/app/data"
-        ];
+        backups.mealie-data = {
+            type = "path-list";
+            gatusHealthcheckId = "mealie-backup";
+            paths = [
+                "/var/lib/appdata/mealie/app/data"
+            ];
+        };
     };
 
     virtualisation.oci-containers.containers = {

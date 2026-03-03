@@ -2,7 +2,7 @@
 {
   imports = [
     ../nas-oci
-    ../restic-local-appdata
+    ../restic-backup
     ../nginx-multi-proxy
     ../dns
   ];
@@ -19,11 +19,15 @@
     file = ../../secrets/pinchflat-env-file.age;
   };
 
-  services.resticLocalAppdata = {
+  services.resticBackup = {
     enable = true;
-    paths = [
-      "/var/lib/appdata/pinchflat/config"
-    ];
+    backups.pinchflat-data = {
+      type = "path-list";
+      gatusHealthcheckId = "pinchflat-backup";
+      paths = [
+        "/var/lib/appdata/pinchflat/config"
+      ];
+    };
   };
 
   services.nasOci = {

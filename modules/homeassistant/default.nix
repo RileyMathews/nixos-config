@@ -7,7 +7,7 @@ let
     haConfigFile = pkgs.writeText "configuration.yaml" (builtins.readFile ./configuration.yaml);
 in
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["home.rileymathews.com"];
 
@@ -43,11 +43,15 @@ in
         };
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/homeassistant/config"
-            "/var/lib/appdata/homeassistant/media"
-        ];
+        backups.homeassistant-data = {
+            type = "path-list";
+            gatusHealthcheckId = "homeassistant-backup";
+            paths = [
+                "/var/lib/appdata/homeassistant/config"
+                "/var/lib/appdata/homeassistant/media"
+            ];
+        };
     };
 }

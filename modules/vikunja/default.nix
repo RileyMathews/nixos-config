@@ -3,7 +3,7 @@
     imports = [
         ../nginx-multi-proxy
         ../dns
-        ../restic-local-appdata
+        ../restic-backup
     ];
 
     services.cloudflare-dns.enable = true;
@@ -18,11 +18,15 @@
         file = ../../secrets/vikunja-credentials-file.age;
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/vikunja/files"
-        ];
+        backups.vikunja-data = {
+            type = "path-list";
+            gatusHealthcheckId = "vikunja-backup";
+            paths = [
+                "/var/lib/appdata/vikunja/files"
+            ];
+        };
     };
 
     virtualisation.oci-containers.containers = {

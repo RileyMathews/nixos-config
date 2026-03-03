@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["homebox.rileymathews.com"];
 
@@ -19,9 +19,13 @@
         file =  ../../secrets/homebox-credentials-file.age;
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [ "/var/lib/appdata/homebox/data" ];
+        backups.homebox-data = {
+            type = "path-list";
+            gatusHealthcheckId = "homebox-backup";
+            paths = [ "/var/lib/appdata/homebox/data" ];
+        };
     };
 
     virtualisation.oci-containers.containers = {

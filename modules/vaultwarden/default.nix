@@ -6,7 +6,7 @@
     ...
 }:
 {
-    imports = [ ../restic-local-appdata ];
+    imports = [ ../restic-backup ];
 
     networking.firewall.allowedTCPPorts = [8222];
 
@@ -33,10 +33,14 @@
         };
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/vaultwarden/data"
-        ];
+        backups.vaultwarden-data = {
+            type = "path-list";
+            gatusHealthcheckId = "vaultwarden-backup";
+            paths = [
+                "/var/lib/appdata/vaultwarden/data"
+            ];
+        };
     };
 }

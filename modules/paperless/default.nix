@@ -3,7 +3,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-local-appdata];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["paperless.rileymathews.com"];
 
@@ -38,12 +38,16 @@
         };
     };
 
-    services.resticLocalAppdata = {
+    services.resticBackup = {
         enable = true;
-        paths = [
-            "/var/lib/appdata/paperless/data"
-            "/var/lib/appdata/paperless/media"
-            "/var/lib/appdata/paperless/export"
-        ];
+        backups.paperless-data = {
+            type = "path-list";
+            gatusHealthcheckId = "paperless-backup";
+            paths = [
+                "/var/lib/appdata/paperless/data"
+                "/var/lib/appdata/paperless/media"
+                "/var/lib/appdata/paperless/export"
+            ];
+        };
     };
 }

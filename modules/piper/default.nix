@@ -3,7 +3,7 @@
     imports = [
         ../nginx-multi-proxy
         ../dns
-        ../restic-local-appdata
+        ../restic-backup
     ];
 
     networking.firewall.allowedTCPPorts = [10200];
