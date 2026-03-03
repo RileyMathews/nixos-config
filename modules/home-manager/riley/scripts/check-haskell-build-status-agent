@@ -41,6 +41,7 @@ output_filename=".devel-logs/ghciwatch-output"
 
 show_reload_output() {
     echo "Output from last 'Reloading ghci':"
+    # TODO: 'Reloading ghci' isn't always present when reloading if new modules are added
     last_reload_line=$(grep -n "Reloading ghci" "$output_filename" | tail -n 1 | cut -d: -f1)
     if [ -n "$last_reload_line" ]; then
         tail -n +$last_reload_line "$output_filename"
