@@ -100,7 +100,7 @@ A phase may have multiple outputs which will each be on their own line
   - What: `just deploy yamato` from the repo root
   - Done when: Deployment completes without errors and mount point is active
 
-- [ ] 1.6 Verify mount is active
+- [x] 1.6 Verify mount is active
   - Commands: `df -h /mnt/temp-immich` and `mount | grep temp-immich`
   - Done when: Mount shows ~1TB available and is listed in mount output
 
