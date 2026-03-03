@@ -10,6 +10,7 @@ let
     "q"
     "crusher"
     "obrien"
+    "haskell"
   ];
 
   modelProfiles = {
