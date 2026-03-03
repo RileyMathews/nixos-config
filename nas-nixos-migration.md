@@ -126,17 +126,17 @@ A phase may have multiple outputs which will each be on their own line
   - Verify: `systemctl status podman-immich-ml` shows inactive
   - Done when: Service is stopped
 
-- [ ] 2.4 Perform rsync from NAS to temporary storage
+- [x] 2.4 Perform rsync from NAS to temporary storage
   - Command: SSH to `yamato`, then `rsync -avhP --delete /mnt/immich/ /mnt/temp-immich/`
   - Done when: rsync completes with no errors and shows final summary
 
-- [ ] 2.5 Verify file count matches
+- [x] 2.5 Verify file count matches
   - Commands:
     - `find /mnt/immich -type f | wc -l` (on yamato)
     - `find /mnt/temp-immich -type f | wc -l` (on yamato)
   - Done when: Both counts are identical
 
-- [ ] 2.6 Spot-check file permissions
+- [x] 2.6 Spot-check file permissions
   - Commands:
     - `ls -la /mnt/immich` and `ls -la /mnt/temp-immich`
     - `du -sh /mnt/temp-immich` should show ~200GB
@@ -149,20 +149,20 @@ A phase may have multiple outputs which will each be on their own line
 
 **Prerequisites**: Phase 2 complete, data verified
 
-- [ ] 3.1 Update `modules/immich/default.nix`
+- [x] 3.1 Update `modules/immich/default.nix`
   - Files: `modules/immich/default.nix`
   - What: Remove NFS mount (nasOci for `10.0.0.110:/immich`), add direct volume mount
   - Volume mount: `/mnt/temp-immich/uploads:/usr/src/app/upload`
   - Comment: `# TEMPORARY: Using local disk during NAS migration`
   - Done when: File is edited and syntax is correct
 
-- [ ] 3.2 Update `modules/immich-transcoding/default.nix`
+- [x] 3.2 Update `modules/immich-transcoding/default.nix`
   - Files: `modules/immich-transcoding/default.nix`
   - What: Remove NFS mount, add direct volume mount to `/mnt/temp-immich/uploads:/usr/src/app/upload`
   - Comment: `# TEMPORARY: Using local disk during NAS migration`
   - Done when: File is edited and syntax is correct
 
-- [ ] 3.3 Create migration checkpoint branch
+- [x] 3.3 Create migration checkpoint branch
   - Commands:
     - `git checkout -b migration/nas-temp-storage`
     - `git add modules/immich/default.nix modules/immich-transcoding/default.nix`
@@ -234,6 +234,7 @@ A phase may have multiple outputs which will each be on their own line
   - Done when: Pool info is documented and pool is exported
   -- output: pool name is 'main'
   -- output: hostid was a mangled file. Not sure if this is required?
+  -- output: we decided that we will just ensure the zfs pool is exported so we don't need the old hostid
 
 - [x] 4.3 Build NixOS Image on a Separate Machine
   - Command: `nix build --no-write-lock-file 'github:Mic92/nixos-aarch64-images#cm3588NAS'`

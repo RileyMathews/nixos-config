@@ -22,17 +22,17 @@
     services.nasOci = {
         enable = true;
 
-        mounts.immich = {
-            mountPoint = "/mnt/immich";
-            device = "10.0.0.110:/immich";
-        };
+        # mounts.immich = {
+        #     mountPoint = "/mnt/immich";
+        #     device = "10.0.0.110:/immich";
+        # };
 
         containers.immich = {
             definition = {
                 image = "ghcr.io/immich-app/immich-server:v2.5.6";
                 ports = ["2283:2283"];
                 volumes = [
-                    "/mnt/immich/uploads:/usr/src/app/upload"
+                    "/mnt/temp-immich/immich/uploads:/usr/src/app/upload"
                 ];
                 environment = {
                     IMMICH_VERSION = "release";
