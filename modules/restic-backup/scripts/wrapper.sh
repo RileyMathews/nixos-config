@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 # Unified wrapper script for restic backups
 # Sources shared.sh and executes the appropriate pattern-specific script
-#
-# Environment variables required:
-#   BACKUP_TYPE - one of: path-list, directory-children, sqlite-live-copy
-#   AWS_ACCESS_KEY_ID - AWS access key ID
-#   AWS_SECRET_ACCESS_KEY_FILE - Path to file containing AWS secret key
-#   RESTIC_PASSWORD_FILE_SOURCE - Path to source file containing restic password
 
 set -euo pipefail
 
@@ -23,21 +17,41 @@ if [[ -z "${BACKUP_TYPE:-}" ]]; then
 fi
 
 if [[ ! -f "${AWS_SECRET_ACCESS_KEY_FILE:-}" ]]; then
-  echo "ERROR: AWS_SECRET_ACCESS_KEY_FILE does not exist" >&2
+  echo "ERROR: AWS_SECRET_ACCESS_KEY_FILE does not exist: ${AWS_SECRET_ACCESS_KEY_FILE:-}" >&2
   exit 1
 fi
 
 if [[ ! -f "${RESTIC_PASSWORD_FILE_SOURCE:-}" ]]; then
-  echo "ERROR: RESTIC_PASSWORD_FILE_SOURCE does not exist" >&2
+  echo "ERROR: RESTIC_PASSWORD_FILE_SOURCE does not exist: ${RESTIC_PASSWORD_FILE_SOURCE:-}" >&2
   exit 1
 fi
 
 # ==============================================================================
-# Set up environment with credential file paths
+# Create credentials in a temporary directory for this run
 # ==============================================================================
 
-export AWS_SHARED_CREDENTIALS_FILE="${AWS_SECRET_ACCESS_KEY_FILE}"
-export RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE_SOURCE}"
+CREDS_DIR=$(mktemp -d)
+trap "rm -rf '$CREDS_DIR'" EXIT
+
+# Read AWS secret and create credentials file
+AWS_SECRET=$(cat "$AWS_SECRET_ACCESS_KEY_FILE")
+cat > "${CREDS_DIR}/aws-creds" << EOF
+[default]
+aws_access_key_id = ${AWS_ACCESS_KEY_ID}
+aws_secret_access_key = ${AWS_SECRET}
+EOF
+chmod 600 "${CREDS_DIR}/aws-creds"
+
+# Copy restic password file
+cp "$RESTIC_PASSWORD_FILE_SOURCE" "${CREDS_DIR}/restic-password"
+chmod 600 "${CREDS_DIR}/restic-password"
+
+# ==============================================================================
+# Set environment variables for restic
+# ==============================================================================
+
+export AWS_SHARED_CREDENTIALS_FILE="${CREDS_DIR}/aws-creds"
+export RESTIC_PASSWORD_FILE="${CREDS_DIR}/restic-password"
 
 # ==============================================================================
 # Source shared functions and hardcoded configuration
