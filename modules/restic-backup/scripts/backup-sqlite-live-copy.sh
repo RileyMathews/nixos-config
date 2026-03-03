@@ -43,7 +43,8 @@ main() {
     die "No databases specified"
   fi
 
-  # Create temp directory with mktemp for uniqueness
+  # Create temp directory
+  mkdir -p "$SQLITE_TEMP_DIR"
   local temp_dir
   temp_dir=$(mktemp -d -p "$SQLITE_TEMP_DIR" -t restic-sqlite-backup.XXXXXX)
   TEMP_DIRS="${TEMP_DIRS:-} $temp_dir"
