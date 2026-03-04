@@ -61,9 +61,9 @@ endpoints:
     <<: *defaults
     url: "https://search.rileymathews.com"
 
-  - name: audiobookshelf
-    <<: *defaults
-    url: "https://audiobookshelf.rileymathews.com"
+  # - name: audiobookshelf
+  #   <<: *defaults
+  #   url: "https://audiobookshelf.rileymathews.com"
 
   - name: registry
     <<: *defaults
@@ -109,13 +109,13 @@ endpoints:
     <<: *defaults
     url: "https://grafana.rileymathews.com"
 
-  - name: jellyfin
-    <<: *defaults
-    url: "https://jellyfin.rileymathews.com"
-
-  - name: copyparty
-    <<: *defaults
-    url: "https://copyparty.rileymathews.com"
+  # - name: jellyfin
+  #   <<: *defaults
+  #   url: "https://jellyfin.rileymathews.com"
+  #
+  # - name: copyparty
+  #   <<: *defaults
+  #   url: "https://copyparty.rileymathews.com"
 
 external-endpoints:
   - name: thegenerosityco-staging-backup
