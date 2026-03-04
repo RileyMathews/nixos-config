@@ -34,6 +34,14 @@
 # worktree-path = "~/worktrees/{{ repo }}/{{ branch | sanitize }}"
 #
 # `~` expands to the home directory. Relative paths are relative to the repository root.
+
+# None of the examples quite fit my desired use case.
+# I want a bare repo at ~/code/{{repo_name}}/.git
+# and worktrees at ~/code/{{repo_name}}/{{branch}}
+# If I use the default sibling directory then 
+# ~/code/{{repo_name}}/.git.{{branch}} is created
+worktree-path = "{{ repo_path }}/../{{ branch | sanitize }}"
+
 #
 # ## LLM commit messages
 #
