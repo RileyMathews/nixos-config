@@ -54,7 +54,6 @@ main() {
 
   # Notifications
   gatus_heartbeat "true"
-  notify "${HOSTNAME} backup completed (${BACKUP_TAG})"
 }
 
 main "$@"
