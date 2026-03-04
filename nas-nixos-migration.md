@@ -213,6 +213,9 @@ A phase may have multiple outputs which will each be on their own line
 - **Path C**: Vendor kernel (full hardware acceleration; uses FriendlyElec BSP kernel)
   - Reference: [YayaADev/nixos-friendlyelec-cm3588](https://github.com/YayaADev/nixos-friendlyelec-cm3588) (vendor kernel flake, Feb 2026, NAS-optimized)
 
+- NONE OF THOSE PATHS WORKED.
+  - trying to follow guide in this github issue [here](https://github.com/edk2-porting/edk2-rk3588/issues/142#issuecomment-2662769408)
+
 - [x] 4.1 Create NixOS NAS configuration
   - Files: `hosts/vms/nas/configuration.nix` (or `hosts/nas/configuration.nix`)
   - What: Build configuration from `ansible/host_vars/nas.yml` reference
