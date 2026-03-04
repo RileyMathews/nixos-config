@@ -169,21 +169,21 @@ A phase may have multiple outputs which will each be on their own line
     - `git commit -m "WIP: Point immich to temporary storage during NAS migration"`
   - Done when: Commit is created on the migration branch
 
-- [ ] 3.4 Deploy config to `yamato` VM
+- [x] 3.4 Deploy config to `yamato` VM
   - Command: `just deploy yamato`
   - Done when: Deployment completes without errors
 
-- [ ] 3.5 Verify immich API server starts
+- [x] 3.5 Verify immich API server starts
   - Commands:
     - `systemctl status podman-immich` (should be active)
     - `journalctl -u podman-immich -n 50` (check for errors)
   - Done when: Service is active and logs show clean startup
 
-- [ ] 3.6 Test immich web UI
+- [x] 3.6 Test immich web UI
   - What: Access `https://immich.rileymathews.com` and verify photos are visible
   - Done when: Web UI loads, shows existing photo library, and photos display correctly
 
-- [ ] 3.7 Start immich transcoding on `data` (optional test)
+- [x] 3.7 Start immich transcoding on `data` (optional test)
   - Commands: SSH to `data`, then `systemctl start podman-transcoding`
   - Verify: `systemctl status podman-transcoding` shows active
   - Done when: Service is running (optional but good to verify)
@@ -213,7 +213,7 @@ A phase may have multiple outputs which will each be on their own line
 - **Path C**: Vendor kernel (full hardware acceleration; uses FriendlyElec BSP kernel)
   - Reference: [YayaADev/nixos-friendlyelec-cm3588](https://github.com/YayaADev/nixos-friendlyelec-cm3588) (vendor kernel flake, Feb 2026, NAS-optimized)
 
-- [ ] 4.1 Create NixOS NAS configuration
+- [x] 4.1 Create NixOS NAS configuration
   - Files: `hosts/vms/nas/configuration.nix` (or `hosts/nas/configuration.nix`)
   - What: Build configuration from `ansible/host_vars/nas.yml` reference
   - Reference files:
@@ -223,7 +223,7 @@ A phase may have multiple outputs which will each be on their own line
   - Includes: ZFS pool `main` with all datasets, NFS server config, Tailscale, bootloader for CM3588
   - Done when: Configuration file is complete and tested (in separate wardroom session)
 
-- [ ] 4.2 Gather ZFS Pool Info from Current Debian System
+- [x] 4.2 Gather ZFS Pool Info from Current Debian System
   - **⚠️ Do this FIRST, before any changes to the NAS**
   - Commands (on current Debian NAS):
     - `zpool list` (get pool name)

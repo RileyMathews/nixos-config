@@ -14,11 +14,11 @@
     ./../../../modules/tailscale
     ./../../../modules/podman-exporter
     ./../../../modules/open-webui
-    ./../../../modules/jellyfin
+    # ./../../../modules/jellyfin
     ./../../../modules/immich
-    ./../../../modules/audiobookshelf
-    ./../../../modules/copyparty
-    ./../../../modules/pinchflat
+    # ./../../../modules/audiobookshelf
+    # ./../../../modules/copyparty
+    # ./../../../modules/pinchflat
     ./../../../modules/reverse-health-check
   ];
   networking.hostName = "yamato";
