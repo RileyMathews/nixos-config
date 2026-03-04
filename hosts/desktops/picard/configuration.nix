@@ -6,6 +6,7 @@
   pr-tracker,
   agenix,
   opencode,
+  worktrunk,
   ...
 }:
 
@@ -237,6 +238,7 @@
       nodejs
       pavucontrol
       playerctl
+      worktrunk.packages.${pkgs.system}.worktrunk
       podman-compose
       python3
       qutebrowser
