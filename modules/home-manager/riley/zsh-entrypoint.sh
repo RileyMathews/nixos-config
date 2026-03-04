@@ -163,6 +163,8 @@ if command -v fnm >/dev/null; then
   eval "$(fnm env --use-on-cd)"
 fi
 
+eval "$(wt config shell init zsh)"
+
 export PYENV_ROOT="${PYENV_ROOT:=${HOME}/.pyenv}"
 if ! type pyenv > /dev/null && [ -f "${PYENV_ROOT}/bin/pyenv" ]; then
   export PATH="${PYENV_ROOT}/bin:${PATH}"
