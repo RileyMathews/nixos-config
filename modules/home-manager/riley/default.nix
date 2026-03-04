@@ -10,6 +10,7 @@
     ./wlr-which-key.nix
     ./scripts.nix
     ./ghostty.nix
+    ./worktrunk.nix
   ];
 
   options.riley.browser = lib.mkOption {
