@@ -39,6 +39,7 @@ from pathlib import Path
 CYCLE_START_PATTERNS: list[str] = [
     r"Reloading ghci",
     r"Loading ghci",
+    r"Adding modules to ghci",
 ]
 
 # ---------------------------------------------------------------------------
