@@ -16,7 +16,9 @@
   # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   myTailscale.enable = true;
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    supportedFilesystems = [ "zfs" ];
+    zfs.extraPools = [ "main" ];
+    kernelPackages = pkgs.linuxPackages;
     loader = {
       efi.canTouchEfiVariables = true;
       systemd-boot.enable = true;
@@ -31,6 +33,7 @@
   };
 
   networking.hostName = "nas"; # Define your hostname.
+  networking.hostId = "007f0200";
 
   networking.useDHCP = lib.mkDefault true;
 

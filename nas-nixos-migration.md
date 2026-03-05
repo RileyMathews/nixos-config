@@ -267,17 +267,17 @@ A phase may have multiple outputs which will each be on their own line
     - Then on CM3588: `sudo dd if=/tmp/nixos.img of=/dev/mmcblk1 bs=16M status=progress`
   - Done when: Image is written to SD card without errors
 
-- [ ] 4.6 Boot from SD Card and SSH into Installer
+- [x] 4.6 Boot from SD Card and SSH into Installer
   - What: Insert SD card into CM3588 and reboot
   - Command: `ssh root@<cm3588-ip>` (from build machine)
   - Done when: SSH connection to NixOS installer is successful
 
-- [ ] 4.7 Confirm Drive Layout
+- [x] 4.7 Confirm Drive Layout
   - Command: `lsblk` (on NixOS installer)
   - Verify: eMMC is mmcblk2 (NOT your ZFS drives!)
   - Done when: You've confirmed which device is eMMC
 
-- [ ] 4.8 Wipe and Partition eMMC
+- [x] 4.8 Wipe and Partition eMMC
   - Commands (on NixOS installer):
     ```bash
     wipefs -a /dev/mmcblk2
@@ -290,7 +290,7 @@ A phase may have multiple outputs which will each be on their own line
     ```
   - Done when: Filesystems are created without errors
 
-- [ ] 4.9 Mount and Generate NixOS Config
+- [x] 4.9 Mount and Generate NixOS Config
   - Commands (on NixOS installer):
     ```bash
     mount /dev/mmcblk2p2 /mnt
@@ -300,7 +300,7 @@ A phase may have multiple outputs which will each be on their own line
     ```
   - Done when: Config is generated at `/mnt/etc/nixos/configuration.nix`
 
-- [ ] 4.10 Edit Configuration with ZFS Support
+- [x] 4.10 Edit Configuration with ZFS Support
   - File: `/mnt/etc/nixos/configuration.nix` (on NixOS installer)
   - What: Add ZFS support and your pool configuration
   - Key changes to add:
@@ -319,40 +319,40 @@ A phase may have multiple outputs which will each be on their own line
     users.users.root.openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAA... your-key"
     ];
-    
-    system.stateVersion = "24.11";
     ```
   - Done when: Configuration is updated with ZFS pool name and hostid
 
-- [ ] 4.11 Run nixos-install
+- [x] 4.11 Run nixos-install
   - Command: `nixos-install` (on NixOS installer)
   - What: Install NixOS to eMMC
   - Done when: Installation completes and you set a root password
 
-- [ ] 4.12 Reboot into NixOS on eMMC
+- [x] 4.12 Reboot into NixOS on eMMC
   - Command: `reboot` (on NixOS installer)
   - What: Remove SD card during boot so system boots from eMMC
   - Expected: System boots into NixOS on eMMC
   - Done when: NixOS boots successfully and you can SSH in
 
-- [ ] 4.13 SSH into NixOS on eMMC
+- [x] 4.13 SSH into NixOS on eMMC
   - Command: `ssh root@nas` (via Tailscale hostname) or `ssh root@<cm3588-ip>`
   - Done when: SSH connection is successful
 
-- [ ] 4.14 Verify ZFS Pool Imported
+- [x] 4.14 Verify ZFS Pool Imported
   - Commands (on NAS):
     - `zpool status` (should show pool online)
     - If not imported: `zpool import <poolname>`
     - `zfs list` (should show all datasets: main, main/immich, main/jellyfin, etc.)
   - Done when: Pool is online and all datasets are present
 
-- [ ] 4.15 Document NAS IP Address
+- [x] 4.15 Document NAS IP Address
   - Command: `ip addr show` or `hostname -I` (on the NAS)
   - Record: **NAS IP Address**: `[to be filled in]`
   - Purpose: Fallback if Tailscale hostname resolution has issues
   - Done when: IP is documented
+  -- output: host ip 10.0.0.139
+  -- output: tailscale name nas
 
-- [ ] 4.16 Verify Tailscale Connectivity
+- [x] 4.16 Verify Tailscale Connectivity
   - Commands (on NAS): `systemctl status tailscale` and `tailscale ip`
   - Done when: Tailscale is active and IP is shown
 
