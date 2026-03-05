@@ -20,7 +20,7 @@
 
         mounts.audiobookshelf = {
             mountPoint = "/mnt/audiobookshelf";
-            device = "10.0.0.110:/audiobookshelf";
+            device = "10.0.0.139:/audiobookshelf";
         };
 
         containers.audiobookshelf = {

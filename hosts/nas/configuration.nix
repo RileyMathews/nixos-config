@@ -42,6 +42,8 @@
     exports = ''
       /main *(ro,fsid=0,no_subtree_check,crossmnt)
       /main/immich *(rw,no_subtree_check,sync,no_root_squash)
+      /main/audiobookshelf *(rw,no_subtree_check,sync,no_root_squash)
+      /main/copyparty *(rw,no_subtree_check,sync,no_root_squash)
     '';
     
     extraNfsdConfig = ''

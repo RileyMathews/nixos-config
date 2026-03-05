@@ -16,8 +16,8 @@
     ./../../../modules/open-webui
     # ./../../../modules/jellyfin
     ./../../../modules/immich
-    # ./../../../modules/audiobookshelf
-    # ./../../../modules/copyparty
+    ./../../../modules/audiobookshelf
+    ./../../../modules/copyparty
     # ./../../../modules/pinchflat
     ./../../../modules/reverse-health-check
   ];
