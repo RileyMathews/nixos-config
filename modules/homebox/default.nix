@@ -23,7 +23,7 @@
         enable = true;
         backups.homebox-data = {
             type = "path-list";
-            gatusHealthcheckId = "homebox-backup";
+            gatusHealthcheckId = "backups_homebox-backup";
             paths = [ "/var/lib/appdata/homebox/data" ];
         };
     };

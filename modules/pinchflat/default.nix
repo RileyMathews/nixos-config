@@ -23,7 +23,7 @@
     enable = true;
     backups.pinchflat-data = {
       type = "path-list";
-      gatusHealthcheckId = "pinchflat-backup";
+      gatusHealthcheckId = "backups_pinchflat-backup";
       paths = [
         "/var/lib/appdata/pinchflat/config"
       ];

@@ -22,7 +22,7 @@
         enable = true;
         backups.mealie-data = {
             type = "path-list";
-            gatusHealthcheckId = "mealie-backup";
+            gatusHealthcheckId = "backups_mealie-backup";
             paths = [
                 "/var/lib/appdata/mealie/app/data"
             ];

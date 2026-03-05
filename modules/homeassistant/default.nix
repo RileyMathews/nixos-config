@@ -47,7 +47,7 @@ in
         enable = true;
         backups.homeassistant-data = {
             type = "path-list";
-            gatusHealthcheckId = "homeassistant-backup";
+            gatusHealthcheckId = "backups_homeassistant-backup";
             paths = [
                 "/var/lib/appdata/homeassistant/config"
                 "/var/lib/appdata/homeassistant/media"

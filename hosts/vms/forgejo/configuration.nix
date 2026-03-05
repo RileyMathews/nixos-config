@@ -101,7 +101,7 @@
       enable = true;
       backups.forgejo-data = {
           type = "path-list";
-          gatusHealthcheckId = "forgejo-backup";
+          gatusHealthcheckId = "backups_forgejo-backup";
           paths = [
               "/var/lib/forgejo"
           ];

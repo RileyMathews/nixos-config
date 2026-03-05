@@ -123,3 +123,63 @@ external-endpoints:
     token: "$GATUS_PUSH_TOKEN"
     heartbeat:
       interval: 25h
+
+  - name: forgejo-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: homebridge-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: vikunja-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: vaultwarden-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: homebox-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: paperless-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: homeassistant-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: karakeep-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: mealie-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
+  - name: pinchflat-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h

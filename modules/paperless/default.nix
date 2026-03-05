@@ -42,7 +42,7 @@
         enable = true;
         backups.paperless-data = {
             type = "path-list";
-            gatusHealthcheckId = "paperless-backup";
+            gatusHealthcheckId = "backups_paperless-backup";
             paths = [
                 "/var/lib/appdata/paperless/data"
                 "/var/lib/appdata/paperless/media"

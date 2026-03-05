@@ -37,7 +37,7 @@
         enable = true;
         backups.vaultwarden-data = {
             type = "path-list";
-            gatusHealthcheckId = "vaultwarden-backup";
+            gatusHealthcheckId = "backups_vaultwarden-backup";
             paths = [
                 "/var/lib/appdata/vaultwarden/data"
             ];

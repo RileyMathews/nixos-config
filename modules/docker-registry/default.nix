@@ -2,7 +2,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns ../restic-backup];
+    imports = [../caddy-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["registry.rileymathews.com"];
 

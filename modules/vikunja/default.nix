@@ -22,7 +22,7 @@
         enable = true;
         backups.vikunja-data = {
             type = "path-list";
-            gatusHealthcheckId = "vikunja-backup";
+            gatusHealthcheckId = "backups_vikunja-backup";
             paths = [
                 "/var/lib/appdata/vikunja/files"
             ];

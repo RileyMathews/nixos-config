@@ -19,7 +19,7 @@
         enable = true;
         backups.homebridge-data = {
             type = "path-list";
-            gatusHealthcheckId = "homebridge-backup";
+            gatusHealthcheckId = "backups_homebridge-backup";
             paths = [
                 "/var/lib/appdata/homebridge"
             ];

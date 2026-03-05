@@ -24,7 +24,7 @@
         enable = true;
         backups.karakeep-data = {
             type = "path-list";
-            gatusHealthcheckId = "karakeep-backup";
+            gatusHealthcheckId = "backups_karakeep-backup";
             paths = [
                 "/var/lib/appdata/karakeep/data"
             ];
