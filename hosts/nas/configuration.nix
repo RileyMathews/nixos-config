@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./../../modules/tailscale
     ];
 
   # Use the GRUB 2 boot loader.
@@ -13,6 +14,7 @@
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
   # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  myTailscale.enable = true;
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
