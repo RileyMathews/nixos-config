@@ -54,6 +54,9 @@ build-all:
     echo "✓ All VMs built successfully!"
     echo "========================================="
 
+test:
+    python3 modules/home-manager/riley/scripts/check-haskell-build-status-agent --test
+
 switch:
     #!/usr/bin/env bash
     set -euo pipefail

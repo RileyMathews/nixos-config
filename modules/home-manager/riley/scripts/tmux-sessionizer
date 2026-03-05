@@ -12,12 +12,14 @@ fi
 
 cd $selected
 
-is_bare=$(git rev-parse --is-bare-repository)
-echo $is_bare
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    selected=$(find . -mindepth 1 -maxdepth 1 -type d | fzf)
 
-if [ "$is_bare" == "true" ]; then
-    selected=$(ls | fzf)
-    cd $selected
+    if [[ -z $selected ]]; then
+        exit 0
+    fi
+
+    cd "$selected"
 fi
 
 tmux_running=$(pgrep tmux)
