@@ -12,8 +12,8 @@ unstablePkgs,
     ./../../../modules/vms/basic-hardware-config.nix
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/tailscale
-    # ./../../../modules/immich-transcoding
-    # ./../../../modules/immich-ml
+    ./../../../modules/immich-transcoding
+    ./../../../modules/immich-ml
     ./../../../modules/whisper
     ./../../../modules/piper
     ./../../../modules/ollama

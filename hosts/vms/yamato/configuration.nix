@@ -25,10 +25,12 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
   virtualisation.podman.enable = true;
+  boot.kernelModules = [ "nfs" ];
+  boot.supportedFilesystems = [ "nfs" ];
 
-  fileSystems."/mnt/temp-immich" = {
-    device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1";
-    fsType = "ext4";
-    options = ["defaults" "nofail"];
-  };
+  # fileSystems."/mnt/temp-immich" = {
+  #   device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1";
+  #   fsType = "ext4";
+  #   options = ["defaults" "nofail"];
+  # };
 }

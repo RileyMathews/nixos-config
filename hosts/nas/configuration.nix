@@ -7,13 +7,6 @@
       ./../../modules/tailscale
     ];
 
-  # Use the GRUB 2 boot loader.
-  # boot.loader.grub.enable = true;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   myTailscale.enable = true;
   boot = {
     supportedFilesystems = [ "zfs" ];
@@ -42,6 +35,28 @@
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
+
+  services.nfs.server = {
+    enable = true;
+
+    exports = ''
+      /main *(ro,fsid=0,no_subtree_check,crossmnt)
+      /main/immich *(rw,no_subtree_check,sync,no_root_squash)
+    '';
+    
+    extraNfsdConfig = ''
+      UDP=off
+      vers2=off
+      vers3=off
+      vers4=on
+      vers4.0=off
+      vers4.1=off
+      vers4.2=on
+    '';
+  };
+
+  networking.firewall.allowedTCPPorts = [ 2049 ];
+  services.zfs.autoScrub.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.riley = {

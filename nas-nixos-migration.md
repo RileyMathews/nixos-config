@@ -356,14 +356,14 @@ A phase may have multiple outputs which will each be on their own line
   - Commands (on NAS): `systemctl status tailscale` and `tailscale ip`
   - Done when: Tailscale is active and IP is shown
 
-- [ ] 4.17 Verify NFS Server Configuration
+- [x] 4.17 Verify NFS Server Configuration
   - Commands (on NAS):
     - `systemctl status nfs-server` (should be active)
     - `exportfs -a` (apply exports)
     - `showmount -e localhost` (list exports)
   - Done when: NFS server is active and exports are listed
 
-- [ ] 4.18 Test NFS Mount from `yamato`
+- [x] 4.18 Test NFS Mount from `yamato`
   - Commands (on yamato):
     - `showmount -e nas` (query NAS exports)
     - `mount -t nfs -o vers=4.2 nas:/main /tmp/test-mount` (test mount)
@@ -417,7 +417,7 @@ A phase may have multiple outputs which will each be on their own line
 
 **Prerequisites**: Phase 5 complete, data verified on new NAS
 
-- [ ] 6.1 Update `modules/immich/default.nix`
+- [x] 6.1 Update `modules/immich/default.nix`
   - Files: `modules/immich/default.nix`
   - What: Remove temporary volume mount, restore NFS mount via nasOci
   - NFS device: `nas:/main/immich` (or IP if needed; document which is used)
@@ -425,43 +425,43 @@ A phase may have multiple outputs which will each be on their own line
   - Remove: `# TEMPORARY:` comment
   - Done when: File is edited and syntax is correct
 
-- [ ] 6.2 Update `modules/immich-transcoding/default.nix`
+- [x] 6.2 Update `modules/immich-transcoding/default.nix`
   - Files: `modules/immich-transcoding/default.nix`
   - What: Remove temporary volume mount, restore NFS mount
   - Remove: `# TEMPORARY:` comment
   - Done when: File is edited and syntax is correct
 
-- [ ] 6.3 Create restoration checkpoint commit
+- [x] 6.3 Create restoration checkpoint commit
   - Commands:
     - `git add modules/immich/default.nix modules/immich-transcoding/default.nix`
     - `git commit -m "Restore immich to NAS storage after successful migration"`
   - Done when: Commit is created
 
-- [ ] 6.4 Deploy config to `yamato` VM
+- [x] 6.4 Deploy config to `yamato` VM
   - Command: `just deploy yamato`
   - Done when: Deployment completes without errors
 
-- [ ] 6.5 Verify immich API server starts
+- [x] 6.5 Verify immich API server starts
   - Commands:
     - `systemctl status podman-immich` (should be active)
     - `journalctl -u podman-immich -n 50` (check for errors)
   - Done when: Service is active and logs show clean startup
 
-- [ ] 6.6 Test immich web UI
+- [x] 6.6 Test immich web UI
   - What: Access `https://immich.rileymathews.com` and verify all photos are visible
   - Done when: Web UI loads, shows full photo library, and photos display correctly
 
-- [ ] 6.7 Test immich write access (optional)
+- [x] 6.7 Test immich write access (optional)
   - What: Upload a test photo via the web UI
   - Done when: Photo uploads successfully and appears in library
 
-- [ ] 6.8 Restart immich transcoding on `data`
+- [x] 6.8 Restart immich transcoding on `data`
   - Commands (on data):
     - `systemctl start podman-transcoding`
     - `systemctl status podman-transcoding` (should be active)
   - Done when: Service is running
 
-- [ ] 6.9 Verify NFS mounts are from new NAS
+- [x] 6.9 Verify NFS mounts are from new NAS
   - Commands:
     - On `yamato`: `mount | grep immich` (should show `nas:/main/immich`)
     - On `data`: `mount | grep immich` (should show `nas:/main/immich`)
