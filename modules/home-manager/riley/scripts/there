@@ -2,7 +2,7 @@
 
 tmux_running=$(pgrep tmux)
 selected=$(pwd)
-session_name=$(basename pwd)
+session_name=$(basename $selected)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s $session_name
