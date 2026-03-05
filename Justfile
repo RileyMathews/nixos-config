@@ -4,6 +4,9 @@ build HOSTNAME:
 deploy HOST:
     nix run nixpkgs#nixos-rebuild -- switch --flake .#{{HOST}} --target-host root@{{HOST}}
 
+deploy-nas:
+    nix run nixpkgs#nixos-rebuild -- switch --flake .#nas --target-host root@10.0.0.139
+
 finalize FLAKEPATH IP:
     nix run nixpkgs#nixos-rebuild -- switch --flake .#{{FLAKEPATH}} --target-host root@{{IP}}
 

@@ -106,6 +106,11 @@
           ];
         };
 
+        nas = mkNixosHost {
+          hostPath = ./hosts/nas/configuration.nix;
+          extraModules = [];
+        };
+
         iso = mkNixosHost {
           hostPath = ./hosts/iso/configuration.nix;
           includeDefaults = false;
