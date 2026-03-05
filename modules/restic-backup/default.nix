@@ -209,12 +209,11 @@ in
           AWS_ACCESS_KEY_ID = "c735b0f700e602cbdb3af8d50977337c";
           AWS_SECRET_ACCESS_KEY_FILE = config.age.secrets.aws-access-key.path;
           RESTIC_PASSWORD_FILE_SOURCE = config.age.secrets.restic-password.path;
-          GATUS_PUSH_TOKEN_FILE = config.age.secrets.gatus-push-token.path;
         };
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${backupLib.backupScripts}/bin/wrapper.sh";
-          EnvironmentFile = "${envFile}";
+          EnvironmentFile = [ "${envFile}" config.age.secrets.gatus-push-token.path ];
           User = "root";
           Group = "root";
         };

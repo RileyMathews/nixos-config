@@ -23,7 +23,7 @@ NTFY_TOPIC="home-server-alerts"
 : "${AWS_SHARED_CREDENTIALS_FILE:=}"
 : "${RESTIC_PASSWORD_FILE:=}"
 : "${GATUS_HEALTHCHECK_ID:=}"
-: "${GATUS_PUSH_TOKEN_FILE:=}"
+: "${GATUS_PUSH_TOKEN:=}"
 : "${BACKUP_TAG:=}"
 : "${HOSTNAME:=$(cat /etc/hostname)}"
 
@@ -95,11 +95,7 @@ gatus_heartbeat() {
     return 0
   fi
 
-  # Read token directly from file - no grep parsing needed
-  local token=""
-  if [[ -n "${GATUS_PUSH_TOKEN_FILE:-}" && -f "$GATUS_PUSH_TOKEN_FILE" ]]; then
-    token=$(cat "$GATUS_PUSH_TOKEN_FILE" 2>/dev/null | tr -d '[:space:]') || true
-  fi
+  local token="${GATUS_PUSH_TOKEN:-}"
 
   # Build the URL
   local url="${GATUS_URL}/api/v1/endpoints/${GATUS_HEALTHCHECK_ID}/external?success=${success}"
