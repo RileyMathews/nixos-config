@@ -3,6 +3,7 @@ let
   canonicalAgents = [
     "wardroom"
     "riker"
+    "guide"
     "data"
     "worf"
     "troi"
@@ -25,6 +26,7 @@ let
       crusher = "opencode/claude-haiku-4-5";
       obrien = "opencode/gpt-5-nano";
       haskell = "opencode/kimi-k2.5";
+      guide = "opencode/claude-sonnet-4-6";
     };
 
     work = {
@@ -38,6 +40,7 @@ let
       crusher = "anthropic/claude-opus-4-6";
       obrien = "anthropic/claude-opus-4-6";
       haskell = "anthropic/claude-opus-4-6";
+      guide = "anthropic/claude-haiku-4-6";
     };
   };
 
