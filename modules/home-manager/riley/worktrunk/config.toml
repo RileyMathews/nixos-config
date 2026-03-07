@@ -40,7 +40,7 @@
 # and worktrees at ~/code/{{repo_name}}/{{branch}}
 # If I use the default sibling directory then 
 # ~/code/{{repo_name}}/.git.{{branch}} is created
-# worktree-path = "{{ repo_path }}/../{{ branch | sanitize }}"
+worktree-path = "../{{ branch | sanitize }}"
 
 #
 # ## LLM commit messages
