@@ -25,20 +25,10 @@ let
       q = "opencode/claude-haiku-4-5";
       crusher = "opencode/claude-haiku-4-5";
       obrien = "opencode/gpt-5-nano";
-      haskell = "opencode/kimi-k2.5";
       guide = "opencode/claude-sonnet-4-6";
     };
 
     work = {
-      wardroom = "anthropic/claude-opus-4-6";
-      riker = "anthropic/claude-opus-4-6";
-      data = "anthropic/claude-opus-4-6";
-      worf = "anthropic/claude-opus-4-6";
-      troi = "anthropic/claude-opus-4-6";
-      laforge = "anthropic/claude-opus-4-6";
-      q = "anthropic/claude-opus-4-6";
-      crusher = "anthropic/claude-opus-4-6";
-      obrien = "anthropic/claude-opus-4-6";
       haskell = "anthropic/claude-opus-4-6";
       guide = "anthropic/claude-haiku-4-6";
     };
@@ -58,44 +48,64 @@ let
   missingTemplateFiles = lib.filter (name: !(lib.elem name templateFiles)) canonicalTemplateFiles;
   extraTemplateFiles = lib.filter (name: !(lib.elem name canonicalTemplateFiles)) templateFiles;
 
+  # Collect all agents used by all profiles to detect orphaned templates
+  allProfileAgents = lib.foldl' (acc: profileName: 
+    acc // (lib.listToAttrs (map (agent: { name = agent; value = true; }) (lib.attrNames modelProfiles.${profileName})))
+  ) { } (lib.attrNames modelProfiles);
+  agentsWithProfiles = lib.attrNames allProfileAgents;
+
+  orphanedTemplateFiles = lib.filter (name: 
+    let agentName = lib.removeSuffix ".md" name;
+    in !(lib.elem agentName agentsWithProfiles)) templateFiles;
+
   formatList = values:
     if values == [ ] then
       "(none)"
     else
       lib.concatStringsSep ", " values;
 
+  # Per-profile validation: check all model values are non-empty strings
   profileModelAssertions =
     lib.concatMap
       (
         profileName:
         let
           profileModels = modelProfiles.${profileName};
-          profileKeys = lib.attrNames profileModels;
-          missingKeys = lib.filter (name: !(lib.elem name profileKeys)) canonicalAgents;
-          extraKeys = lib.filter (name: !(lib.elem name canonicalAgents)) profileKeys;
+          profileAgents = lib.attrNames profileModels;
+          # Check that every agent in this profile has a non-empty model string
+          invalidModelAgents = lib.filter (agent: 
+            let model = profileModels.${agent};
+            in model == "" || model == null || !(lib.isString model)
+          ) profileAgents;
         in
         [
           {
-            assertion = missingKeys == [ ];
-            message = "riley.opencode profile '${profileName}' is missing agent model mappings for: ${formatList missingKeys}";
-          }
-          {
-            assertion = extraKeys == [ ];
-            message = "riley.opencode profile '${profileName}' has unexpected agent model mappings for: ${formatList extraKeys}";
+            assertion = invalidModelAgents == [ ];
+            message = "riley.opencode profile '${profileName}' has agents with empty or invalid model strings: ${formatList invalidModelAgents}";
           }
         ]
       )
       (lib.attrNames modelProfiles);
 
-  selectedProfileKeys = lib.attrNames selectedModels;
-  selectedProfileMissingKeys = lib.filter (name: !(lib.elem name selectedProfileKeys)) canonicalAgents;
-  selectedProfileExtraKeys = lib.filter (name: !(lib.elem name canonicalAgents)) selectedProfileKeys;
+  selectedProfileAgents = lib.attrNames selectedModels;
+  
+  # Check that all agents in the selected profile have valid model strings
+  selectedProfileInvalidModels = lib.filter (agent: 
+    let model = selectedModels.${agent};
+    in model == "" || model == null || !(lib.isString model)
+  ) selectedProfileAgents;
+  
+  # Check that all agents in the selected profile have existing template files
+  selectedProfileMissingTemplates = lib.filter (agent: 
+    !(lib.elem "${agent}.md" templateFiles)
+  ) selectedProfileAgents;
 
   canRender =
     missingTemplateFiles == [ ]
     && extraTemplateFiles == [ ]
-    && selectedProfileMissingKeys == [ ]
-    && selectedProfileExtraKeys == [ ];
+    && orphanedTemplateFiles == [ ]
+    && selectedProfileInvalidModels == [ ]
+    && selectedProfileMissingTemplates == [ ];
 
   templateModelLineAssertions =
     if canRender then
@@ -122,13 +132,13 @@ let
             }
           ]
         )
-        canonicalAgents
+        selectedProfileAgents
     else
       [ ];
 
   renderedAgentFiles =
     if canRender then
-      lib.genAttrs canonicalAgents (agent: {
+      lib.genAttrs selectedProfileAgents (agent: {
         force = true;
         source = pkgs.replaceVars (templatePath agent) {
           MODEL = selectedModels.${agent};
@@ -149,12 +159,16 @@ in
         message = "riley.opencode agent template directory has unexpected *.md files: ${formatList extraTemplateFiles}";
       }
       {
-        assertion = selectedProfileMissingKeys == [ ];
-        message = "riley.opencode selected profile '${selectedProfile}' is missing agent model mappings for: ${formatList selectedProfileMissingKeys}";
+        assertion = orphanedTemplateFiles == [ ];
+        message = "riley.opencode has orphaned templates with no profile deploying them: ${formatList orphanedTemplateFiles}";
       }
       {
-        assertion = selectedProfileExtraKeys == [ ];
-        message = "riley.opencode selected profile '${selectedProfile}' has unexpected agent model mappings for: ${formatList selectedProfileExtraKeys}";
+        assertion = selectedProfileInvalidModels == [ ];
+        message = "riley.opencode selected profile '${selectedProfile}' has agents with empty or invalid model strings: ${formatList selectedProfileInvalidModels}";
+      }
+      {
+        assertion = selectedProfileMissingTemplates == [ ];
+        message = "riley.opencode selected profile '${selectedProfile}' references agents without template files: ${formatList selectedProfileMissingTemplates}";
       }
     ]
     ++ profileModelAssertions
