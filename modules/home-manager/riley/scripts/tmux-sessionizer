@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ $# -eq 1 ]]; then
-    selected=$1
-else
-    selected=$(find ~/code -mindepth 1 -maxdepth 1 -type d | fzf)
-fi
+selected=$(findcode)
 
 if [[ -z $selected ]]; then
     exit 0
@@ -12,31 +8,5 @@ fi
 
 cd $selected
 
-if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    selected=$(find . -mindepth 1 -maxdepth 1 -type d | fzf)
+_tmux_switch_or_activate $selected $(basename selected)
 
-    if [[ -z $selected ]]; then
-        exit 0
-    fi
-
-    cd "$selected"
-fi
-
-tmux_running=$(pgrep tmux)
-
-session_name=$(basename $selected)
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $session_name
-    exit 0
-fi
-
-if ! tmux has-session -t=$session_name 2> /dev/null; then
-    tmux new-session -ds $session_name
-fi
-
-if [[ -z $TMUX ]]; then
-    tmux attach-session -t $session_name
-else
-    tmux switch-client -t $session_name
-fi

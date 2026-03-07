@@ -1,14 +1,22 @@
-#! zsh 
+#!/usr/bin/env bash
 directory=$1
 session_name=$2
-if [[ $TERM_PROGRAM == "tmux" ]]; then
-    command="switch"
-else
-    command="attach"
+
+cd $directory
+
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s $session_name
+    exit 0
 fi
 
-if tmux ls | grep -q "^${session_name}:"; then
-else
-    tmux new-session -d -s $session_name -c $directory
+if ! tmux has-session -t=$session_name 2> /dev/null; then
+    tmux new-session -ds $session_name
 fi
-tmux $command -t $session_name
+
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t $session_name
+else
+    tmux switch-client -t $session_name
+fi
