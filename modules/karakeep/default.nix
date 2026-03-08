@@ -32,6 +32,7 @@
     };
 
     virtualisation.oci-containers.backend = "podman";
+    virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
 
     virtualisation.oci-containers.containers.karakeep = {
         image = "ghcr.io/karakeep-app/karakeep:0.31.0";
@@ -42,17 +43,18 @@
         # to connect to chrome otherwise. It seems like karakeep does some internal
         # resolution logic that then manually calls the
         # ip address instead of going through normal DNS resolution.
-        extraOptions = [ "--network=host" ];
+        networks = [ "podman" ];
         environment = {
-            BROWSER_WEB_URL = "http://0.0.0.0:9222";
+            BROWSER_WEB_URL = "http://chrome:9222";
             NEXTAUTH_URL = "https://karakeep.rileymathews.com";
             DATA_DIR = "/data";
+            MEILI_ADDR = "http://meilisearch:7700";
         };
     };
 
     virtualisation.oci-containers.containers.chrome = {
         image = "gcr.io/zenika-hub/alpine-chrome:124";
-        ports = ["9222:9222"];
+        networks = [ "podman" ];
         cmd = [
             "--no-sandbox"
             "--disable-gpu"
@@ -61,5 +63,15 @@
             "--remote-debugging-port=9222"
             "--hide-scrollbars"
         ];
+    };
+
+    virtualisation.oci-containers.containers.meilisearch = {
+        image = "getmeili/meilisearch:v1.13.3";
+        environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];
+        networks = [ "podman" ];
+        environment = {
+            MEILI_NO_ANALYTICS = "true";
+        };
+        volumes = ["/var/lib/appdata/meilisearch/data:/meili_data"];
     };
 }
