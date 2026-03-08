@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 directory=$1
 echo $directory
-session_name=$2
+
+base_name=$(basename "$directory")
+parent_path=$(dirname "$directory")
+parent_name=$(basename "$parent_path")
+session_name="${parent_name}_${base_name}"
 echo $session_name
 
 cd $directory

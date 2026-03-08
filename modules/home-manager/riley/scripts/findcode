@@ -1,13 +1,24 @@
 #! /usr/bin/env bash
 
-selected=$(find ~/code -mindepth 1 -maxdepth 1 -type d | fzf)
+# Start in ~/code
+current_dir="$HOME/code"
 
-cd $selected
-
-is_worktree=$(git rev-parse --is-inside-work-tree)
-
-if [[ "$is_worktree" == "false" ]]; then
-    selected=$(find $selected -mindepth 1 -maxdepth 1 -type d | fzf)
-fi
-
-echo $selected
+while true; do
+    # Find directories at current level
+    selected=$(find $current_dir -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+    
+    # Exit if user cancelled fzf
+    [[ -z "$selected" ]] && exit 1
+    
+    # Check if selected directory is a git worktree
+    cd "$selected" 2>/dev/null || continue
+    is_worktree=$(git rev-parse --is-inside-work-tree 2>/dev/null)
+    
+    if [[ "$is_worktree" == "true" ]]; then
+        echo "$selected"
+        exit 0
+    fi
+    
+    # Not a git repo, go deeper
+    current_dir="$selected"
+done

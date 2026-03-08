@@ -229,7 +229,7 @@ hyprlog() {
   cp /run/user/1000/hypr/$(command ls -t /run/user/1000/hypr/ | head -n 1)/hyprland.log ~/hyprland.log
 }
 
-newtree() {
+wtc() {
   wt switch --create --no-cd $1 -x '_tmux_switch_or_attach {{repo}}_{{ branch | sanitize }}'
 }
 
