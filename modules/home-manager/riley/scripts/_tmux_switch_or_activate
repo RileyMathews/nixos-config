@@ -1,22 +1,11 @@
 #!/usr/bin/env bash
 directory=$1
+echo $directory
 session_name=$2
+echo $session_name
 
 cd $directory
 
-tmux_running=$(pgrep tmux)
+tmux new-session -ds $session_name
 
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $session_name
-    exit 0
-fi
-
-if ! tmux has-session -t=$session_name 2> /dev/null; then
-    tmux new-session -ds $session_name
-fi
-
-if [[ -z $TMUX ]]; then
-    tmux attach-session -t $session_name
-else
-    tmux switch-client -t $session_name
-fi
+_tmux_switch_or_attach $session_name

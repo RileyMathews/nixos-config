@@ -204,3 +204,16 @@ worktree-path = "../{{ branch | sanitize }}"
 
 [post-start]
 copy = "wt step copy-ignored"
+
+[post-create]
+tmux = """
+S={{repo}}_{{ branch | sanitize }}
+W={{ worktree_path }}
+tmux new-session -d -s "$S" -c "$W" -n dev
+
+tmux select-pane -t "$S:dev.0"
+echo "✓ Session '$S' — attach with: tmux attach -t $S"
+"""
+
+[post-remove]
+tmux = "tmux kill-session -t {{repo}}_{{ branch | sanitize }} 2>/dev/null || true"

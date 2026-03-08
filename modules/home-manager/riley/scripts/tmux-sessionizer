@@ -7,6 +7,7 @@ if [[ -z $selected ]]; then
 fi
 
 cd $selected
+session=$(basename $selected)
 
-_tmux_switch_or_activate $selected $(basename selected)
+_tmux_switch_or_activate $selected $session
 
