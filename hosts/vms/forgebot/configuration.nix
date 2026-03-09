@@ -5,7 +5,6 @@
   unstablePkgs,
   config,
   forgebot,
-  forgeBotPkg,
   ...
 }:
 {
@@ -25,7 +24,6 @@
 
   services.forgebot = {
     enable = true;
-    package = forgeBotPkg;
     
     forgejo.url = "https://git.rileymathews.com";
     secretsFilePath = config.age.secrets.forgebot-credentials-file.path;

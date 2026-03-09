@@ -76,10 +76,7 @@
       }:
         lib.nixosSystem {
           inherit system;
-          specialArgs = {
-            inherit system unstablePkgs pr-tracker agenix opencode worktrunk forgebot;
-            forgeBotPkg = forgebot.packages.${system}.forgebot;
-          };
+          specialArgs = { inherit system unstablePkgs pr-tracker agenix opencode worktrunk forgebot; };
           modules =
             (if includeDefaults then vmDefaultModules else [ ])
             ++ [ hostPath ]
