@@ -184,11 +184,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773036372,
-        "narHash": "sha256-xVS/X2aT0FIINGpAKIf4VTDnUJIaq6fVf34mtECxO/I=",
+        "lastModified": 1773072260,
+        "narHash": "sha256-ZotFeC5jqVqyc7yTA9InR5AsDbVmXeE7G0HEKeHZeAQ=",
         "owner": "rileymathews",
         "repo": "forgebot",
-        "rev": "5db103ac59dd2316c45d83e6573e2a0d06816993",
+        "rev": "305fbc84a403635340785dad94a3a7d09b253dc5",
         "type": "github"
       },
       "original": {
