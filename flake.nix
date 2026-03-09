@@ -42,9 +42,13 @@
       url = "github:max-sixty/worktrunk?ref=v0.28.2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    forgebot = {
+      url = "github:rileymathews/forgebot";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot }:
     let
       system = "x86_64-linux";
 
@@ -72,7 +76,10 @@
       }:
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit system unstablePkgs pr-tracker agenix opencode worktrunk; };
+          specialArgs = {
+            inherit system unstablePkgs pr-tracker agenix opencode worktrunk forgebot;
+            forgeBotPkg = forgebot.packages.${system}.forgebot;
+          };
           modules =
             (if includeDefaults then vmDefaultModules else [ ])
             ++ [ hostPath ]
