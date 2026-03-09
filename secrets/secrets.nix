@@ -47,5 +47,5 @@ in
   "github-token-file.age".publicKeys = [riley];
   "forgejo-token-file.age".publicKeys = [riley];
   "gatus-push-token.age".publicKeys = all;
-  "forgebot-credentials-file.age".publicKeys = [riley hostKeysByName.forgebot];
+  # "forgebot-credentials-file.age".publicKeys = [riley hostKeysByName.forgebot];
 }

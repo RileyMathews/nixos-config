@@ -19,7 +19,7 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
   age.secrets.forgebot-credentials-file = {
-      file = ../../secrets/forgebot-credentials-file.age;
+      file = ../../../secrets/forgebot-credentials-file.age;
   };
 
   services.forgebot = {
