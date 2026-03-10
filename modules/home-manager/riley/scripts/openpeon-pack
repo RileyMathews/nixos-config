@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REGISTRY_URL="https://peonping.github.io/registry/index.json"
+XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+PACKS_DIR="${OPENPEON_PACKS_DIR:-$XDG_DATA_HOME/openpeon/packs}"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  openpeon-pack list
+  openpeon-pack available [query]
+  openpeon-pack install <pack-name>
+  openpeon-pack install-all <pack1> <pack2> ...
+
+Environment overrides:
+  OPENPEON_PACKS_DIR  Target packs directory (default: $XDG_DATA_HOME/openpeon/packs)
+EOF
+}
+
+require_cmd() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    printf 'Missing required command: %s\n' "$1" >&2
+    exit 1
+  fi
+}
+
+require_cmd curl
+require_cmd python3
+require_cmd tar
+
+mkdir -p "$PACKS_DIR"
+
+list_installed() {
+  python3 - "$PACKS_DIR" <<'PY'
+import json
+import os
+import sys
+
+packs_dir = sys.argv[1]
+if not os.path.isdir(packs_dir):
+    sys.exit(0)
+
+names = []
+for name in sorted(os.listdir(packs_dir)):
+    pack_dir = os.path.join(packs_dir, name)
+    manifest = os.path.join(pack_dir, "openpeon.json")
+    if os.path.isdir(pack_dir) and os.path.isfile(manifest):
+        names.append(name)
+
+for name in names:
+    print(name)
+PY
+}
+
+available_packs() {
+  local query="${1:-}"
+  local tmp
+  tmp=$(mktemp)
+  trap 'rm -f "$tmp"' RETURN
+  curl -fsSL "$REGISTRY_URL" -o "$tmp"
+  python3 - "$tmp" "$query" <<'PY'
+import json
+import sys
+
+registry_path = sys.argv[1]
+query = sys.argv[2].strip().lower()
+
+with open(registry_path, encoding="utf-8") as f:
+    raw = json.load(f)
+
+data = raw.get("packs", raw)
+if not isinstance(data, list):
+    raise SystemExit(1)
+
+for item in data:
+    name = item.get("name", "")
+    display = item.get("display_name", name)
+    if query and query not in name.lower() and query not in display.lower():
+        continue
+    print(f"{name}\t{display}")
+PY
+}
+
+install_one() {
+  local pack="$1"
+  local tmp_dir
+  tmp_dir=$(mktemp -d)
+  trap 'rm -rf "$tmp_dir"' RETURN
+
+  printf 'Installing pack: %s\n' "$pack"
+
+  local meta
+  meta=$(python3 - "$pack" <<'PY'
+import json
+import sys
+import urllib.request
+
+pack = sys.argv[1]
+registry_url = "https://peonping.github.io/registry/index.json"
+with urllib.request.urlopen(registry_url) as r:
+    raw = json.load(r)
+
+data = raw.get("packs", raw)
+if not isinstance(data, list):
+    raise SystemExit(1)
+
+for item in data:
+    if item.get("name") == pack:
+        print(item.get("source_repo", ""))
+        print(item.get("source_ref", ""))
+        print(item.get("source_path", ""))
+        raise SystemExit(0)
+
+raise SystemExit(1)
+PY
+) || {
+    printf 'Pack not found in registry: %s\n' "$pack" >&2
+    exit 1
+  }
+
+  local source_repo source_ref source_path
+  source_repo=$(printf '%s\n' "$meta" | sed -n '1p')
+  source_ref=$(printf '%s\n' "$meta" | sed -n '2p')
+  source_path=$(printf '%s\n' "$meta" | sed -n '3p')
+
+  if [ -z "$source_repo" ] || [ -z "$source_ref" ] || [ -z "$source_path" ]; then
+    printf 'Invalid registry metadata for pack: %s\n' "$pack" >&2
+    exit 1
+  fi
+
+  local tarball="$tmp_dir/pack.tar.gz"
+  local extract_root="$tmp_dir/extracted"
+  mkdir -p "$extract_root"
+
+  curl -fsSL "https://github.com/${source_repo}/archive/refs/tags/${source_ref}.tar.gz" -o "$tarball"
+  tar -xzf "$tarball" -C "$extract_root"
+
+  local extracted_base
+  extracted_base=$(python3 - "$extract_root" <<'PY'
+import os
+import sys
+
+root = sys.argv[1]
+entries = [e for e in os.listdir(root) if os.path.isdir(os.path.join(root, e))]
+if not entries:
+    raise SystemExit(1)
+print(entries[0])
+PY
+)
+
+  local source_dir="$extract_root/$extracted_base/$source_path"
+  local target_dir="$PACKS_DIR/$pack"
+
+  if [ ! -f "$source_dir/openpeon.json" ]; then
+    printf 'Pack is missing openpeon.json: %s\n' "$pack" >&2
+    exit 1
+  fi
+
+  rm -rf "$target_dir"
+  mkdir -p "$target_dir"
+  cp -r "$source_dir"/. "$target_dir"/
+
+  printf 'Installed to: %s\n' "$target_dir"
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  list)
+    list_installed
+    ;;
+  available)
+    available_packs "${2:-}"
+    ;;
+  install)
+    if [ $# -lt 2 ]; then
+      usage
+      exit 1
+    fi
+    install_one "$2"
+    ;;
+  install-all)
+    if [ $# -lt 2 ]; then
+      usage
+      exit 1
+    fi
+    shift
+    for pack in "$@"; do
+      install_one "$pack"
+    done
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

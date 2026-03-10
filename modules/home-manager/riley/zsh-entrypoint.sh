@@ -97,11 +97,6 @@ export PATH="$PATH:$HOME/.local/bin:$HOME/.local/scripts:$HOME/.local/python-scr
 export KEYTIMEOUT=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/share:/usr/local/share:/var/lib/flatpak/exports/share:/home/riley/.local/share/flatpak/exports/share"
 
-export OPENPEON_DIR="${OPENPEON_DIR:-$HOME/.openpeon}"
-export CLAUDE_CONFIG_DIR="$OPENPEON_DIR"
-PEON_PING_DIR="$OPENPEON_DIR/hooks/peon-ping"
-[ -f "$PEON_PING_DIR/completions.bash" ] && source "$PEON_PING_DIR/completions.bash"
-
 alias mpr="python manage.py runserver"
 alias mpmm="python manage.py makemigrations"
 alias mpm="python manage.py migrate"
@@ -152,7 +147,6 @@ alias ghd='gh-dash'
 alias oc='opencode'
 alias ocp='opencode --agent plan'
 alias och='opencode --agent haskell-dev --prompt "This project has some compile errors. Please help me fix them."'
-alias peon="bash $PEON_PING_DIR/peon.sh"
 
 alias ndr='nix-direnv-reload'
 
