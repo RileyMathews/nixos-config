@@ -14,5 +14,12 @@
         ".hs"
       ]
     }
+  },
+  "mcp": {
+    "forgejo": {
+      "type": "local",
+      "command": ["forgejo-mcp", "--url", "https://git.rileymathews.com"],
+      "enabled": true
+    }
   }
 }
