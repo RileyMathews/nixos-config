@@ -97,8 +97,9 @@ export PATH="$PATH:$HOME/.local/bin:$HOME/.local/scripts:$HOME/.local/python-scr
 export KEYTIMEOUT=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/share:/usr/local/share:/var/lib/flatpak/exports/share:/home/riley/.local/share/flatpak/exports/share"
 
-PEON_PING_BASE="${OPENPEON_DIR:-$HOME/.openpeon}"
-PEON_PING_DIR="$PEON_PING_BASE/hooks/peon-ping"
+export OPENPEON_DIR="${OPENPEON_DIR:-$HOME/.openpeon}"
+export CLAUDE_CONFIG_DIR="$OPENPEON_DIR"
+PEON_PING_DIR="$OPENPEON_DIR/hooks/peon-ping"
 [ -f "$PEON_PING_DIR/completions.bash" ] && source "$PEON_PING_DIR/completions.bash"
 
 alias mpr="python manage.py runserver"

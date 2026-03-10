@@ -12,6 +12,7 @@
     ./ghostty.nix
     ./worktrunk.nix
     ./direnv.nix
+    ./openpeon.nix
   ];
 
   options.riley.browser = lib.mkOption {

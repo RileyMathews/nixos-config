@@ -88,7 +88,8 @@ interface CESPManifest {
 }
 
 interface PeonConfig {
-  active_pack: string
+  active_pack?: string
+  default_pack?: string
   volume: number
   enabled: boolean
   desktop_notifications: boolean
@@ -150,12 +151,15 @@ function getRelayConfig(config: PeonConfig, platform: RuntimePlatform): RelayCon
 // ---------------------------------------------------------------------------
 
 const PLUGIN_DIR = path.join(os.homedir(), ".config", "opencode", "peon-ping")
-const CONFIG_PATH = path.join(PLUGIN_DIR, "config.json")
 const STATE_PATH = path.join(PLUGIN_DIR, ".state.json")
 const PAUSED_PATH = path.join(PLUGIN_DIR, ".paused")
-const DEFAULT_PACKS_DIR = path.join(os.homedir(), ".openpeon", "packs")
+const OPENPEON_DIR = process.env.OPENPEON_DIR || path.join(os.homedir(), ".openpeon")
+const OPENPEON_CONFIG_PATH = path.join(OPENPEON_DIR, "hooks", "peon-ping", "config.json")
+const OPENPEON_HOOKS_PACKS_DIR = path.join(OPENPEON_DIR, "hooks", "peon-ping", "packs")
+const DEFAULT_PACKS_DIR = path.join(OPENPEON_DIR, "packs")
 
 const DEFAULT_CONFIG: PeonConfig = {
+  default_pack: "peon",
   active_pack: "peon",
   volume: 0.5,
   enabled: true,
@@ -196,7 +200,7 @@ const TERMINAL_APPS = [
 
 function loadConfig(): PeonConfig {
   try {
-    const raw = fs.readFileSync(CONFIG_PATH, "utf8")
+    const raw = fs.readFileSync(OPENPEON_CONFIG_PATH, "utf8")
     const parsed = JSON.parse(raw)
     return {
       ...DEFAULT_CONFIG,
@@ -235,7 +239,9 @@ function isPaused(): boolean {
 // ---------------------------------------------------------------------------
 
 function getPacksDir(config: PeonConfig): string {
-  return config.packs_dir || DEFAULT_PACKS_DIR
+  if (config.packs_dir) return config.packs_dir
+  if (fs.existsSync(OPENPEON_HOOKS_PACKS_DIR)) return OPENPEON_HOOKS_PACKS_DIR
+  return DEFAULT_PACKS_DIR
 }
 
 function loadManifest(packDir: string): CESPManifest | null {
@@ -379,11 +385,12 @@ function resolveActivePack(
     }
   }
 
-  if (available.includes(config.active_pack)) {
-    return config.active_pack
+  const preferredPack = config.default_pack || config.active_pack
+  if (preferredPack && available.includes(preferredPack)) {
+    return preferredPack
   }
 
-  return available[0] || config.active_pack
+  return available[0] || preferredPack || "peon"
 }
 
 function escapeAppleScript(s: string): string {
@@ -451,7 +458,7 @@ function playSound(
   if (platform === "darwin") {
     const cfg = loadConfig()
     const useSfx = cfg.use_sound_effects_device !== false
-    const peonPlay = path.join(os.homedir(), ".claude", "hooks", "peon-ping", "scripts", "peon-play")
+    const peonPlay = path.join(OPENPEON_DIR, "hooks", "peon-ping", "scripts", "peon-play")
     const cmd = (useSfx && fs.existsSync(peonPlay)) ? peonPlay : "afplay"
     const proc = Bun.spawn([cmd, "-v", String(volume), filePath], {
       stdout: "ignore",
