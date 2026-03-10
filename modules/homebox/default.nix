@@ -30,7 +30,7 @@
 
     virtualisation.oci-containers.containers = {
         homebox = {
-            image = "ghcr.io/sysadminsmedia/homebox:0.23.1";
+            image = "ghcr.io/sysadminsmedia/homebox:0.24.1";
             ports = ["7745:7745"];
             volumes = [ "/var/lib/appdata/homebox/data:/data" ];
             user = "1000:1000";

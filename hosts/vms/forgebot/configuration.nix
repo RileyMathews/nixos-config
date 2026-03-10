@@ -31,6 +31,11 @@
   age.secrets.forgebot-credentials-file = {
       file = ../../../secrets/forgebot-credentials-file.age;
   };
+  age.secrets.forgebot-opencode-auth-json = {
+      file = ../../../secrets/forgebot-opencode-auth.json.age;
+      owner = "forgebot";
+      group = "forgebot";
+  };
 
   services.forgebot = {
     enable = true;
@@ -38,5 +43,6 @@
     forgejo.url = "https://git.rileymathews.com";
     server.forgeBotHost = "https://forgebot.rileymathews.com";
     secretsFilePath = config.age.secrets.forgebot-credentials-file.path;
+    opencode.credentialsFile = config.age.secrets.forgebot-opencode-auth-json.path;
   };
 }
