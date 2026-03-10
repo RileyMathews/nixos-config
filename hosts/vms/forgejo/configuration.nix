@@ -40,18 +40,18 @@
     ];
   };
 
-  systemd.mounts = [{
-    what = "nas:/main/forgejo";
-    where = "/mnt/forgejo";
-    type = "nfs";
-    options = "defaults";
-    
-    # Make it wait for Tailscale
-    # TODO: does this block shutdown because tailscale service never stops?
-    wantedBy = [ "multi-user.target" ];
-    after = [ "tailscale-ready.service" ];
-    requires = [ "tailscale-ready.service" ];
-  }];
+  # systemd.mounts = [{
+  #   what = "nas:/main/forgejo";
+  #   where = "/mnt/forgejo";
+  #   type = "nfs";
+  #   options = "defaults";
+  #
+  #   # Make it wait for Tailscale
+  #   # TODO: does this block shutdown because tailscale service never stops?
+  #   wantedBy = [ "multi-user.target" ];
+  #   after = [ "tailscale-ready.service" ];
+  #   requires = [ "tailscale-ready.service" ];
+  # }];
 
   users.users = {
     git = {
@@ -69,12 +69,12 @@
     group = "git";
     mode = "0400";
   };
-  systemd.services.forgejo = {
-    unitConfig = {
-      Requires = [ "mnt-forgejo.mount" ]; # Replace with your actual mount unit name
-      After = [ "mnt-forgejo.mount" ];   # Replace with your actual mount unit name
-    };
-  };
+  # systemd.services.forgejo = {
+  #   unitConfig = {
+  #     Requires = [ "mnt-forgejo.mount" ]; # Replace with your actual mount unit name
+  #     After = [ "mnt-forgejo.mount" ];   # Replace with your actual mount unit name
+  #   };
+  # };
 
   services.forgejo = {
     enable = true;

@@ -1,7 +1,9 @@
 {
-  "active_pack": "peon",
+  "default_pack": "st_worf",
+  "active_pack": "st_worf",
   "volume": 0.5,
   "enabled": true,
+  "desktop_notifications": true,
   "categories": {
     "session.start": true,
     "session.end": true,
@@ -15,6 +17,8 @@
   },
   "spam_threshold": 3,
   "spam_window_seconds": 10,
+  "session_start_cooldown_seconds": 30,
   "pack_rotation": [],
-  "debounce_ms": 500
+  "debounce_ms": 500,
+  "use_sound_effects_device": true
 }

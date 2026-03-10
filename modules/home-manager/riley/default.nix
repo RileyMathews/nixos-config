@@ -12,6 +12,7 @@
     ./ghostty.nix
     ./worktrunk.nix
     ./direnv.nix
+    ./openpeon.nix
   ];
 
   options.riley.browser = lib.mkOption {
@@ -44,6 +45,8 @@
       ".zshrc".text = ''
         export GITHUB_TOKEN=$(cat ${config.age.secrets.github-token-file.path})
         export FORGEJO_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
+        # forgejo access token specifically for mcp server
+        export FORGEJO_ACCESS_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
         export BROWSER=${config.riley.browser};
         export GH_BROWSER=${config.riley.browser};
         source ~/.config/zsh/zsh-entrypoint.sh

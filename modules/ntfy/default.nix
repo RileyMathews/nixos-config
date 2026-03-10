@@ -20,7 +20,7 @@ lib,
   '';
 
   virtualisation.oci-containers.containers.ntfy = {
-    image = "binwiederhier/ntfy:v2.17.0";
+    image = "binwiederhier/ntfy:v2.18.0";
     volumes = [ "/etc/ntfy/server.yml:/etc/ntfy/server.yml:ro" ];
     ports = [ "8021:8021" ];
     cmd = ["serve"];
