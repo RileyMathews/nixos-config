@@ -180,7 +180,7 @@ in
       ".config/opencode/skills".source = ./opencode/skills;
       ".config/opencode/tools".source = ./opencode/tools;
       ".config/opencode/plugins".source = ./opencode/plugins;
-      ".config/opencode/AGENT.md".source = ./opencode/AGENT.md;
+      ".config/opencode/AGENTS.md".source = ./opencode/AGENTS.md;
       ".config/opencode/peon-ping/config.json".source = ./opencode/peon-ping/config.json;
       ".config/opencode/tui.json".source = ./opencode/tui.json;
     }

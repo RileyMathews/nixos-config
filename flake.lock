@@ -468,11 +468,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1773068321,
-        "narHash": "sha256-UM8STFpL/Wmm1miDK/jiRFLRH1RQrj/7fq6IQgQHF7g=",
+        "lastModified": 1773072611,
+        "narHash": "sha256-wnboTOHT8p8SeaxcWseJkpL0m6RhVm368Wu6DzKoMGU=",
         "owner": "rileymathews",
         "repo": "pr-tracker-rust",
-        "rev": "8013e038352c54c0f9e978bfcd09b382ec051947",
+        "rev": "b70dd9e9414317b0b314e92b42f241baf0495f7a",
         "type": "github"
       },
       "original": {
