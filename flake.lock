@@ -376,11 +376,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1772773019,
-        "narHash": "sha256-E1bxHxNKfDoQUuvriG71+f+s/NT0qWkImXsYZNFFfCs=",
+        "lastModified": 1772963539,
+        "narHash": "sha256-9jVDGZnvCckTGdYT53d/EfznygLskyLQXYwJLKMPsZs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "aca4d95fce4914b3892661bcb80b8087293536c6",
+        "rev": "9dcb002ca1690658be4a04645215baea8b95f31d",
         "type": "github"
       },
       "original": {
@@ -468,11 +468,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1773072611,
-        "narHash": "sha256-wnboTOHT8p8SeaxcWseJkpL0m6RhVm368Wu6DzKoMGU=",
+        "lastModified": 1773100151,
+        "narHash": "sha256-Q0IUCSaJy2KAk19jYlgyfRQ4xxUb47MnJoETy4QxLsQ=",
         "owner": "rileymathews",
         "repo": "pr-tracker-rust",
-        "rev": "b70dd9e9414317b0b314e92b42f241baf0495f7a",
+        "rev": "2d0ecc9dab56b7d1d63ebd22683593f92db954ec",
         "type": "github"
       },
       "original": {
@@ -544,11 +544,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772944399,
-        "narHash": "sha256-xTzsSd3r5HBeufSZ3fszAn0ldfKctvsYG7tT2YJg5gY=",
+        "lastModified": 1773096132,
+        "narHash": "sha256-M3zEnq9OElB7zqc+mjgPlByPm1O5t2fbUrH3t/Hm5Ag=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "c8e69670b316d6788e435a3aa0bda74eb1b82cc0",
+        "rev": "d1ff3b1034d5bab5d7d8086a7803c5a5968cd784",
         "type": "github"
       },
       "original": {
@@ -612,16 +612,16 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1772515391,
-        "narHash": "sha256-ftuZP5nmdUoSZLzbHVMwNkOeVr0ZSmtXfcL5w/xXBUg=",
+        "lastModified": 1773016774,
+        "narHash": "sha256-JawxnNoEv8ZDLaZmOlMrvsa/cEzmOFYv7oHWmPeOIbc=",
         "owner": "max-sixty",
         "repo": "worktrunk",
-        "rev": "24e25aa36e9a20a42f9a9ca3eb7a2f5ff31ae83d",
+        "rev": "6297eb853a7efc09c9cf78f18b76811b0a81d486",
         "type": "github"
       },
       "original": {
         "owner": "max-sixty",
-        "ref": "v0.28.2",
+        "ref": "v0.29.0",
         "repo": "worktrunk",
         "type": "github"
       }

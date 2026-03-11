@@ -39,7 +39,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     worktrunk = {
-      url = "github:max-sixty/worktrunk?ref=v0.28.2";
+      url = "github:max-sixty/worktrunk?ref=v0.29.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     forgebot = {
