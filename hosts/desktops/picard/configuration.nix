@@ -260,7 +260,6 @@
       unstablePkgs.hyprcursor
       unstablePkgs.neovim
       virtualglLib
-      vtsls
       waybar
       wl-clipboard
       wlr-which-key
