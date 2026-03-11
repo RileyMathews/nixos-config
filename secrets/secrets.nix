@@ -49,4 +49,5 @@ in
   "gatus-push-token.age".publicKeys = all;
   "forgebot-credentials-file.age".publicKeys = [riley hostKeysByName.forgebot];
   "forgebot-opencode-auth.json.age".publicKeys = [riley hostKeysByName.forgebot];
+  "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
 }
