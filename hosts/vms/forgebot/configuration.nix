@@ -19,11 +19,15 @@
   ];
   services.cloudflare-dns = {
     enable = true;
-    domains = ["forgebot.rileymathews.com"];
+    domains = ["forgebot.rileymathews.com" "forgebot-webui.rileymathews.com"];
   };
   myCaddy.proxies.forgebot = {
     listenHost = "forgebot.rileymathews.com";
     backendHost = "http://127.0.0.1:8765";
+  };
+  myCaddy.proxies.forgebot-webui = {
+    listenHost = "forgebot-webui.rileymathews.com";
+    backendHost = "http://127.0.0.1:4096";
   };
   networking.hostName = "forgebot";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -39,6 +43,12 @@
 
   services.forgebot = {
     enable = true;
+
+    opencodeWebServer = {
+      enabled = true;
+      port = 4096;
+      host = "https://forgebot-webui.rileymathews.com";
+    };
     
     forgejo.url = "https://git.rileymathews.com";
     server.forgeBotHost = "https://forgebot.rileymathews.com";
