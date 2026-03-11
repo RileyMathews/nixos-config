@@ -185,11 +185,11 @@
         "opencode": "opencode"
       },
       "locked": {
-        "lastModified": 1773206945,
-        "narHash": "sha256-a+oucuAn1zfXRyieLp5kPH9KkIFej8EDqW4vMrs9xTA=",
+        "lastModified": 1773208476,
+        "narHash": "sha256-ZvKbUNrR4/FF9k4186STcui5tqnuzHaT4/I1OzCkdrs=",
         "owner": "rileymathews",
         "repo": "forgebot",
-        "rev": "64a57c371d51a2be4c16c9ff3f04f75097ca73f7",
+        "rev": "dab507826f8cc6d6009255a81a5cac552aaed04d",
         "type": "github"
       },
       "original": {
