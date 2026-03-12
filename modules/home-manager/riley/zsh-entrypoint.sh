@@ -79,6 +79,7 @@ eval "$(fzf --zsh)"
 
 autoload edit-command-line
 zle -N edit-command-line
+bindkey '^x^e' edit-command-line
 
 HISTSIZE=5000
 HISTFILE=~/.cache/.zsh_history
