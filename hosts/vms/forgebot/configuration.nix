@@ -45,7 +45,6 @@
     enable = true;
 
     opencodeWebServer = {
-      enabled = true;
       port = 4096;
       host = "https://forgebot-webui.rileymathews.com";
     };
