@@ -165,6 +165,11 @@
   };
 
   programs = {
+    _1password.enable = true;
+    _1password-gui = {
+      enable = true;
+      polkitPolicyOwners = [ "yourUsernameHere" ];
+    };
     niri.enable = true;
     firefox.enable = true;
     obs-studio.enable = true;
