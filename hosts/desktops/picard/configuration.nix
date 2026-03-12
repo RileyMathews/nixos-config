@@ -27,7 +27,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = unstablePkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
