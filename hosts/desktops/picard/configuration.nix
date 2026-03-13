@@ -27,7 +27,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = unstablePkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
@@ -165,6 +165,11 @@
   };
 
   programs = {
+    _1password.enable = true;
+    _1password-gui = {
+      enable = true;
+      polkitPolicyOwners = [ "yourUsernameHere" ];
+    };
     niri.enable = true;
     firefox.enable = true;
     obs-studio.enable = true;
