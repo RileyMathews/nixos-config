@@ -30,6 +30,12 @@
     description = "OpenCode model profile for Riley's agents on this host.";
   };
 
+  options.riley.opencode.superpowers.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Enable Superpowers plugin and skill pack for OpenCode.";
+  };
+
   config = {
     home.username = "riley";
     home.homeDirectory = "/home/riley";

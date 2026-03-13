@@ -46,9 +46,13 @@
       url = "github:rileymathews/forgebot";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    superpowers = {
+      url = "github:obra/superpowers";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot }:
+  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot, superpowers }:
     let
       system = "x86_64-linux";
 
@@ -76,7 +80,7 @@
       }:
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit system unstablePkgs pr-tracker agenix opencode worktrunk forgebot; };
+          specialArgs = { inherit system unstablePkgs pr-tracker agenix opencode worktrunk forgebot superpowers; };
           modules =
             (if includeDefaults then vmDefaultModules else [ ])
             ++ [ hostPath ]
@@ -125,7 +129,7 @@
       homeConfigurations = {
         ds9 = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit system unstablePkgs; };
+          extraSpecialArgs = { inherit system unstablePkgs superpowers; };
           modules = [
             agenix.homeManagerModules.default
             ./hosts/desktops/ds9/home.nix

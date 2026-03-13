@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, superpowers ? null, ... }:
 let
   canonicalAgents = [
     "wardroom"
@@ -36,6 +36,7 @@ let
 
   selectedProfile = config.riley.opencode.profile;
   selectedModels = modelProfiles.${selectedProfile};
+  superpowersEnabled = lib.attrByPath [ "riley" "opencode" "superpowers" "enable" ] false config;
 
   templateDir = ./opencode/agent;
   templatePath = agent: templateDir + "/${agent}.md";
@@ -146,10 +147,30 @@ let
       })
     else
       { };
+
+  localPluginFiles =
+    lib.mapAttrs'
+      (name: _: lib.nameValuePair ".config/opencode/plugins/${name}" { source = ./opencode/plugins + "/${name}"; })
+      (builtins.readDir ./opencode/plugins);
+
+  localSkillDirs =
+    lib.mapAttrs'
+      (name: _: lib.nameValuePair ".config/opencode/skills/${name}" { source = ./opencode/skills + "/${name}"; })
+      (builtins.readDir ./opencode/skills);
+
+  superpowersFiles =
+    lib.optionalAttrs superpowersEnabled {
+      ".config/opencode/plugins/superpowers.js".source = superpowers + "/.opencode/plugins/superpowers.js";
+      ".config/opencode/skills/superpowers".source = superpowers + "/skills";
+    };
 in
 {
   assertions =
     [
+      {
+        assertion = !(superpowersEnabled && superpowers == null);
+        message = "riley.opencode.superpowers.enable requires flake specialArgs to provide 'superpowers' input";
+      }
       {
         assertion = missingTemplateFiles == [ ];
         message = "riley.opencode agent templates are missing required files: ${formatList missingTemplateFiles}";
@@ -177,11 +198,12 @@ in
   home.file =
     {
       ".config/opencode/opencode.json".source = ./opencode/opencode.json;
-      ".config/opencode/skills".source = ./opencode/skills;
       ".config/opencode/tools".source = ./opencode/tools;
-      ".config/opencode/plugins".source = ./opencode/plugins;
       ".config/opencode/AGENTS.md".source = ./opencode/AGENTS.md;
       ".config/opencode/tui.json".source = ./opencode/tui.json;
     }
+    // localPluginFiles
+    // localSkillDirs
+    // superpowersFiles
     // lib.mapAttrs' (agent: value: lib.nameValuePair ".config/opencode/agent/${agent}.md" value) renderedAgentFiles;
 }
