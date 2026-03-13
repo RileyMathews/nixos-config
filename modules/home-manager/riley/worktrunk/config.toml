@@ -40,7 +40,6 @@
 # and worktrees at ~/code/{{repo_name}}/{{branch}}
 # If I use the default sibling directory then 
 # ~/code/{{repo_name}}/.git.{{branch}} is created
-worktree-path = "../{{ branch | sanitize }}"
 
 #
 # ## LLM commit messages
@@ -207,7 +206,7 @@ copy = "wt step copy-ignored"
 
 [post-create]
 tmux = """
-S={{repo}}_{{ branch | sanitize }}
+S={{repo}}.{{ branch | sanitize }}
 W={{ worktree_path }}
 tmux new-session -d -s "$S" -c "$W" -n dev
 
@@ -216,4 +215,4 @@ echo "✓ Session '$S' — attach with: tmux attach -t $S"
 """
 
 [post-remove]
-tmux = "tmux kill-session -t {{repo}}_{{ branch | sanitize }} 2>/dev/null || true"
+tmux = "tmux kill-session -t {{repo}}.{{ branch | sanitize }} 2>/dev/null || true"
