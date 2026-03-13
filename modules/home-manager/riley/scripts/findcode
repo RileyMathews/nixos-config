@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # Start in ~/code
-directories="$HOME/code $HOME/.config"
+directories="$HOME/code $HOME/.config $HOME/worktrees"
 
 directory=$(find $directories -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 

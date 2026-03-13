@@ -24,7 +24,7 @@
 # # Default — sibling directory
 # # Creates: ~/code/myproject.feature-auth
 # # worktree-path = "{{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}"
-worktree-path = "{{ repo_path }}/../{{ repo }}__{{ branch | sanitize }}"
+worktree-path = "/home/riley/worktrees/{{ repo }}__{{ branch | sanitize }}"
 #
 # # Inside the repository
 # # Creates: ~/code/myproject/.worktrees/feature-auth
