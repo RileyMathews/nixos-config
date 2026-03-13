@@ -11,7 +11,6 @@ let
     "q"
     "crusher"
     "obrien"
-    "haskell"
   ];
 
   modelProfiles = {
@@ -29,7 +28,6 @@ let
     };
 
     work = {
-      haskell = "anthropic/claude-opus-4-6";
       guide = "anthropic/claude-haiku-4-6";
     };
   };
