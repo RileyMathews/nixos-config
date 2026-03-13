@@ -50,6 +50,7 @@
     };
     
     forgejo.url = "https://git.rileymathews.com";
+    forgejo.botUsername = "opecode_bot";
     server.forgeBotHost = "https://forgebot.rileymathews.com";
     secretsFilePath = config.age.secrets.forgebot-credentials-file.path;
     opencode.credentialsFile = config.age.secrets.forgebot-opencode-auth-json.path;
