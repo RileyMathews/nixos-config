@@ -35,14 +35,11 @@
   age.secrets.forgebot-credentials-file = {
       file = ../../../secrets/forgebot-credentials-file.age;
   };
-  age.secrets.forgebot-opencode-auth-json = {
-      file = ../../../secrets/forgebot-opencode-auth.json.age;
-      owner = "forgebot";
-      group = "forgebot";
-  };
 
   services.forgebot = {
     enable = true;
+
+    opencode.model = "openai/gpt-5.3-codex";
 
     opencodeWebServer = {
       port = 4096;
@@ -53,6 +50,5 @@
     forgejo.botUsername = "opecode_bot";
     server.forgeBotHost = "https://forgebot.rileymathews.com";
     secretsFilePath = config.age.secrets.forgebot-credentials-file.path;
-    opencode.credentialsFile = config.age.secrets.forgebot-opencode-auth-json.path;
   };
 }
