@@ -24,7 +24,7 @@
 # # Default — sibling directory
 # # Creates: ~/code/myproject.feature-auth
 # # worktree-path = "{{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}"
-worktree-path = "{{ repo_path }}/../{{ repo }}_{{ branch | sanitize }}"
+worktree-path = "{{ repo_path }}/../{{ repo }}__{{ branch | sanitize }}"
 #
 # # Inside the repository
 # # Creates: ~/code/myproject/.worktrees/feature-auth
@@ -215,4 +215,4 @@ echo "✓ Session '$S' — attach with: tmux attach -t $S"
 """
 
 [post-remove]
-tmux = "tmux kill-session -t $(basename {{ worktree_path }}) 2>/dev/null || true"
+tmux = "tmux kill-session -t $(basename {{ worktree_path }}) || true"
