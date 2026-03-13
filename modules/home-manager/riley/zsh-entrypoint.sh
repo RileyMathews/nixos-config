@@ -47,6 +47,7 @@ zinit cdreplay -q
 bindkey '^y' autosuggest-accept
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+bindkey ' ' magic-space
 
 bindkey -s '^f' '~/.local/scripts/tmux-sessionizer\n'
 
