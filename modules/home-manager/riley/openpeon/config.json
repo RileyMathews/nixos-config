@@ -1,6 +1,6 @@
 {
-  "default_pack": "sc_battlecruiser",
-  "active_pack": "sc_battlecruiser",
+  "default_pack": "peon",
+  "active_pack": "peon",
   "volume": 0.5,
   "enabled": true,
   "desktop_notifications": true,
