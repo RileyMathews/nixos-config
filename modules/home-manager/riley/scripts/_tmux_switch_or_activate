@@ -2,11 +2,7 @@
 directory=$1
 echo $directory
 
-base_name=$(basename "$directory")
-parent_path=$(dirname "$directory")
-parent_name=$(basename "$parent_path")
-session_name="${parent_name}_${base_name}"
-echo $session_name
+session_name=$2
 
 cd $directory
 

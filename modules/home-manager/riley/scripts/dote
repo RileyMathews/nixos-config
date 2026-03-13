@@ -1,2 +1,0 @@
-#! zsh
-_tmux_switch_or_activate ~/dotfiles "dotfiles"

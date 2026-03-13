@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-selected=$(findcode)
+directory=$(findcode)
 
-if [[ -z $selected ]]; then
+if [[ -z $directory ]]; then
     exit 0
 fi
 
-cd $selected
-session=$(basename $selected)
+cd $directory
+session=$(basename $directory)
 
-_tmux_switch_or_activate $selected $session
+_tmux_switch_or_activate $directory $session
 
