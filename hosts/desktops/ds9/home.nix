@@ -6,6 +6,7 @@
 
   riley.opencode.profile = "personal";
   riley.opencode.superpowers.enable = true;
+  riley.targets.genericLinux.enable = true;
 
   home.file.".local/hypr/10-monitors.conf".source = ./hypr/10-monitors.conf;
 }
