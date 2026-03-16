@@ -1,4 +1,4 @@
-{ pkgs, config, lib, superpowers ? null, ... }:
+{ pkgs, config, lib, inputs, ... }:
 let
   canonicalAgents = [
     "wardroom"
@@ -158,15 +158,15 @@ let
 
   superpowersFiles =
     lib.optionalAttrs superpowersEnabled {
-      ".config/opencode/plugins/superpowers.js".source = superpowers + "/.opencode/plugins/superpowers.js";
-      ".config/opencode/skills/superpowers".source = superpowers + "/skills";
+      ".config/opencode/plugins/superpowers.js".source = inputs.superpowers + "/.opencode/plugins/superpowers.js";
+      ".config/opencode/skills/superpowers".source = inputs.superpowers + "/skills";
     };
 in
 {
   assertions =
     [
       {
-        assertion = !(superpowersEnabled && superpowers == null);
+        assertion = !(superpowersEnabled && !inputs ? superpowers);
         message = "riley.opencode.superpowers.enable requires flake specialArgs to provide 'superpowers' input";
       }
       {

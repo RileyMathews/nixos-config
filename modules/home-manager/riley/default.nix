@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, inputs, ... }:
 {
   imports = [
     ./alacritty.nix
@@ -48,6 +48,8 @@
     age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
     age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
 
+    targets.genericLinux.enable = true;
+
     home.file = {
       ".zshrc".text = ''
         export GITHUB_TOKEN=$(cat ${config.age.secrets.github-token-file.path})
@@ -65,7 +67,7 @@
 
     home.packages = with pkgs; [
       pgcli
-      ghostty
+      inputs.ghostty.packages."${pkgs.system}".default
     ];
   };
 }

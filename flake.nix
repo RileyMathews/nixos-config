@@ -50,9 +50,11 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+
+    ghostty.url = "github:ghostty-org/ghostty?ref=v1.3.1";
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot, superpowers }:
+  outputs = inputs@{ self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot, superpowers, ghostty }:
     let
       system = "x86_64-linux";
 
@@ -80,7 +82,7 @@
       }:
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit system unstablePkgs pr-tracker agenix opencode worktrunk forgebot superpowers; };
+          specialArgs = { inherit inputs system; };
           modules =
             (if includeDefaults then vmDefaultModules else [ ])
             ++ [ hostPath ]
@@ -129,7 +131,7 @@
       homeConfigurations = {
         ds9 = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit system unstablePkgs superpowers; };
+          extraSpecialArgs = { inherit inputs system; };
           modules = [
             agenix.homeManagerModules.default
             ./hosts/desktops/ds9/home.nix
