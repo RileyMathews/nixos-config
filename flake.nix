@@ -52,20 +52,26 @@
     };
 
     ghostty.url = "github:ghostty-org/ghostty?ref=v1.3.1";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot, superpowers, ghostty }:
+  outputs = inputs@{ self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot, superpowers, ghostty, nur }:
     let
       system = "x86_64-linux";
 
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [ nur.overlays.default ];
       };
 
       unstablePkgs = import nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
+        overlays = [ nur.overlays.default ];
       };
 
       flakeInputs = inputs // {
