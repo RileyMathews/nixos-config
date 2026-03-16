@@ -28,7 +28,7 @@
   };
 
   environment.sessionVariables.AQ_DRM_DEVICES =
-    "/dev/dri/nvidia-dgpu:/dev/dri/intel-igpu";
+    "/dev/dri/intel-igpu:/dev/dri/nvidia-dgpu";
   hardware = {
     nvidia = {
       modesetting.enable = true;

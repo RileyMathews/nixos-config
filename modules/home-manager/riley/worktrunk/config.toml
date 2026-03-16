@@ -80,6 +80,8 @@ worktree-path = "/home/riley/worktrees/{{ repo }}__{{ branch | sanitize }}"
 # remove = true      # Remove worktree after merge (--no-remove to keep)
 # verify = true      # Run project hooks (--no-verify to skip)
 #
+[switch]
+no-cd = true
 # ### Switch picker
 #
 # Configuration for `wt switch` interactive picker.

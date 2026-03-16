@@ -35,11 +35,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     opencode = {
-      url = "github:anomalyco/opencode?ref=v1.2.23";
+      url = "github:anomalyco/opencode?ref=v1.2.27";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     worktrunk = {
-      url = "github:max-sixty/worktrunk?ref=v0.29.0";
+      url = "github:max-sixty/worktrunk?ref=v0.29.4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     forgebot = {
