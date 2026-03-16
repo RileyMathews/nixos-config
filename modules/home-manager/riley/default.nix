@@ -49,7 +49,7 @@
     home.stateVersion = "25.11";
 
     programs.home-manager.enable = true;
-    programs.firefox = {
+    programs.librewolf = {
       enable = true;
       profiles = {
         default = {
@@ -57,9 +57,13 @@
           name = "default";
           isDefault = true;
           settings = {
+            "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
             "browser.startup.homepage" = "https://search.rileymathews.com";
             "browser.search.defaultenginename" = "Searx";
             "browser.search.order.1" = "Searx";
+            "browser.theme.toolbar-theme" = 0;
+            "browser.theme.content-theme" = 0;
+            "privacy.sanitize.sanitizeOnShutdown" = false;
           };
           search = {
             force = true;
