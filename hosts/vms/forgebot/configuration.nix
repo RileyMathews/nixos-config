@@ -2,9 +2,8 @@
   modulesPath,
   lib,
   pkgs,
-  unstablePkgs,
   config,
-  forgebot,
+  inputs,
   ...
 }:
 {
@@ -15,7 +14,7 @@
     ./../../../modules/tailscale
     ./../../../modules/dns
     ./../../../modules/caddy-multi-proxy
-    forgebot.nixosModules.forgebot
+    inputs.forgebot.nixosModules.forgebot
   ];
   services.cloudflare-dns = {
     enable = true;

@@ -1,12 +1,8 @@
 {
   config,
   pkgs,
-  unstablePkgs,
   lib,
-  pr-tracker,
-  agenix,
-  opencode,
-  worktrunk,
+  inputs,
   ...
 }:
 
@@ -27,7 +23,7 @@
   };
 
   boot = {
-    kernelPackages = unstablePkgs.linuxPackages_zen;
+    kernelPackages = inputs.unstablePkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
@@ -175,7 +171,7 @@
     obs-studio.enable = true;
     hyprland = {
       enable = true;
-      package = unstablePkgs.hyprland;
+      package = inputs.unstablePkgs.hyprland;
     };
     zsh.enable = true;
 
@@ -243,7 +239,7 @@
       nodejs
       pavucontrol
       playerctl
-      worktrunk.packages.${pkgs.system}.worktrunk
+      inputs.worktrunk.packages.${pkgs.system}.worktrunk
       podman-compose
       python3
       qutebrowser
@@ -259,10 +255,10 @@
       tldr
       tmux
       tpm2-tools
-      opencode.packages.${pkgs.system}.opencode
-      unstablePkgs.claude-code
-      unstablePkgs.hyprcursor
-      unstablePkgs.neovim
+      inputs.opencode.packages.${pkgs.system}.opencode
+      inputs.unstablePkgs.claude-code
+      inputs.unstablePkgs.hyprcursor
+      inputs.unstablePkgs.neovim
       virtualglLib
       waybar
       wl-clipboard
@@ -287,11 +283,14 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    extraSpecialArgs = {
+      inherit inputs;
+    };
     users.riley = {
       imports = [
         ../../../modules/home-manager/riley
-        pr-tracker.homeManagerModules.default
-        agenix.homeManagerModules.default
+        inputs.pr-tracker.homeManagerModules.default
+        inputs.agenix.homeManagerModules.default
       ];
       riley.browser = "google-chrome-stable";
       riley.opencode.profile = "work";

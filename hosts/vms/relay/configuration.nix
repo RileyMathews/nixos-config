@@ -2,7 +2,6 @@
   modulesPath,
   lib,
   pkgs,
-  unstablePkgs,
   ...
 }:
 {
@@ -41,4 +40,3 @@
     proxyProtocol = true;
   };
 }
-

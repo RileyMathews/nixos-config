@@ -68,6 +68,10 @@
         config.allowUnfree = true;
       };
 
+      flakeInputs = inputs // {
+        unstablePkgs = unstablePkgs;
+      };
+
       lib = nixpkgs.lib;
 
       vmDefaultModules = [
@@ -82,7 +86,10 @@
       }:
         lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs system; };
+          specialArgs = {
+            inputs = flakeInputs;
+            inherit system;
+          };
           modules =
             (if includeDefaults then vmDefaultModules else [ ])
             ++ [ hostPath ]
@@ -131,7 +138,10 @@
       homeConfigurations = {
         ds9 = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit inputs system; };
+          extraSpecialArgs = {
+            inputs = flakeInputs;
+            inherit system;
+          };
           modules = [
             agenix.homeManagerModules.default
             ./hosts/desktops/ds9/home.nix

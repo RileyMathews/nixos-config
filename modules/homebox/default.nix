@@ -2,7 +2,6 @@
     config,
     modulesPath,
     lib,
-    unstablePkgs,
     ...
 }:
 {
