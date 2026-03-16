@@ -13,6 +13,7 @@
   ];
   nixpkgs = {
     config.allowUnfree = true;
+    overlays = [ inputs.nur.overlays.default ];
     hostPlatform = {
       system = "x86_64-linux";
     };
