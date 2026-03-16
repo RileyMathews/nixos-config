@@ -25,7 +25,7 @@
 
         containers.audiobookshelf = {
             definition = {
-                image = "ghcr.io/advplyr/audiobookshelf:2.32.1";
+                image = "ghcr.io/advplyr/audiobookshelf:2.33.0";
                 ports = ["13378:80"];
                 volumes = [
                     "/mnt/audiobookshelf/audiobooks:/audiobooks"
