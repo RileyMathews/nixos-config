@@ -43,6 +43,7 @@
     home.stateVersion = "25.11";
 
     programs.home-manager.enable = true;
+    programs.firefox.enable = true;
 
     age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
     age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
