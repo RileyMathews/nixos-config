@@ -220,7 +220,6 @@
       fzf
       gcc
       gh
-      ghostty
       git
       tree-sitter
       kitty
