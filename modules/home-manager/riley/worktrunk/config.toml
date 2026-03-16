@@ -129,7 +129,8 @@ no-cd = true
 # Default template:
 #
 # <!-- DEFAULT_TEMPLATE_START -->
-# [commit.generation]
+[commit.generation]
+command = "opencode run -m anthropic/claude-haiku-4.5 --variant fast"
 # template = """
 # Write a commit message for the staged changes below.
 #
