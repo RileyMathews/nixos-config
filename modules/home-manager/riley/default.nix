@@ -53,6 +53,7 @@
 
     programs.home-manager.enable = true;
     programs.nushell.enable = true;
+    programs.nushell.configFile.source = ./config.nu;
     programs.librewolf = {
       enable = true;
       profiles = {
