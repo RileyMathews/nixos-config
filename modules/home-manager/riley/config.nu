@@ -3,5 +3,5 @@ $env.config.keybindings ++= [{
     modifier: control
     keycode: char_f
     mode: emacs
-    event: { edit: InsertString value: completion_menu }
+    event: [{ edit: InsertString value: tmux-sessionizer  } { send: Enter }]
 }]
