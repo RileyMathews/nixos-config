@@ -281,12 +281,13 @@
   };
 
   home-manager = {
-    useGlobalPkgs = true;
+    useGlobalPkgs = false;
     useUserPackages = true;
     extraSpecialArgs = {
       inherit inputs;
     };
     users.riley = {
+      _module.args.pkgs = lib.mkForce inputs.unstablePkgs;
       imports = [
         ../../../modules/home-manager/riley
         inputs.pr-tracker.homeManagerModules.default

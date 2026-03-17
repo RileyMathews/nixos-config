@@ -142,7 +142,7 @@
 
       homeConfigurations = {
         ds9 = inputs.home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          pkgs = unstablePkgs;
           extraSpecialArgs = {
             inputs = flakeInputs;
             inherit system;

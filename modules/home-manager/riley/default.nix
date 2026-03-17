@@ -50,6 +50,7 @@
     home.homeDirectory = "/home/riley";
 
     home.stateVersion = "25.11";
+    home.enableNixpkgsReleaseCheck = false;
 
     programs.home-manager.enable = true;
     programs.nushell.enable = true;
