@@ -18,7 +18,7 @@
   ];
 
   options.riley.browser = lib.mkOption {
-    type = lib.types.nullOr lib.types.str;
+    type = lib.types.str;
     default = "librewolf";
     description = "Default browser command for Riley's shell environment on this host.";
   };
@@ -54,6 +54,18 @@
     programs.home-manager.enable = true;
     programs.nushell.enable = true;
     programs.nushell.configFile.source = ./config.nu;
+    programs.nushell.extraConfig = ''
+      let github_token = (open $"($env.XDG_RUNTIME_DIR)/agenix/github-token-file" | str trim)
+      let forgejo_token = (open $"($env.XDG_RUNTIME_DIR)/agenix/forgejo-token-file" | str trim)
+
+      load-env {
+        GITHUB_TOKEN: $github_token
+        FORGEJO_TOKEN: $forgejo_token
+        FORGEJO_ACCESS_TOKEN: $forgejo_token
+        BROWSER: "${config.riley.browser}"
+        GH_BROWSER: "${config.riley.browser}"
+      }
+    '';
     programs.librewolf = {
       enable = true;
       profiles = {
