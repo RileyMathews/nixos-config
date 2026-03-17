@@ -8,6 +8,7 @@
   # sometimes stomping on all extensions settings
   stylix.targets.librewolf.enable = false;
   stylix.targets.alacritty.colors.enable = true;
+  stylix.targets.ghostty.colors.enable = true;
 
   stylix.fonts = {
     monospace = {

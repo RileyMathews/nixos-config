@@ -115,7 +115,7 @@
     
     home.packages = with pkgs; [
       pgcli
-      inputs.ghostty.packages."${pkgs.system}".default
+      # inputs.ghostty.packages."${pkgs.system}".default
     ];
   };
 }
