@@ -291,6 +291,7 @@
         ../../../modules/home-manager/riley
         inputs.pr-tracker.homeManagerModules.default
         inputs.agenix.homeManagerModules.default
+        inputs.stylix.homeModules.stylix
       ];
       riley.browser = "google-chrome-stable";
       riley.opencode.profile = "work";
