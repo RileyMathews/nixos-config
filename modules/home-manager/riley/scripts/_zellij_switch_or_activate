@@ -17,7 +17,7 @@ fi
 cd "$dir"
 session_name="$(basename "$dir")"
 
-if zellij list-sessions 2>/dev/null | awk '{print $1}' | grep -qx "$session_name"; then
+if zellij list-sessions 2>/dev/null | awk '{print $1}' | grep -q "$session_name"; then
   zellij attach "$session_name"
 else
   zellij --session "$session_name"

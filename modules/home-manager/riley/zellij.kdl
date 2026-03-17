@@ -113,6 +113,7 @@ keybinds clear-defaults=true {
             SwitchToMode "locked"
         }
         bind "d" { Detach; }
+        bind "x" { Quit; }
         bind "o" { SwitchToMode "normal"; }
         bind "p" {
             LaunchOrFocusPlugin "plugin-manager" {
@@ -162,7 +163,7 @@ keybinds clear-defaults=true {
         bind "m" { SwitchToMode "move"; }
     }
     shared_except "locked" "entersearch" "search" "renametab" "renamepane" "session" {
-        bind "o" { SwitchToMode "session"; }
+        bind "s" { SwitchToMode "session"; }
     }
     shared_except "locked" "tab" "entersearch" "renametab" "renamepane" {
         bind "t" { SwitchToMode "tab"; }
@@ -249,3 +250,4 @@ show_startup_tips false
 pane_frames false
 default_shell "nu"
 default_layout "compact"
+session_serialization false

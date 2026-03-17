@@ -8,6 +8,7 @@
       window-decoration = "server";
       confirm-close-surface = false;
       command = "nu";
+      keybind = "ctrl+o=unbind";
     };
   };
 }
