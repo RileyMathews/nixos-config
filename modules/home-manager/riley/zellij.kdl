@@ -247,3 +247,5 @@ theme "catppuccin-mocha"
 default_mode "locked"
 show_startup_tips false
 pane_frames false
+default_shell "nu"
+default_layout "compact"
