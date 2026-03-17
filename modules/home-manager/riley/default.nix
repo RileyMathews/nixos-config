@@ -52,6 +52,7 @@
     home.stateVersion = "25.11";
 
     programs.home-manager.enable = true;
+    programs.nushell.enable = true;
     programs.librewolf = {
       enable = true;
       profiles = {
