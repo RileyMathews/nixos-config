@@ -50,28 +50,28 @@
       url = "github:obra/superpowers";
       flake = false;
     };
-
     ghostty.url = "github:ghostty-org/ghostty?ref=v1.3.1";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix.url = "github:danth/stylix?ref=release-25.11";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-hardware, nixpkgs-unstable, nixos-generators, disko, agenix, sops-nix, kolide, auto-cpufreq, home-manager, pr-tracker, opencode, worktrunk, forgebot, superpowers, ghostty, nur }:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
 
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ nur.overlays.default ];
+        overlays = [ inputs.nur.overlays.default ];
       };
 
-      unstablePkgs = import nixpkgs-unstable {
+      unstablePkgs = import inputs.nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ nur.overlays.default ];
+        overlays = [ inputs.nur.overlays.default ];
       };
 
       flakeInputs = inputs // {
@@ -81,8 +81,8 @@
       lib = nixpkgs.lib;
 
       vmDefaultModules = [
-        disko.nixosModules.disko
-        agenix.nixosModules.default
+        inputs.disko.nixosModules.disko
+        inputs.agenix.nixosModules.default
       ];
 
       mkNixosHost = {
@@ -123,9 +123,8 @@
         picard = mkNixosHost {
           hostPath = ./hosts/desktops/picard/configuration.nix;
           extraModules = [
-            home-manager.nixosModules.home-manager
-            kolide.nixosModules.kolide-launcher
-            auto-cpufreq.nixosModules.default
+            inputs.home-manager.nixosModules.home-manager
+            inputs.kolide.nixosModules.kolide-launcher
           ];
         };
 
@@ -142,14 +141,15 @@
       } // vmNixosConfigurations;
 
       homeConfigurations = {
-        ds9 = home-manager.lib.homeManagerConfiguration {
+        ds9 = inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
             inputs = flakeInputs;
             inherit system;
           };
           modules = [
-            agenix.homeManagerModules.default
+            inputs.stylix.homeModules.stylix
+            inputs.agenix.homeManagerModules.default
             ./hosts/desktops/ds9/home.nix
           ];
         };
@@ -159,7 +159,7 @@
 
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = with pkgs; [
-          agenix.packages.${system}.default
+          inputs.agenix.packages.${system}.default
           ansible
           bun
           jq

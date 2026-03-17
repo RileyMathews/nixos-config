@@ -2,6 +2,7 @@
 {
   imports = [
     ./alacritty.nix
+    ./stylix.nix
     ./dunst.nix
     ./hypr.nix
     ./opencode.nix
@@ -42,6 +43,7 @@
     description = "Enable Home Manager's generic Linux target settings.";
   };
 
+
   config = {
     home.username = "riley";
     home.homeDirectory = "/home/riley";
@@ -57,13 +59,14 @@
           name = "default";
           isDefault = true;
           settings = {
-            "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
             "browser.startup.homepage" = "https://search.rileymathews.com";
             "browser.search.defaultenginename" = "Searx";
             "browser.search.order.1" = "Searx";
-            "browser.theme.toolbar-theme" = 0;
-            "browser.theme.content-theme" = 0;
+            "extensions.autoDisableScopes" = 0;
             "privacy.sanitize.sanitizeOnShutdown" = false;
+            "privacy.resistFingerprinting" = false;
+            "privacy.fingerprintingProtection" = true;
+            "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme";
           };
           search = {
             force = true;
@@ -89,7 +92,6 @@
       };
     };
 
-
     age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
     age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
 
@@ -109,11 +111,10 @@
       ".config/zsh/zsh-syntax-highligting-theme.sh".source = ./zsh-syntax-highligting-theme.sh;
       ".tmux.conf".source = ./tmux.conf;
     };
-
+    
     home.packages = with pkgs; [
       pgcli
       inputs.ghostty.packages."${pkgs.system}".default
-      alacritty
     ];
   };
 }
