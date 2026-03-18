@@ -128,6 +128,14 @@
           ];
         };
 
+        ds9 = mkNixosHost {
+          hostPath = ./hosts/desktops/ds9/configuration.nix;
+          extraModules = [
+            inputs.home-manager.nixosModules.home-manager
+            inputs.kolide.nixosModules.kolide-launcher
+          ];
+        };
+
         nas = mkNixosHost {
           hostPath = ./hosts/nas/configuration.nix;
           extraModules = [];
