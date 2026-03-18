@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -16,20 +16,9 @@
     extraSpecialArgs = {
       inherit inputs;
     };
-    users.riley = {
-      _module.args.pkgs = lib.mkForce inputs.unstablePkgs;
-      imports = [
-        ../../../modules/home-manager/riley
-        inputs.pr-tracker.homeManagerModules.default
-        inputs.agenix.homeManagerModules.default
-        inputs.stylix.homeModules.stylix
-      ];
-      riley.browser = "librewolf";
-      riley.opencode.profile = "personal";
-      riley.opencode.superpowers.enable = true;
-
-      home.file.".local/hypr/10-monitors.conf".source = ./hypr/10-monitors.conf;
-    };
+    users.riley.imports = [
+      ./home.nix
+    ];
   };
 
   # Use the systemd-boot EFI boot loader.

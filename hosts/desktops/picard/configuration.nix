@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   inputs,
   ...
 }:
@@ -60,18 +59,9 @@
     extraSpecialArgs = {
       inherit inputs;
     };
-    users.riley = {
-      _module.args.pkgs = lib.mkForce inputs.unstablePkgs;
-      imports = [
-        ../../../modules/home-manager/riley
-        inputs.pr-tracker.homeManagerModules.default
-        inputs.agenix.homeManagerModules.default
-        inputs.stylix.homeModules.stylix
-      ];
-      riley.browser = "google-chrome-stable";
-      riley.opencode.profile = "work";
-      services.pr-tracker-sync.enable = true;
-    };
+    users.riley.imports = [
+      ./home.nix
+    ];
   };
 
   system.stateVersion = "25.05";
