@@ -12,6 +12,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/5c18f2e7-5f8b-412d-af94-24c1fe0d5ac1";
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/NIXROOT";
