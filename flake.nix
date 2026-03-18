@@ -60,22 +60,15 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
     let
-      system = "x86_64-linux";
-
       pkgs = import nixpkgs {
-        inherit system;
+        system = "x86_64-linux";
         config.allowUnfree = true;
-        overlays = [ inputs.nur.overlays.default ];
       };
 
       unstablePkgs = import inputs.nixpkgs-unstable {
-        inherit system;
+        system = "x86_64-linux";
         config.allowUnfree = true;
         overlays = [ inputs.nur.overlays.default ];
-      };
-
-      flakeInputs = inputs // {
-        unstablePkgs = unstablePkgs;
       };
 
       lib = nixpkgs.lib;
@@ -85,26 +78,13 @@
         inputs.agenix.nixosModules.default
       ];
 
-      mkNixosHost = {
-        hostPath,
-        extraModules ? [ ],
-        includeDefaults ? true,
-      }:
-        lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inputs = flakeInputs;
-            inherit system;
-          };
-          modules =
-            (if includeDefaults then vmDefaultModules else [ ])
-            ++ [ hostPath ]
-            ++ extraModules;
-        };
-
       mkVmHost = hostName:
-        mkNixosHost {
-          hostPath = ./hosts/vms/${hostName}/configuration.nix;
+        lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = vmDefaultModules ++ [
+            ./hosts/vms/${hostName}/configuration.nix
+          ];
         };
 
       vmHostNames =
@@ -117,33 +97,47 @@
 
       vmNixosConfigurations = lib.genAttrs vmHostNames mkVmHost;
 
+      enrichedInputs = inputs // {
+        inherit unstablePkgs;
+      };
+
     in {
       nixosConfigurations = {
 
-        picard = mkNixosHost {
-          hostPath = ./hosts/desktops/picard/configuration.nix;
-          extraModules = [
+        picard = lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inputs = enrichedInputs; };
+          modules = [
+            ./hosts/desktops/picard/configuration.nix
             inputs.home-manager.nixosModules.home-manager
             inputs.kolide.nixosModules.kolide-launcher
           ];
         };
 
-        ds9 = mkNixosHost {
-          hostPath = ./hosts/desktops/ds9/configuration.nix;
-          extraModules = [
+        ds9 = lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inputs = enrichedInputs; };
+          modules = [
+            ./hosts/desktops/ds9/configuration.nix
             inputs.home-manager.nixosModules.home-manager
             inputs.kolide.nixosModules.kolide-launcher
           ];
         };
 
-        nas = mkNixosHost {
-          hostPath = ./hosts/nas/configuration.nix;
-          extraModules = [];
+        nas = lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/nas/configuration.nix
+          ];
         };
 
-        iso = mkNixosHost {
-          hostPath = ./hosts/iso/configuration.nix;
-          includeDefaults = false;
+        iso = lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/iso/configuration.nix
+          ];
         };
 
       } // vmNixosConfigurations;
@@ -152,7 +146,7 @@
 
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = with pkgs; [
-          inputs.agenix.packages.${system}.default
+          inputs.agenix.packages."x86_64-linux".default
           ansible
           bun
           jq
