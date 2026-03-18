@@ -193,6 +193,8 @@ in
     ++ profileModelAssertions
     ++ (if canRender then templateModelLineAssertions else [ ]);
 
+  programs.opencode.enable = true;
+  programs.opencode.package = inputs.opencode.packages.${pkgs.system}.opencode;
   home.file =
     {
       ".config/opencode/opencode.json".source = ./opencode/opencode.json;

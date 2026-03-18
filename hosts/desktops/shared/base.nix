@@ -223,7 +223,6 @@
       tldr
       tmux
       tpm2-tools
-      inputs.opencode.packages.${pkgs.system}.opencode
       inputs.unstablePkgs.claude-code
       inputs.unstablePkgs.hyprcursor
       inputs.unstablePkgs.neovim
