@@ -185,7 +185,7 @@
       gcc
       gh
       git
-      tree-sitter
+      inputs.tree-sitter.packages.x86_64-linux.cli
       kitty
       wezterm
       git-prole
