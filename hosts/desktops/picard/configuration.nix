@@ -70,7 +70,6 @@
       ];
       riley.browser = "google-chrome-stable";
       riley.opencode.profile = "work";
-      riley.targets.genericLinux.enable = false;
       services.pr-tracker-sync.enable = true;
     };
   };

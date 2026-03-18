@@ -26,7 +26,9 @@
       ];
       riley.browser = "librewolf";
       riley.opencode.profile = "personal";
-      riley.targets.genericLinux.enable = true;
+      riley.opencode.superpowers.enable = true;
+
+      home.file.".local/hypr/10-monitors.conf".source = ./hypr/10-monitors.conf;
     };
   };
 
@@ -173,4 +175,3 @@
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
-

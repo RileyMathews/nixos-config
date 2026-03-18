@@ -42,4 +42,4 @@ some of my VMs that have storage hungry apps like immich and jellyfin. You do no
 on its own. It does consume a home manager module that is shared with my desktop.
 
 ## ds9
-`ds9` is my gaming PC that runs archlinux. It's only declared here to export a home manager module so that I can share my dotfiles between my hosts via home manager.
+`ds9` is my gaming PC running nixos. Its configuration lives under `./hosts/desktops/ds9/` and, like `picard`, it uses the shared home manager module for my user environment.

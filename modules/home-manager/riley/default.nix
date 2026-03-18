@@ -38,13 +38,6 @@
     description = "Enable Superpowers plugin and skill pack for OpenCode.";
   };
 
-  options.riley.targets.genericLinux.enable = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = "Enable Home Manager's generic Linux target settings.";
-  };
-
-
   config = {
     home.username = "riley";
     home.homeDirectory = "/home/riley";
@@ -110,8 +103,6 @@
 
     age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
     age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
-
-    targets.genericLinux.enable = config.riley.targets.genericLinux.enable;
 
     home.file = {
       ".zshrc".text = ''

@@ -148,21 +148,6 @@
 
       } // vmNixosConfigurations;
 
-      homeConfigurations = {
-        ds9 = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = unstablePkgs;
-          extraSpecialArgs = {
-            inputs = flakeInputs;
-            inherit system;
-          };
-          modules = [
-            inputs.stylix.homeModules.stylix
-            inputs.agenix.homeManagerModules.default
-            ./hosts/desktops/ds9/home.nix
-          ];
-        };
-      };
-
       vmDeployments = vmHostNames;
 
       devShells.x86_64-linux.default = pkgs.mkShell {
