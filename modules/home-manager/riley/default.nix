@@ -98,6 +98,7 @@
             bitwarden
             darkreader
             vimium
+            karakeep
           ];
         };
       };
