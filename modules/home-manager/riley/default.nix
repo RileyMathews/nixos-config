@@ -11,6 +11,7 @@
     ./wlr-which-key.nix
     ./scripts.nix
     ./ghostty.nix
+    ./git.nix
     ./worktrunk.nix
     ./direnv.nix
     ./openpeon.nix
