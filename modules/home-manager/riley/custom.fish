@@ -3,3 +3,4 @@ function gcb -a branch_name -d "make a new branch with worktrunk and zellij"
 end
 
 zoxide init fish | source
+direnv hook fish | source
