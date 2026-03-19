@@ -4,6 +4,7 @@
     enable = true;
     binds = {
       "ctrl-y".command = "accept-autosuggestion";
+      "ctrl-s".command = "zellij-sessionizer";
     };
     shellAliases = {
       gst = "git status";
@@ -13,7 +14,6 @@
       gpsup = "git push --set-upstream origin $(git branch --show-current)";
       gl = "git pull";
       gco = "git checkout";
-      gcb = "git checkout -b";
       gcm = "git checkout $(git_main_branch)";
       l = "ls -al";
       tss = "sudo tailscale switch";
@@ -24,5 +24,6 @@
       mpm = "python manage.py migrate";
       mp = "python manage.py";
     };
+    interactiveShellInit = builtins.readFile ./custom.fish;
   };
 }

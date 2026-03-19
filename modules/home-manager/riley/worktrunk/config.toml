@@ -24,7 +24,7 @@
 # # Default — sibling directory
 # # Creates: ~/code/myproject.feature-auth
 # # worktree-path = "{{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}"
-worktree-path = "/home/riley/worktrees/{{ repo }}__{{ branch | sanitize }}"
+worktree-path = "/home/riley/worktrees/{{ repo }}.{{ branch | sanitize }}"
 #
 # # Inside the repository
 # # Creates: ~/code/myproject/.worktrees/feature-auth
@@ -80,8 +80,8 @@ worktree-path = "/home/riley/worktrees/{{ repo }}__{{ branch | sanitize }}"
 # remove = true      # Remove worktree after merge (--no-remove to keep)
 # verify = true      # Run project hooks (--no-verify to skip)
 #
-[switch]
-no-cd = true
+# [switch]
+# no-cd = true
 # ### Switch picker
 #
 # Configuration for `wt switch` interactive picker.
@@ -208,14 +208,15 @@ command = "opencode run -m anthropic/claude-haiku-4.5 --variant fast"
 [post-start]
 copy = "wt step copy-ignored"
 
-[post-create]
-tmux = """
-W={{ worktree_path }}
-S=$(basename {{ worktree_path }})
-tmux new-session -d -s "$S" -c "$W" -n dev
-
-echo "✓ Session '$S' — attach with: tmux attach -t $S"
-"""
+# [post-create]
+# tmux = """
+# W={{ worktree_path }}
+# S=$(basename {{ worktree_path }})
+# tmux new-session -d -s "$S" -c "$W" -n dev
+#
+# echo "✓ Session '$S' — attach with: tmux attach -t $S"
+# """
 
 [post-remove]
 tmux = "tmux kill-session -t $(basename {{ worktree_path }}) || true"
+zellij = "zellij kill-session {{ repo }}.{{ branch }}"
