@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+wt switch --cd $1 -x "zellij --session {{ base_worktree_path }}"

@@ -16,6 +16,7 @@
     ./direnv.nix
     ./openpeon.nix
     ./zellij.nix
+    ./fish.nix
   ];
 
   options.riley.browser = lib.mkOption {

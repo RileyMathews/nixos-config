@@ -4,6 +4,13 @@ $env.config.keybindings ++= [
     modifier: control
     keycode: char_f
     mode: emacs
+    event: [{ edit: InsertString value: gotocode  } { send: Enter }]
+}
+{
+    name: completion_menu
+    modifier: control
+    keycode: char_t
+    mode: emacs
     event: [{ edit: InsertString value: zellij-sessionizer  } { send: Enter }]
 }
 {
