@@ -11,6 +11,7 @@
   ];
 
   riley.browser = "librewolf";
+  riley.altBrowser = "google-chrome-stable";
   riley.opencode.profile = "personal";
   riley.opencode.superpowers.enable = true;
 

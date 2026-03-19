@@ -11,6 +11,7 @@
   ];
 
   riley.browser = "google-chrome-stable";
+  riley.altBrowser = "librewolf";
   riley.opencode.profile = "work";
 
   home.file.".config/hypr/monitors.conf".source = ./hypr/monitors.conf;

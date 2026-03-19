@@ -25,6 +25,12 @@
     description = "Default browser command for Riley's shell environment on this host.";
   };
 
+  options.riley.altBrowser = lib.mkOption {
+    type = lib.types.str;
+    default = lib.mkUndefined;
+    description = "Alternative browser command for Riley's desktop environment; must be set per host.";
+  };
+
   options.riley.opencode.profile = lib.mkOption {
     type = lib.types.enum [
       "personal"
@@ -60,6 +66,7 @@
         FORGEJO_ACCESS_TOKEN: $forgejo_token
         BROWSER: "${config.riley.browser}"
         GH_BROWSER: "${config.riley.browser}"
+        ALT_BROWSER: "${config.riley.altBrowser}"
       }
     '';
     programs.librewolf = {
@@ -115,6 +122,8 @@
         export FORGEJO_ACCESS_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
         export BROWSER=${config.riley.browser};
         export GH_BROWSER=${config.riley.browser};
+        export ALT_BROWSER=${config.riley.altBrowser};
+        export GH_ALT_BROWSER=${config.riley.altBrowser};
         source ~/.config/zsh/zsh-entrypoint.sh
       '';
       ".config/zsh/zsh-entrypoint.sh".source = ./zsh-entrypoint.sh;
