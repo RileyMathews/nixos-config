@@ -124,6 +124,8 @@
     home.packages = with pkgs; [
       pgcli
       typescript-go
+      zoxide
+      fzf
       # inputs.ghostty.packages."${pkgs.system}".default
     ];
   };

@@ -181,7 +181,6 @@
       fastfetch
       ffmpeg
       forgejo-cli
-      fzf
       gcc
       gh
       git
