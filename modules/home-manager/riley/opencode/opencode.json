@@ -14,6 +14,15 @@
       "extensions": [
         ".hs"
       ]
+    },
+    "tsgo": {
+      "command": [],
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx"
+      ]
     }
   },
   "mcp": {

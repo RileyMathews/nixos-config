@@ -56,6 +56,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix.url = "github:danth/stylix?ref=release-25.11";
+    tree-sitter = {
+      url = "github:tree-sitter/tree-sitter?ref=v0.26.7";
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

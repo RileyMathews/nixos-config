@@ -185,7 +185,7 @@
       gcc
       gh
       git
-      tree-sitter
+      inputs.tree-sitter.packages.x86_64-linux.cli
       kitty
       wezterm
       git-prole
@@ -223,7 +223,6 @@
       tldr
       tmux
       tpm2-tools
-      inputs.opencode.packages.${pkgs.system}.opencode
       inputs.unstablePkgs.claude-code
       inputs.unstablePkgs.hyprcursor
       inputs.unstablePkgs.neovim

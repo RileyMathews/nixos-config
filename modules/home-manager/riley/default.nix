@@ -122,6 +122,7 @@
     
     home.packages = with pkgs; [
       pgcli
+      typescript-go
       # inputs.ghostty.packages."${pkgs.system}".default
     ];
   };
