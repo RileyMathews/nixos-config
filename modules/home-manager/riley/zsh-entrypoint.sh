@@ -156,6 +156,8 @@ alias mwb='make ghciwatch static_ls=1 2>&1 | tee .devel-logs/ghciwatch-output'
 
 alias th='there'
 
+alias vim='/run/current-system/sw/bin/nvim'
+
 export PATH="$PATH:$HOME/.cargo/bin"
 
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
@@ -242,7 +244,3 @@ COMPUTER_NAME=$(cat /etc/hostname)
 if [[ "$TERM" == "linux" ]] && [[ -z "$DISPLAY" ]] && [[ "$(tty)" == "/dev/tty1" ]]; then
   start-hyprland
 fi
-
-# I'm exploring options for setting up neovim via nix but in the meantime I've moved my previous config to an 'oldnvim' folder.
-# setting this env var so that for the moment the old config is still default and I have to set manually to try out the new config. 
-export NVIM_APPNAME="oldnvim"
