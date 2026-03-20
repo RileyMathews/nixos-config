@@ -68,3 +68,28 @@ switch:
       echo "Detected non-NixOS on '$host'; running Home Manager switch"
       nix run home-manager -- switch --flake ".#$host"
     fi
+
+remote-host-services:
+	#!/usr/bin/env bash
+	set -euo pipefail
+	hosts=(
+	  backup-server bridge data defiant discovery engineering enterprise
+	  forgebot forgejo immichdb lab pg17 redis relay
+	  thegenerosityco-staging worf yamato
+	)
+	tmp="$(mktemp)"
+	trap 'rm -f "$tmp"' EXIT
+	for host in "${hosts[@]}"; do
+	  {
+	    if ssh -o BatchMode=yes -o ConnectTimeout=4 "root@${host}" "systemctl list-units --type=service --all --no-legend --no-pager --plain --output=json" 2>/dev/null | jq -r --arg host "$host" '.[] | "\(.unit) \($host)"'; then
+	      :
+	    else
+	      echo "warning: failed to query ${host}" >&2
+	    fi
+	  } >>"$tmp" &
+	done
+	wait
+	sort -u "$tmp"
+
+logs:
+    tv --source-command="just remote-host-services" --preview-command='ssh root@{1} "journalctl -u {0} -n 100 --no-pager"'
