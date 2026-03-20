@@ -25,11 +25,8 @@
 
     kernel = {
       sysctl = {
-        "vm.swappiness" = 10;
-        "vm.max_map_count" = 2622144;
+        "vm.swappiness" = 100;
         "fs.inotify.max_user_watches" = 524288;
-        "vm.dirty_ratio" = 10;
-        "vm.dirty_background_ratio" = 5;
       };
     };
 
