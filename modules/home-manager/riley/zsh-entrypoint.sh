@@ -156,6 +156,8 @@ alias mwb='make ghciwatch static_ls=1 2>&1 | tee .devel-logs/ghciwatch-output'
 
 alias th='there'
 
+alias vim='/run/current-system/sw/bin/nvim'
+
 export PATH="$PATH:$HOME/.cargo/bin"
 
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"

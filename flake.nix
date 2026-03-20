@@ -59,6 +59,11 @@
     tree-sitter = {
       url = "github:tree-sitter/tree-sitter?ref=v0.26.7";
     };
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -102,6 +107,7 @@
 
       enrichedInputs = inputs // {
         inherit unstablePkgs;
+        nix-cachyos-kernel = inputs.nix-cachyos-kernel;
       };
 
     in {
@@ -124,6 +130,7 @@
             ./hosts/desktops/ds9/configuration.nix
             inputs.home-manager.nixosModules.home-manager
             inputs.kolide.nixosModules.kolide-launcher
+            { nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ]; }
           ];
         };
 

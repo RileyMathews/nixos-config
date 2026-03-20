@@ -23,6 +23,7 @@
       mpmm = "python manage.py makemigrations";
       mpm = "python manage.py migrate";
       mp = "python manage.py";
+      vim = "/run/current-system/sw/bin/nvim";
     };
     interactiveShellInit = builtins.readFile ./custom.fish;
   };
