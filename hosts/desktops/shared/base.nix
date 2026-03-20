@@ -14,7 +14,6 @@
   };
 
   boot = {
-    kernelPackages = inputs.unstablePkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
