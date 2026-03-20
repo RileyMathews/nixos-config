@@ -59,6 +59,10 @@
     tree-sitter = {
       url = "github:tree-sitter/tree-sitter?ref=v0.26.7";
     };
+    television = {
+      url = "github:alexpasmantier/television?ref=0.15.3";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     nvf = {
       url = "github:NotAShelf/nvf";

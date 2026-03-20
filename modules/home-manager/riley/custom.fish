@@ -10,3 +10,4 @@ end
 zoxide init fish | source
 direnv hook fish | source
 wt config shell init fish | source
+tv init fish | source

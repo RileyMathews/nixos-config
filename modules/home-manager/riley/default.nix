@@ -17,6 +17,7 @@
     ./openpeon.nix
     ./zellij.nix
     ./fish.nix
+    ./television.nix
     ./nvim.nix
   ];
 
