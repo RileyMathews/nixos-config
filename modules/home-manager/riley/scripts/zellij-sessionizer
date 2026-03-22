@@ -1,9 +1,0 @@
-#! /usr/bin/env bash
-
-directory=$(findcode)
-
-if [[ -z $directory ]]; then
-    exit 0
-fi
-
-_zellij_switch_or_activate $directory
