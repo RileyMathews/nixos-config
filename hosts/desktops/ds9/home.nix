@@ -13,7 +13,7 @@
   riley.browser = "librewolf";
   riley.altBrowser = "google-chrome-stable";
   riley.opencode.profile = "personal";
-  riley.opencode.superpowers.enable = true;
+  riley.opencode.superpowers.enable = false;
 
   home.file.".config/hypr/monitors.conf".source = ./hypr/monitors.conf;
 }

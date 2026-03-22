@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   programs.fish = {
     enable = true;
@@ -25,6 +25,11 @@
       mp = "python manage.py";
       vim = "/run/current-system/sw/bin/nvim";
     };
-    interactiveShellInit = builtins.readFile ./custom.fish;
+    interactiveShellInit = ''
+      set -gx GITHUB_TOKEN (cat ${config.age.secrets.github-token-file.path})
+      set -gx FORGEJO_TOKEN (cat ${config.age.secrets.forgejo-token-file.path})
+      set -gx FORGEJO_ACCESS_TOKEN (cat ${config.age.secrets.forgejo-token-file.path})
+      set -gx PERSONAL_OPENAI_TOKEN (cat ${config.age.secrets.openai-personal-api-token-file.path})
+    '' + builtins.readFile ./custom.fish;
   };
 }

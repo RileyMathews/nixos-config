@@ -115,6 +115,7 @@
 
     age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
     age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
+    age.secrets.openai-personal-api-token-file.file = ../../../secrets/openai-personal-api-token-file.age;
 
     home.file = {
       ".zshrc".text = ''
@@ -122,6 +123,7 @@
         export FORGEJO_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
         # forgejo access token specifically for mcp server
         export FORGEJO_ACCESS_TOKEN=$(cat ${config.age.secrets.forgejo-token-file.path})
+        export PERSONAL_OPENAI_TOKEN=$(cat ${config.age.secrets.openai-personal-api-token-file.path})
         export BROWSER=${config.riley.browser};
         export GH_BROWSER=${config.riley.browser};
         export ALT_BROWSER=${config.riley.altBrowser};
