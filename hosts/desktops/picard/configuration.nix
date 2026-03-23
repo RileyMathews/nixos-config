@@ -38,20 +38,6 @@
     };
   };
 
-
-  services = {
-    scx = {
-      enable = true;
-      scheduler = "scx_bpfland";
-    };
-
-    udev.extraRules = ''
-      ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
-    '';
-
-    thermald.enable = true;
-  };
-
   powerManagement.cpuFreqGovernor = "performance";
 
   home-manager = {
