@@ -85,16 +85,13 @@
 
       lib = nixpkgs.lib;
 
-      vmDefaultModules = [
-        inputs.disko.nixosModules.disko
-        inputs.agenix.nixosModules.default
-      ];
-
       mkVmHost = hostName:
-        lib.nixosSystem {
+        nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
-          modules = vmDefaultModules ++ [
+          modules = [
+            inputs.disko.nixosModules.disko
+            inputs.agenix.nixosModules.default
             ./hosts/vms/${hostName}/configuration.nix
           ];
         };
