@@ -25,7 +25,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
+  boot.kernelPackages = inputs.unstablePkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
   # boot.kernelPackages = inputs.unstablePkgs.linuxPackages_zen;
   nix.settings = {
     substituters = [ "https://attic.xuyh0120.win/lantian" ];

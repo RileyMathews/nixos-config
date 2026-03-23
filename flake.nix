@@ -80,7 +80,10 @@
       unstablePkgs = import inputs.nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
-        overlays = [ inputs.nur.overlays.default ];
+        overlays = [ 
+          inputs.nur.overlays.default 
+          inputs.nix-cachyos-kernel.overlays.pinned
+        ];
       };
 
       lib = nixpkgs.lib;
@@ -106,9 +109,8 @@
 
       vmNixosConfigurations = lib.genAttrs vmHostNames mkVmHost;
 
-      enrichedInputs = inputs // {
+      allInputs = inputs // {
         inherit unstablePkgs;
-        nix-cachyos-kernel = inputs.nix-cachyos-kernel;
       };
 
     in {
@@ -116,7 +118,7 @@
 
         picard = lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inputs = enrichedInputs; };
+          specialArgs = { inputs = allInputs; };
           modules = [
             ./hosts/desktops/picard/configuration.nix
             inputs.home-manager.nixosModules.home-manager
@@ -126,12 +128,11 @@
 
         ds9 = lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inputs = enrichedInputs; };
+          specialArgs = { inputs = allInputs; };
           modules = [
             ./hosts/desktops/ds9/configuration.nix
             inputs.home-manager.nixosModules.home-manager
             inputs.kolide.nixosModules.kolide-launcher
-            { nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ]; }
           ];
         };
 
