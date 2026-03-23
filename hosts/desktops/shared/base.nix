@@ -195,6 +195,7 @@
       lazygit
       libnotify
       librewolf
+      ghostty
       luajitPackages.lua-lsp
       mesa-demos
       mpv

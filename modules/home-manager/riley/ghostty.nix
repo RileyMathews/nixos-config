@@ -3,6 +3,8 @@
 {
   programs.ghostty = {
     enable = true;
+    package = null;
+    systemd.enable = false;
     settings = {
       gtk-titlebar = false;
       window-decoration = "server";

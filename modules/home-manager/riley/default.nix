@@ -73,6 +73,7 @@
     '';
     programs.librewolf = {
       enable = true;
+      package = null;
       profiles = {
         default = {
           id = 0;
