@@ -141,6 +141,7 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/nas/configuration.nix
+            inputs.agenix.nixosModules.default
           ];
         };
 

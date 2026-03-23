@@ -25,6 +25,15 @@
     };
   };
 
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+  };
+
   networking.hostName = "nas"; # Define your hostname.
   networking.hostId = "007f0200";
 
