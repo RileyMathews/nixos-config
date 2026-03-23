@@ -12,6 +12,7 @@
     ./scripts.nix
     ./ghostty.nix
     ./git.nix
+    ./librewolf.nix
     ./worktrunk.nix
     ./direnv.nix
     ./openpeon.nix
@@ -71,49 +72,6 @@
         ALT_BROWSER: "${config.riley.altBrowser}"
       }
     '';
-    programs.librewolf = {
-      enable = true;
-      package = null;
-      profiles = {
-        default = {
-          id = 0;
-          name = "default";
-          isDefault = true;
-          settings = {
-            "browser.startup.homepage" = "https://search.rileymathews.com";
-            "browser.search.defaultenginename" = "Searx";
-            "browser.search.order.1" = "Searx";
-            "extensions.autoDisableScopes" = 0;
-            "privacy.sanitize.sanitizeOnShutdown" = false;
-            "privacy.resistFingerprinting" = false;
-            "privacy.fingerprintingProtection" = true;
-            "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme";
-          };
-          search = {
-            force = true;
-            default = "Searx";
-            order = [ "Searx" "Google" ];
-            engines = {
-              "Searx" = {
-                urls = [{ template = "https://search.rileymathews.com/?q={searchTerms}"; }];
-                iconUpdateURL = "https://nixos.wiki/favicon.png";
-                updateInterval = 24 * 60 * 60 * 1000; # every day
-                  definedAliases = [ "@searx" ];
-              };
-              "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
-            };
-          };
-          extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
-            ublock-origin
-            bitwarden
-            darkreader
-            vimium
-            karakeep
-          ];
-        };
-      };
-    };
-
     age.secrets.github-token-file.file = ../../../secrets/github-token-file.age;
     age.secrets.forgejo-token-file.file = ../../../secrets/forgejo-token-file.age;
     age.secrets.openai-personal-api-token-file.file = ../../../secrets/openai-personal-api-token-file.age;

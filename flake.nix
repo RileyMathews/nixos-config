@@ -126,16 +126,6 @@
           ];
         };
 
-        ds9 = lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inputs = allInputs; };
-          modules = [
-            ./hosts/desktops/ds9/configuration.nix
-            inputs.home-manager.nixosModules.home-manager
-            inputs.kolide.nixosModules.kolide-launcher
-          ];
-        };
-
         nas = lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
@@ -154,6 +144,17 @@
         };
 
       } // vmNixosConfigurations;
+
+      homeConfigurations = {
+        ds9 = inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inputs = allInputs; };
+          modules = [
+            inputs.agenix.homeManagerModules.default
+            ./hosts/desktops/ds9/home.nix
+          ];
+        };
+      };
 
       vmDeployments = vmHostNames;
 
