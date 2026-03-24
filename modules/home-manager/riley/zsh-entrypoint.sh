@@ -233,10 +233,6 @@ hyprlog() {
   cp /run/user/1000/hypr/$(command ls -t /run/user/1000/hypr/ | head -n 1)/hyprland.log ~/hyprland.log
 }
 
-wtc() {
-  wt switch --create $1 -x '_tmux_switch_or_attach $(basename {{ worktree_path }})'
-}
-
 [ -f "$HOME/.local/secrets" ] && source "$HOME/.local/secrets"
 
 COMPUTER_NAME=$(cat /etc/hostname)

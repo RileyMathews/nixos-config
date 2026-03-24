@@ -42,4 +42,13 @@ some of my VMs that have storage hungry apps like immich and jellyfin. You do no
 on its own. It does consume a home manager module that is shared with my desktop.
 
 ## ds9
-`ds9` is my gaming PC running nixos. Its configuration lives under `./hosts/desktops/ds9/` and, like `picard`, it uses the shared home manager module for my user environment.
+`ds9` is my gaming PC running cachyos (a downstream of archlinux). Its configuration lives under `./hosts/desktops/ds9/` and it just pulls a home manager module out of this config.
+
+# home manager
+For my nix home manager module it is currently in a phase of transition. I tried going all in on home manager but found I didn't like it as much.
+
+Over time as I work on this config I want to slowly make the home manager configuration a 'dotfiles only' type setup that only outputs configuration files.
+Any packages defined in home manager should be moved back into nixos system configurations where possible. On ds9 I'm just moving back to pulling everything
+from the cachyos and archlinux repositories.
+
+If an opportunity presents itself while working on the config to extract a package requirement out of home manager and into system config go for it.

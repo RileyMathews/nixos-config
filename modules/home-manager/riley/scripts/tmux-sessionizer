@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
-directory=$(findcode)
+directory=$1
 
 if [[ -z $directory ]]; then
     exit 0
 fi
 
 cd $directory
-session=$(basename $directory)
+session_name=$(basename $directory)
 
-_tmux_switch_or_activate $directory $session
+tmux new-session -ds $session_name
+
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t $session_name
+else
+    tmux switch-client -t $session_name
+fi
 

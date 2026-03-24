@@ -14,5 +14,10 @@ description = "Opens a new zellij session in the directory"
 command = "zellij-session {}"
 mode = "execute"
 
+[actions.tmux]
+description = "Opens a tmux session in the directory"
+command = "tmux-sessionizer {}"
+mode = "execute"
+
 [keybindings]
-enter = "actions:zellij"
+enter = "actions:tmux"

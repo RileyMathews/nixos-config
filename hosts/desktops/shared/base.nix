@@ -228,6 +228,7 @@
       wlr-which-key
       xlsclients
       yt-dlp
+      zellij
     ];
   };
 
