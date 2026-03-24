@@ -10,7 +10,7 @@
   stylix.targets.alacritty.colors.enable = true;
   stylix.targets.ghostty.colors.enable = true;
   stylix.targets.nushell.colors.enable = true;
-  stylix.targets.fish.colors.enable = false;
+  stylix.targets.fish.colors.enable = true;
 
   stylix.fonts = {
     monospace = {
