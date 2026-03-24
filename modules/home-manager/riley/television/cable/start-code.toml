@@ -11,7 +11,7 @@ command = "ls -la --color=always '{}'"
 
 [actions.zellij]
 description = "Opens a new zellij session in the directory"
-command = "cd '{}' && zellij attach $(basename {}) --create"
+command = "zellij-session {}"
 mode = "execute"
 
 [keybindings]

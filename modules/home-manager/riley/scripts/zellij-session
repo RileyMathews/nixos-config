@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+
+directory=$1
+
+session_name=$(basename $directory)
+
+if ! zellij list-sessions 2>/dev/null | grep -Fq "$session_name"; then
+    cd $directory
+    zellij attach --create-background $session_name
+fi
+
+if [[ -z "${ZELLIJ}" ]]; then
+    zellij attach $session_name
+else
+    zellij action switch-session $session_name
+fi
+
