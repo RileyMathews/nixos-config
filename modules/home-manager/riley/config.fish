@@ -1,4 +1,6 @@
 status is-interactive; and begin
+    set -U fish_greeting ""
+
   alias gst 'git status'
   alias gaa 'git add .'
   alias gcmsg 'git commit -m'

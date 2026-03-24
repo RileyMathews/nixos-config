@@ -230,6 +230,7 @@
       yt-dlp
       zellij
       fish
+      starship
     ];
   };
 
