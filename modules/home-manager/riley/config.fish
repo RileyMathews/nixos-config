@@ -45,4 +45,5 @@ status is-interactive; and begin
   direnv hook fish | source
   wt config shell init fish | source
   tv init fish | source
+  starship init fish | source
 end
