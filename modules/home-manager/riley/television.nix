@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 {
   home.packages = [
-    inputs.television.packages."${pkgs.system}".default
+    inputs.television.packages."${pkgs.stdenv.hostPlatform.system}".default
   ];
 
   xdg.configFile = {

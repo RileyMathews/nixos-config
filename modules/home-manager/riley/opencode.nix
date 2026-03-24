@@ -194,7 +194,7 @@ in
     ++ (if canRender then templateModelLineAssertions else [ ]);
 
   programs.opencode.enable = true;
-  programs.opencode.package = inputs.opencode.packages.${pkgs.system}.opencode;
+  programs.opencode.package = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
   home.file =
     {
       ".config/opencode/opencode.json".source = ./opencode/opencode.json;

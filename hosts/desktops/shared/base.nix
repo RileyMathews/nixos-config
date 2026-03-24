@@ -203,7 +203,7 @@
       nodejs
       pavucontrol
       playerctl
-      inputs.worktrunk.packages.${pkgs.system}.worktrunk
+      inputs.worktrunk.packages.${pkgs.stdenv.hostPlatform.system}.worktrunk
       podman-compose
       python3
       qutebrowser
@@ -226,7 +226,7 @@
       waybar
       wl-clipboard
       wlr-which-key
-      xorg.xlsclients
+      xlsclients
       yt-dlp
     ];
   };
