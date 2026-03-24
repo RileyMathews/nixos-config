@@ -229,6 +229,7 @@
       xlsclients
       yt-dlp
       zellij
+      fish
     ];
   };
 
