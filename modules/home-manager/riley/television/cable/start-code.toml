@@ -9,15 +9,15 @@ command = ["find $HOME/code $HOME/.config $HOME/worktrees -mindepth 1 -maxdepth 
 [preview]
 command = "ls -la --color=always '{}'"
 
-[actions.zellij]
-description = "Opens a new zellij session in the directory"
-command = "zellij-session {}"
-mode = "execute"
-
-[actions.tmux]
-description = "Opens a tmux session in the directory"
-command = "tmux-sessionizer {}"
-mode = "execute"
-
-[keybindings]
-enter = "actions:tmux"
+# [actions.zellij]
+# description = "Opens a new zellij session in the directory"
+# command = "zellij-session {}"
+# mode = "execute"
+#
+# [actions.tmux]
+# description = "Opens a tmux session in the directory"
+# command = "tmux-sessionizer {}"
+# mode = "execute"
+#
+# [keybindings]
+# enter = "actions:tmux"

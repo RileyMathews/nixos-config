@@ -204,6 +204,7 @@
       pavucontrol
       playerctl
       inputs.worktrunk.packages.${pkgs.stdenv.hostPlatform.system}.worktrunk
+      inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode
       podman-compose
       python3
       qutebrowser
@@ -228,7 +229,7 @@
       wlr-which-key
       xlsclients
       yt-dlp
-      zellij
+      inputs.bleedingEdgePkgs.zellij
       fish
       starship
     ];

@@ -5,6 +5,7 @@
     pr-tracker.url = "github:rileymathews/pr-tracker-rust";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixos-generators = {
       url = "github:nix-community/nixos-generators/7c60ba4bc8d6aa2ba3e5b0f6ceb9fc07bc261565";
@@ -86,6 +87,11 @@
         ];
       };
 
+      bleedingEdgePkgs = import inputs.nixpkgs-master {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
+
       lib = nixpkgs.lib;
 
       mkVmHost = hostName:
@@ -111,6 +117,7 @@
 
       allInputs = inputs // {
         inherit unstablePkgs;
+        inherit bleedingEdgePkgs;
       };
 
     in {
