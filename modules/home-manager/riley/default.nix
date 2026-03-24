@@ -20,6 +20,7 @@
     ./fish.nix
     ./television.nix
     ./nvim.nix
+    ./starship
   ];
 
   options.riley.browser = lib.mkOption {
