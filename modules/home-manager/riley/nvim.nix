@@ -3,7 +3,7 @@
   imports = [ inputs.nvf.homeManagerModules.default ];
 
   programs.nvf = {
-    enable = true;
+    enable = false;
     settings = {
       vim.viAlias = false;
       vim.vimAlias = false;
