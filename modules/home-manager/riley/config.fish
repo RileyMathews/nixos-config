@@ -1,9 +1,3 @@
-# ~/.config/fish/config.fish: DO NOT EDIT -- this file has been generated
-# automatically by home-manager.
-
-set -q __riley_fish_config_sourced; and exit
-set -g __riley_fish_config_sourced 1
-
 status is-interactive; and begin
   alias gst 'git status'
   alias gaa 'git add .'
