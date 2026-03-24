@@ -58,7 +58,7 @@
     home.enableNixpkgsReleaseCheck = false;
 
     programs.home-manager.enable = true;
-    programs.nushell.enable = true;
+    programs.nushell.enable = false;
     programs.nushell.configFile.source = ./config.nu;
     programs.nushell.extraConfig = ''
       let github_token = (open $"($env.XDG_RUNTIME_DIR)/agenix/github-token-file" | str trim)
@@ -95,12 +95,12 @@
       ".tmux.conf".source = ./tmux.conf;
     };
     
-    home.packages = with pkgs; [
-      pgcli
-      typescript-go
-      zoxide
-      fzf
-      # inputs.ghostty.packages."${pkgs.system}".default
-    ];
+    # home.packages = with pkgs; [
+    #   pgcli
+    #   typescript-go
+    #   zoxide
+    #   fzf
+    #   # inputs.ghostty.packages."${pkgs.system}".default
+    # ];
   };
 }
