@@ -2,7 +2,6 @@
   description = "Flake for nixos configuration";
 
   inputs = {
-    pr-tracker.url = "github:rileymathews/pr-tracker-rust";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master";

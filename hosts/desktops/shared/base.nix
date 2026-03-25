@@ -229,9 +229,17 @@
       wlr-which-key
       xlsclients
       yt-dlp
+      ghostty
       inputs.bleedingEdgePkgs.zellij
       fish
       starship
+      zoom
+      pgcli
+      typescript-go
+      zoxide
+      fzf
+      inputs.television.packages."${pkgs.stdenv.hostPlatform.system}".default
+      zellij
     ];
   };
 

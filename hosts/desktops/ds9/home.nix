@@ -5,7 +5,6 @@
 
   imports = [
     ../../../modules/home-manager/riley
-    inputs.pr-tracker.homeManagerModules.default
     inputs.agenix.homeManagerModules.default
     inputs.stylix.homeModules.stylix
   ];

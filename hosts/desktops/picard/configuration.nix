@@ -40,16 +40,16 @@
 
   powerManagement.cpuFreqGovernor = "performance";
 
-  home-manager = {
-    useGlobalPkgs = false;
-    useUserPackages = true;
-    extraSpecialArgs = {
-      inherit inputs;
-    };
-    users.riley.imports = [
-      ./home.nix
-    ];
-  };
+  # home-manager = {
+  #   useGlobalPkgs = false;
+  #   useUserPackages = true;
+  #   extraSpecialArgs = {
+  #     inherit inputs;
+  #   };
+  #   users.riley.imports = [
+  #     ./home.nix
+  #   ];
+  # };
 
   system.stateVersion = "25.05";
 }
