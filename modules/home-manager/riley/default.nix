@@ -8,7 +8,6 @@
     ./opencode.nix
     ./rofi.nix
     ./waybar.nix
-    ./wlr-which-key.nix
     ./scripts.nix
     ./ghostty.nix
     ./git.nix
