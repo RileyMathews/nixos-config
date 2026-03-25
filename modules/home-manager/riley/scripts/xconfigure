@@ -1,7 +1,0 @@
-#! /bin/sh
-
-xset -dpms
-xset s off
-# setxkbmap -option caps:escape
-xrdb -merge "$HOME/.config/X11/.Xresources"
-xsetroot -solid "#000000"

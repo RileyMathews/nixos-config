@@ -1,8 +1,0 @@
-#! /bin/sh
-
-xrdb -merge "$HOME/.config/X11/.Xresources"
-exec sxhkd &
-# exec picom -b &
-exec $HOME/.config/dunst/launch.sh &
-# exec xiccd &
-xsetroot -solid "#000000"

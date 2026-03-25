@@ -30,10 +30,6 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager = {
-      url = "github:nix-community/home-manager?ref=release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     opencode = {
       url = "github:anomalyco/opencode?ref=v1.2.27";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -46,16 +42,10 @@
       url = "github:rileymathews/forgebot";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    superpowers = {
-      url = "github:obra/superpowers";
-      flake = false;
-    };
-    ghostty.url = "github:ghostty-org/ghostty?ref=v1.3.1";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix?ref=release-25.11";
     tree-sitter = {
       url = "github:tree-sitter/tree-sitter?ref=v0.26.7";
     };
@@ -64,10 +54,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    nvf = {
-      url = "github:NotAShelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -127,7 +113,6 @@
           specialArgs = { inputs = allInputs; };
           modules = [
             ./hosts/desktops/picard/configuration.nix
-            inputs.home-manager.nixosModules.home-manager
             inputs.kolide.nixosModules.kolide-launcher
           ];
         };
@@ -150,17 +135,6 @@
         };
 
       } // vmNixosConfigurations;
-
-      homeConfigurations = {
-        ds9 = inputs.home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inputs = allInputs; };
-          modules = [
-            inputs.agenix.homeManagerModules.default
-            ./hosts/desktops/ds9/home.nix
-          ];
-        };
-      };
 
       vmDeployments = vmHostNames;
 

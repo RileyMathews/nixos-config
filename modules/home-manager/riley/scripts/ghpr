@@ -1,3 +1,0 @@
-#! /usr/bin/env bash
-
-gh pr new --title "$(git rev-parse --abbrev-ref HEAD) -- $1" --draft --template "PULL_REQUEST_TEMPLATE.md" --editor

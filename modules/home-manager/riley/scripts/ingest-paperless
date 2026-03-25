@@ -1,6 +1,0 @@
-#!/bin/sh
-
-scp -r . riley@enterprise:/var/lib/appdata/paperless/consume
-
-# backup to dropbox
-rclone copy . dropbox:scan-backups
