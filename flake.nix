@@ -108,7 +108,7 @@
     in {
       nixosConfigurations = {
 
-        picard = lib.nixosSystem {
+        picard = inputs.nixpkgs-unstable.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inputs = allInputs; };
           modules = [
