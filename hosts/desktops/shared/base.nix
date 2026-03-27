@@ -235,6 +235,7 @@
       starship
       zoom
       pgcli
+      age
       typescript-go
       zoxide
       fzf
