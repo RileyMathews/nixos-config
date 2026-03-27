@@ -243,6 +243,27 @@
     },
     "flake-parts_3": {
       "inputs": {
+        "nixpkgs-lib": [
+          "sentinelone",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1736143030,
+        "narHash": "sha256-+hu54pAoLDEZT9pjHlqL9DNzWz0NbUn8NEAHP7PQPzU=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "b905f6fc23a9051a6e1b741e1438dbfc0634c6de",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_4": {
+      "inputs": {
         "nixpkgs-lib": "nixpkgs-lib_2"
       },
       "locked": {
@@ -571,6 +592,22 @@
     },
     "nixpkgs_4": {
       "locked": {
+        "lastModified": 1737632463,
+        "narHash": "sha256-38J9QfeGSej341ouwzqf77WIHAScihAKCt8PQJ+NH28=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0aa475546ed21629c4f5bbf90e38c846a99ec9e9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
         "lastModified": 1756787288,
         "narHash": "sha256-rw/PHa1cqiePdBxhF66V7R+WAP8WekQ0mCDG4CFqT8Y=",
         "owner": "NixOS",
@@ -661,6 +698,7 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "opencode": "opencode_2",
+        "sentinelone": "sentinelone",
         "sops-nix": "sops-nix",
         "television": "television",
         "tree-sitter": "tree-sitter",
@@ -723,6 +761,26 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "sentinelone": {
+      "inputs": {
+        "flake-parts": "flake-parts_3",
+        "nixpkgs": "nixpkgs_4",
+        "treefmt-nix": "treefmt-nix"
+      },
+      "locked": {
+        "lastModified": 1772547679,
+        "narHash": "sha256-GVwlY7l5eKDmUU6jb+8IgwmBkPBrEFSldUBgfBb5tUk=",
+        "owner": "devusb",
+        "repo": "sentinelone-nix",
+        "rev": "50e2613e86ea440be60d06909275f6dac4db7b14",
+        "type": "github"
+      },
+      "original": {
+        "owner": "devusb",
+        "repo": "sentinelone-nix",
         "type": "github"
       }
     },
@@ -794,7 +852,7 @@
     "television": {
       "inputs": {
         "crane": "crane",
-        "flake-parts": "flake-parts_3",
+        "flake-parts": "flake-parts_4",
         "nixpkgs": [
           "nixpkgs-unstable"
         ],
@@ -817,7 +875,7 @@
     },
     "tree-sitter": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1773505401,
@@ -831,6 +889,27 @@
         "owner": "tree-sitter",
         "ref": "v0.26.7",
         "repo": "tree-sitter",
+        "type": "github"
+      }
+    },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "sentinelone",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1737483750,
+        "narHash": "sha256-5An1wq5U8sNycOBBg3nsDDgpwBmR9liOpDGlhliA6Xo=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "f2cc121df15418d028a59c9737d38e3a90fbaf8f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
         "type": "github"
       }
     },
