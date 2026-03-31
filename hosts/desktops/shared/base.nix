@@ -205,6 +205,7 @@
       playerctl
       inputs.worktrunk.packages.${pkgs.stdenv.hostPlatform.system}.worktrunk
       inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode
+      mise
       podman-compose
       python3
       qutebrowser
