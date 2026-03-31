@@ -207,6 +207,8 @@
       inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode
       mise
       podman-compose
+      nodejs
+      bun
       python3
       qutebrowser
       ripgrep
@@ -239,6 +241,7 @@
       age
       typescript-go
       lua-language-server
+      gnumake
       sesh
       zoxide
       fzf
