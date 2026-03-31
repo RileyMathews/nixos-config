@@ -223,6 +223,7 @@
       tldr
       tmux
       tpm2-tools
+      postgresql
       inputs.unstablePkgs.claude-code
       inputs.unstablePkgs.hyprcursor
       inputs.unstablePkgs.neovim
