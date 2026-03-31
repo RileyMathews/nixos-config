@@ -28,7 +28,7 @@
 
         containers.immich = {
             definition = {
-                image = "ghcr.io/immich-app/immich-server:v2.5.6";
+                image = "ghcr.io/immich-app/immich-server:v2.6.3";
                 ports = ["2283:2283"];
                 volumes = [
                     "/mnt/immich/uploads:/usr/src/app/upload"

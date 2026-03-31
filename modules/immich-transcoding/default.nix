@@ -21,7 +21,7 @@
         };
 
         containers.immich.definition = {
-            image = "ghcr.io/immich-app/immich-server:v2.5.6";
+            image = "ghcr.io/immich-app/immich-server:v2.6.3";
             volumes = [ 
                 "/mnt/immich/uploads:/usr/src/app/upload" 
             ];
