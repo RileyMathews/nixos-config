@@ -9,6 +9,12 @@
 
     networking.firewall.allowedTCPPorts = [8222];
 
+    systemd.tmpfiles.rules = [
+        "d /var/lib/appdata/vaultwarden 0755 riley riley -"
+        "d /var/lib/appdata/vaultwarden/data 0755 riley riley -"
+        "Z /var/lib/appdata/vaultwarden/data - riley riley -"
+    ];
+
     age.secrets.vaultwarden-env-file = {
         file = ../../secrets/vaultwarden-env-file.age;
         # mode = "0400";
