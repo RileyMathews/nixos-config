@@ -54,7 +54,6 @@
       url = "github:alexpasmantier/television?ref=0.15.3";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

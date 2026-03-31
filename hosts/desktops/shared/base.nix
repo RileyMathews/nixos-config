@@ -237,6 +237,7 @@
       pgcli
       age
       typescript-go
+      lua-language-server
       zoxide
       fzf
       inputs.television.packages."${pkgs.stdenv.hostPlatform.system}".default
