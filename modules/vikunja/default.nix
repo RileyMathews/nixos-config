@@ -31,7 +31,7 @@
 
     virtualisation.oci-containers.containers = {
         vikunja = {
-            image = "vikunja/vikunja:2.1.0";
+            image = "vikunja/vikunja:2.2.2";
             ports = [ "3456:3456" ];
             volumes = [ "/var/lib/appdata/vikunja/files:/app/vikunja/files" ];
             user = "1000:1000";
