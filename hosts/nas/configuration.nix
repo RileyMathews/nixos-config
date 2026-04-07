@@ -5,6 +5,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./../../modules/tailscale
+      ./../../modules/syncthing
     ];
 
   myTailscale.enable = true;
@@ -133,4 +134,3 @@
   system.stateVersion = "26.05"; # Did you read the comment?
 
 }
-

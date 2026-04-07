@@ -5,7 +5,7 @@ deploy HOST:
     nix run nixpkgs#nixos-rebuild -- switch --flake .#{{HOST}} --target-host root@{{HOST}}
 
 deploy-nas:
-    nixos-rebuild switch --flake .#nas --target-host root@nas --build-host root@nas
+    nix run nixpkgs#nixos-rebuild -- switch --flake .#nas --target-host root@nas --build-host root@nas
 
 finalize FLAKEPATH IP:
     nix run nixpkgs#nixos-rebuild -- switch --flake .#{{FLAKEPATH}} --target-host root@{{IP}}
