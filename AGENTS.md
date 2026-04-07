@@ -26,20 +26,11 @@ postgres and redis which are used by the applications.
 
 If a flake output is marked as a `VM` deployment it lives on the shipyard proxmox host as a VM.
 
+The `nas` host is also running nixos and its config is defined at ./hosts/nas/configuration.nix. It doesn't share the VM configuration as it runs on the bare metal host.
+
 ## Troubleshooting homelab hosts
 If you ever need to troubleshoot by collecting logs from VMs you can do so by running systemctl/journalctl over ssh.
 The VMs also make heavy use of podman so you can also fetch podman logs in this way.
 My ssh key also has direct access to the root account on the Nixos VMs so if needed you can also `ssh root@<host> ...` to troubleshoot things.
 When troubleshooting and you want to make changes, prefer to make them declaritavely in the nixos config rather than by one off commands on the hosts.
 
-The `nas` host is a little different. It runs debian as its bare metal OS and basically just serves as a thin host to serve NFS exports to
-some of my VMs that have storage hungry apps like immich and jellyfin. You do not have direct root access on `nas`.
-
-# Desktops
-
-## picard
-`picard` is a System76 Bonobo WS 15 laptop running nixos. Everything about its configuration is declared inline here. It doesn't share any modules with my VMs and is mostly
-on its own.
-
-## ds9
-`ds9` is my gaming PC running cachyos (a downstream of archlinux). Older desktop-specific config files may still live under `./hosts/desktops/ds9/`, but it is no longer exported as a flake output from this repo.
