@@ -23,18 +23,17 @@ deploy-all-vms:
     echo "========================================="
     echo "Starting batch deployment of all VMs"
     echo "========================================="
-    # Get VM list from flake and parse JSON array to space-separated list
     vms=$(nix eval --json .#vmDeployments 2>/dev/null | jq -r '.[]')
     for vm in $vms; do
       echo ""
       echo "========================================="
-      echo "Deploying $vm..."
+      echo "Checking $vm..."
       echo "========================================="
-      just deploy $vm
+      just deploy-if-changed "$vm"
     done
     echo ""
     echo "========================================="
-    echo "✓ All VMs deployed successfully!"
+    echo "✓ All VMs processed successfully!"
     echo "========================================="
 
 build-all:
@@ -93,3 +92,23 @@ remote-host-services:
 
 logs:
     tv --source-command="just remote-host-services" --preview-command='ssh root@{1} "journalctl -u {0} -n 100 --no-pager"'
+
+deploy-if-changed HOST:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    host="{{HOST}}"
+
+    desired="$(nix build --no-link --print-out-paths ".#nixosConfigurations.${host}.config.system.build.toplevel")"
+    current="$(ssh -o BatchMode=yes -o ConnectTimeout=5 "root@${host}" 'readlink -f /run/current-system || true')"
+
+    echo "Host:    $host"
+    echo "Current: ${current:-<unknown>}"
+    echo "Desired: $desired"
+
+    if [[ -n "${current:-}" && "$current" == "$desired" ]]; then
+      echo "✓ ${host} already matches desired system; skipping"
+      exit 0
+    fi
+
+    just deploy "$host"

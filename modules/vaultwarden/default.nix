@@ -24,7 +24,7 @@
 
     virtualisation.oci-containers.containers = {
         vaultwarden = {
-            image = "vaultwarden/server:1.35.4";
+            image = "vaultwarden/server:1.35.5";
             ports = ["8222:8222"];
             volumes = [ "/var/lib/appdata/vaultwarden/data:/data" ];
             user = "1000:1000";
