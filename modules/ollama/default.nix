@@ -14,8 +14,9 @@
     };
 
     virtualisation.oci-containers.containers.ollama = {
-        image = "ollama/ollama:0.20.5";
+        image = "ollama/ollama:0.20.7";
         ports = [ "11434:11434" ];
+        volumes = [ "ollama_data:/root/.ollama" ];
         environment = {
             OLLAMA_HOST = "0.0.0.0:11434";
             NVIDIA_VISIBLE_DEVICES = "all";
