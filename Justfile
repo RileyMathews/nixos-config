@@ -29,7 +29,7 @@ deploy-all-vms:
       echo "========================================="
       echo "Checking $vm..."
       echo "========================================="
-      just deploy-if-changed "$vm"
+      just deploy-smart-if-changed "$vm"
     done
     echo ""
     echo "========================================="
@@ -112,3 +112,51 @@ deploy-if-changed HOST:
     fi
 
     just deploy "$host"
+
+deploy-smart-if-changed HOST:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    host="{{HOST}}"
+
+    desired="$(nix build --no-link --print-out-paths ".#nixosConfigurations.${host}.config.system.build.toplevel")"
+    current="$(ssh -o BatchMode=yes -o ConnectTimeout=5 "root@${host}" 'readlink -f /run/current-system || true')"
+
+    echo "Host:    $host"
+    echo "Current: ${current:-<unknown>}"
+    echo "Desired: $desired"
+
+    if [[ -n "${current:-}" && "$current" == "$desired" ]]; then
+      echo "✓ ${host} already matches desired system; skipping"
+      exit 0
+    fi
+
+    desired_kernel="$(readlink -f "$desired/kernel" 2>/dev/null || true)"
+    desired_initrd="$(readlink -f "$desired/initrd" 2>/dev/null || true)"
+    desired_kmods="$(readlink -f "$desired/kernel-modules" 2>/dev/null || true)"
+
+    readarray -t booted_parts < <(
+      ssh -o BatchMode=yes -o ConnectTimeout=5 "root@${host}" '
+        readlink -f /run/booted-system/kernel 2>/dev/null || true
+        readlink -f /run/booted-system/initrd 2>/dev/null || true
+        readlink -f /run/booted-system/kernel-modules 2>/dev/null || true
+      '
+    )
+
+    booted_kernel="${booted_parts[0]:-}"
+    booted_initrd="${booted_parts[1]:-}"
+    booted_kmods="${booted_parts[2]:-}"
+
+    reboot_needed=0
+    [[ -n "$desired_kernel" && "$desired_kernel" != "$booted_kernel" ]] && reboot_needed=1
+    [[ -n "$desired_initrd" && "$desired_initrd" != "$booted_initrd" ]] && reboot_needed=1
+    [[ -n "$desired_kmods"  && "$desired_kmods"  != "$booted_kmods"  ]] && reboot_needed=1
+
+    if [[ "$reboot_needed" -eq 1 ]]; then
+      echo "⚠ Boot-critical change detected; deploying with boot and rebooting ${host}"
+      nix run nixpkgs#nixos-rebuild -- boot --flake ".#${host}" --target-host "root@${host}"
+      ssh "root@${host}" 'systemctl reboot'
+    else
+      echo "No boot-critical change detected; switching ${host} live"
+      nix run nixpkgs#nixos-rebuild -- switch --flake ".#${host}" --target-host "root@${host}"
+    fi

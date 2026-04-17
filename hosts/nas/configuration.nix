@@ -6,6 +6,7 @@
       ./hardware-configuration.nix
       ./../../modules/tailscale
       ./../../modules/syncthing
+      ./../../modules/dns
     ];
 
   myTailscale.enable = true;
@@ -67,7 +68,7 @@
     '';
   };
 
-  networking.firewall.allowedTCPPorts = [ 2049 ];
+  networking.firewall.allowedTCPPorts = [ 2049 5432 ];
   services.zfs.autoScrub.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -112,6 +113,26 @@
   services.openssh.settings = {
     PermitRootLogin = "yes";
     PasswordAuthentication = true;
+  };
+
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_18;
+    dataDir = "/main/postgresql/data";
+    enableTCPIP = true;
+    authentication = ''
+      local all pgadmin peer
+      local all all trust
+      host all all 0.0.0.0/0 md5
+    '';
+    settings = {
+      timezone = "UTC";
+      log_timezone = "UTC";
+    };
+  };
+  services.cloudflare-dns = {
+    enable = true;
+    domains = ["pg18.tailscale.rileymathews.com"];
   };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
