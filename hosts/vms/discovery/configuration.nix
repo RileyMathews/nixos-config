@@ -21,7 +21,7 @@
     ./../../../modules/scraper
     ./../../../modules/davhome
     ./../../../modules/podman-exporter
-    ./../../../modules/komga
+    ./../../../modules/bookshelf
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
