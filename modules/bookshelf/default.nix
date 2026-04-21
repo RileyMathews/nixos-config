@@ -23,7 +23,7 @@
 
     virtualisation.oci-containers.containers = {
         bookshelf = {
-            image = "registry.rileymathews.com/rileymathews/bookshelf:0.0.2";
+            image = "registry.rileymathews.com/rileymathews/bookshelf:0.0.3";
             ports = ["3847:3000"];
             user = "1000:1000";
             volumes = ["/var/lib/bookshelf/data:/app/storage"];
