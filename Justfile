@@ -17,6 +17,7 @@ build-iso:
     nix run nixpkgs#nixos-rebuild -- build-image --flake .#iso --image-variant iso
 
 # Deploy all VMs sequentially (fails immediately on any error)
+# VMs with boot-critical changes are staged for next boot and summarized at the end.
 deploy-all-vms:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -24,16 +25,33 @@ deploy-all-vms:
     echo "Starting batch deployment of all VMs"
     echo "========================================="
     vms=$(nix eval --json .#vmDeployments 2>/dev/null | jq -r '.[]')
+    restart_needed=()
+    tmpdir="$(mktemp -d)"
+    trap 'rm -rf "$tmpdir"' EXIT
     for vm in $vms; do
       echo ""
       echo "========================================="
       echo "Checking $vm..."
       echo "========================================="
-      just deploy-smart-if-changed "$vm"
+      log_file="$tmpdir/${vm}.log"
+      if ! just deploy-smart-if-changed "$vm" 2>&1 | tee "$log_file"; then
+        exit "${PIPESTATUS[0]}"
+      fi
+      if grep -q "^RESTART_NEEDED: ${vm}$" "$log_file"; then
+        restart_needed+=("$vm")
+      fi
     done
     echo ""
     echo "========================================="
     echo "✓ All VMs processed successfully!"
+    if (( ${#restart_needed[@]} > 0 )); then
+      echo ""
+      echo "⚠ The following VMs have boot-critical changes and need to be restarted:"
+      printf '  - %s\n' "${restart_needed[@]}"
+    else
+      echo ""
+      echo "✓ No VM restarts needed."
+    fi
     echo "========================================="
 
 build-all:
@@ -153,9 +171,9 @@ deploy-smart-if-changed HOST:
     [[ -n "$desired_kmods"  && "$desired_kmods"  != "$booted_kmods"  ]] && reboot_needed=1
 
     if [[ "$reboot_needed" -eq 1 ]]; then
-      echo "⚠ Boot-critical change detected; deploying with boot and rebooting ${host}"
+      echo "⚠ Boot-critical change detected; staging ${host} for next boot without restarting"
       nix run nixpkgs#nixos-rebuild -- boot --flake ".#${host}" --target-host "root@${host}"
-      ssh "root@${host}" 'systemctl reboot'
+      echo "RESTART_NEEDED: ${host}"
     else
       echo "No boot-critical change detected; switching ${host} live"
       nix run nixpkgs#nixos-rebuild -- switch --flake ".#${host}" --target-host "root@${host}"
