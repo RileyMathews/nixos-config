@@ -25,6 +25,14 @@
 
     [storage]
     filesystem_folder = /var/lib/radicale/collections
+
+    [sharing]
+    type = files
+    collection_by_token = true
+    collection_by_map = true
+    permit_create_token = true
+    permit_create_map = true
+    permit_properties_overlay = true
   '';
 
   age.secrets.radicale-users = {
