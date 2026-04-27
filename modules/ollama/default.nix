@@ -14,7 +14,7 @@
     };
 
     virtualisation.oci-containers.containers.ollama = {
-        image = "ollama/ollama:0.20.7";
+        image = "ollama/ollama:0.21.3";
         ports = [ "11434:11434" ];
         volumes = [ "ollama_data:/root/.ollama" ];
         environment = {

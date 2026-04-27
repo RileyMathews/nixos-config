@@ -20,7 +20,7 @@ lib,
   '';
 
   virtualisation.oci-containers.containers.ntfy = {
-    image = "binwiederhier/ntfy:v2.21.0"; # defiant
+    image = "binwiederhier/ntfy:v2.22.0";
     volumes = [ "/etc/ntfy/server.yml:/etc/ntfy/server.yml:ro" ];
     ports = [ "8021:8021" ];
     cmd = ["serve"];

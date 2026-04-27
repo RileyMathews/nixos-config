@@ -20,7 +20,7 @@
 
     virtualisation.oci-containers.containers = {
         open-webui = {
-            image = "ghcr.io/open-webui/open-webui:0.8.12";
+            image = "ghcr.io/open-webui/open-webui:0.9.2";
             ports = ["8080:8080"];
             volumes = [ "openwebui_data:/app/backend/data" ];
             environment = {
