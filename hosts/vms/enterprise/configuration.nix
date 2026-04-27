@@ -17,6 +17,7 @@
     ./../../../modules/webhooks
     ./../../../modules/podman-exporter
     ./../../../modules/mealie
+    ./../../../modules/radicale
   ];
   networking.hostName = "enterprise";
   systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
