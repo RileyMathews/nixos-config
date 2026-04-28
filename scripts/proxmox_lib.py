@@ -4,6 +4,7 @@ import os
 import pathlib
 import shutil
 import sys
+import urllib.parse
 from typing import Any, Iterable, Tuple
 
 import subprocess
@@ -121,7 +122,16 @@ def proxmox_post_form(path: str, *kv_pairs: str) -> Any:
     return _proxmox_request("POST", path, data=data)
 
 
-def proxmox_delete(path: str) -> Any:
+def proxmox_delete(path: str, *kv_pairs: str) -> Any:
+    params: dict[str, str] = {}
+    for kv in kv_pairs:
+        if "=" not in kv:
+            raise ProxmoxError(f"Invalid form pair: {kv}")
+        key, value = kv.split("=", 1)
+        params[key] = value
+    if params:
+        separator = "&" if "?" in path else "?"
+        path = f"{path}{separator}{urllib.parse.urlencode(params)}"
     return _proxmox_request("DELETE", path)
 
 

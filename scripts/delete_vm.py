@@ -51,7 +51,7 @@ def main() -> None:
     config_json = proxmox.proxmox_get(f"/api2/json/nodes/{node}/qemu/{vmid}/config")
     vm_name = config_json.get("data", {}).get("name", "") or "unknown"
 
-    confirm = input(f"Delete VM {vm_name} (vmid {vmid})? [y/N] ")
+    confirm = input(f"Delete VM {vm_name} (vmid {vmid}) and associated disks? [y/N] ")
     if confirm.lower() != "y":
         print("Aborted.")
         return
@@ -60,8 +60,12 @@ def main() -> None:
 
     wait_for_shutdown(node, vmid)
 
-    proxmox.proxmox_delete(f"/api2/json/nodes/{node}/qemu/{vmid}")
-    print(f"Deleted VM {vm_name} (vmid {vmid}).")
+    proxmox.proxmox_delete(
+        f"/api2/json/nodes/{node}/qemu/{vmid}",
+        "purge=1",
+        "destroy-unreferenced-disks=1",
+    )
+    print(f"Deleted VM {vm_name} (vmid {vmid}) and associated disks.")
 
 
 if __name__ == "__main__":
