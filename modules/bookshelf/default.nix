@@ -24,7 +24,7 @@
     virtualisation.oci-containers.containers = {
         bookshelf = {
             # discovery
-            image = "registry.rileymathews.com/rileymathews/bookshelf:0.0.6";
+            image = "ghcr.io/rileymathews/papyrd-server:alpha-2";
             ports = ["3847:3000"];
             user = "1000:1000";
             volumes = ["/var/lib/bookshelf/data:/app/storage"];
