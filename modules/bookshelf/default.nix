@@ -7,10 +7,10 @@
 {
     imports = [../caddy-multi-proxy ../dns];
     services.cloudflare-dns.enable = true;
-    services.cloudflare-dns.domains = ["bookshelf.rileymathews.com"];
+    services.cloudflare-dns.domains = ["papyrd.rileymathews.com"];
 
     myCaddy.proxies.bookshelf = {
-        listenHost = "bookshelf.rileymathews.com";
+        listenHost = "papyrd.rileymathews.com";
         backendHost = "http://127.0.0.1:3847";
     };
 
