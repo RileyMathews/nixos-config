@@ -159,6 +159,7 @@
           jq
           nodejs
           python3
+          python3Packages.pika
           python3Packages.requests
         ];
       };

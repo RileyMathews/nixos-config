@@ -26,6 +26,12 @@
     [storage]
     filesystem_folder = /var/lib/radicale/collections
 
+    [hook]
+    type = rabbitmq
+    rabbitmq_endpoint = amqp://radicale:radicale-rabbitmq@rabbitmq:5672/
+    rabbitmq_topic = radicale
+    rabbitmq_queue_type = classic
+
     [sharing]
     type = files
     collection_by_token = true
@@ -59,7 +65,7 @@
   };
 
   virtualisation.oci-containers.containers.radicale = {
-    image = "ghcr.io/kozea/radicale:3.7.1";
+    image = "registry.rileymathews.com/rileymathews/radicale:test2";
     ports = [ "5232:5232" ];
     volumes = [
       "/etc/radicale/config:/etc/radicale/config:ro"
