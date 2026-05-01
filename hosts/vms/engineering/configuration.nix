@@ -14,12 +14,14 @@
     ./../../../modules/tailscale
     ./../../../modules/dns
     ./../../../modules/nginx-multi-proxy
+    ./../../../modules/dozzle
   ];
   networking.hostName = "engineering";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "grafana.rileymathews.com" ];
+  networking.firewall.allowedTCPPorts = [80 443];
 
   myNginx.proxies.grafana = {
     listenHost = "grafana.rileymathews.com";

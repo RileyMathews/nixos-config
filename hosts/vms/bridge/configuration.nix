@@ -13,6 +13,7 @@
     ./../../../modules/homeassistant
     ./../../../modules/homebridge
     ./../../../modules/podman-exporter
+    ./../../../modules/dozzle/agent.nix
   ];
 
   networking.hostName = "bridge";

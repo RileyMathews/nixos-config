@@ -16,6 +16,7 @@
     ./../../../modules/vikunja
     ./../../../modules/webhooks
     ./../../../modules/podman-exporter
+    ./../../../modules/dozzle/agent.nix
     ./../../../modules/mealie
     ./../../../modules/radicale
   ];

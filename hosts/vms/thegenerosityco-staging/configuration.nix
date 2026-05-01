@@ -11,6 +11,7 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/tailscale
     ./../../../modules/restic-backup
+    ./../../../modules/dozzle/docker-agent.nix
   ];
   networking.hostName = "thegenerosityco-staging";
   nix.settings.experimental-features = ["nix-command" "flakes"];

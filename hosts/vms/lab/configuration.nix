@@ -12,6 +12,7 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
+    ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "lab";
   nix.settings.experimental-features = ["nix-command" "flakes"];

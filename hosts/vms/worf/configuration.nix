@@ -12,6 +12,7 @@
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
     ./../../../modules/vaultwarden
+    ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "worf";
   nix.settings.experimental-features = ["nix-command" "flakes"];

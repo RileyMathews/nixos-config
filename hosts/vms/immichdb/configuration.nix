@@ -11,6 +11,7 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/tailscale
     ./../../../modules/immichdb
+    ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "immichdb";
   nix.settings.experimental-features = ["nix-command" "flakes"];

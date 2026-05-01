@@ -17,6 +17,7 @@ pkgs,
     ./../../../modules/piper
     ./../../../modules/ollama
     ./../../../modules/podman-exporter
+    ./../../../modules/dozzle/agent.nix
   ];
 
   networking.hostName = "data";

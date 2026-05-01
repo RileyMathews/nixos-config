@@ -12,6 +12,7 @@
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
     ./../../../modules/podman-exporter
+    ./../../../modules/dozzle/agent.nix
     ./../../../modules/open-webui
     # ./../../../modules/jellyfin
     ./../../../modules/immich

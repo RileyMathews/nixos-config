@@ -21,6 +21,7 @@
     ./../../../modules/scraper
     ./../../../modules/davhome
     ./../../../modules/podman-exporter
+    ./../../../modules/dozzle/agent.nix
     ./../../../modules/bookshelf
   ];
   networking.hostName = "discovery";

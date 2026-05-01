@@ -15,6 +15,7 @@
     ./../../../modules/gatus
     ./../../../modules/ntfy
     ./../../../modules/podman-exporter
+    ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "defiant";
   nix.settings.experimental-features = ["nix-command" "flakes"];
