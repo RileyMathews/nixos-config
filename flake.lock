@@ -115,6 +115,27 @@
         "type": "github"
       }
     },
+    "familiar": {
+      "inputs": {
+        "gogcli-src": "gogcli-src",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777696270,
+        "narHash": "sha256-xISsuq4LGExxQjaJrWimXoHkiYufL3A50QB8CvccI9U=",
+        "ref": "refs/heads/master",
+        "rev": "2242e2b15b348ce50a23ccc96edc0e4a663deef0",
+        "revCount": 39,
+        "type": "git",
+        "url": "ssh://git@git.rileymathews.com/riley/familiar.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@git.rileymathews.com/riley/familiar.git"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -270,6 +291,23 @@
       "original": {
         "owner": "rileymathews",
         "repo": "forgebot",
+        "type": "github"
+      }
+    },
+    "gogcli-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777369084,
+        "narHash": "sha256-aau1w6b4nBdTMUTeX0LwV+8YPP5YeghE0iWSaHQXBFQ=",
+        "owner": "steipete",
+        "repo": "gogcli",
+        "rev": "469f4b4382f7938d061ff0d1dd075aa9ad4aa10b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "steipete",
+        "ref": "v0.14.0",
+        "repo": "gogcli",
         "type": "github"
       }
     },
@@ -568,6 +606,7 @@
         "agenix": "agenix",
         "auto-cpufreq": "auto-cpufreq",
         "disko": "disko",
+        "familiar": "familiar",
         "forgebot": "forgebot",
         "kolide": "kolide",
         "nixos-generators": "nixos-generators",

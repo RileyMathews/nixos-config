@@ -52,4 +52,5 @@ in
   "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
   "openai-personal-api-token-file.age".publicKeys = [riley];
   "bookshelf-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "familiar-env-file.age".publicKeys = [riley hostKeysByName.familiar];
 }

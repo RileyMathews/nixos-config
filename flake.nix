@@ -43,6 +43,10 @@
       url = "github:rileymathews/forgebot";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    familiar = {
+      url = "git+ssh://git@git.rileymathews.com/riley/familiar.git";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
