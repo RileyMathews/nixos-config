@@ -1,6 +1,6 @@
 { config, ... }:
 {
-    imports = [
+  imports = [
     ../nas-oci
     ../restic-backup
     ../nginx-multi-proxy
