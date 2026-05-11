@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["papyrd.rileymathews.com"];
 
@@ -24,7 +24,7 @@
     virtualisation.oci-containers.containers = {
         bookshelf = {
             # discovery
-            image = "ghcr.io/rileymathews/papyrd-server:alpha-2";
+            image = config.myContainerImages.bookshelf;
             ports = ["3847:3000"];
             user = "1000:1000";
             volumes = ["/var/lib/bookshelf/data:/app/storage"];

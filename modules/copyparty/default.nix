@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   confFile = pkgs.writeText "configuration.yaml" (builtins.readFile ./copyparty.conf);
 in
@@ -7,6 +7,7 @@ in
     ../nas-oci
     ../nginx-multi-proxy
     ../dns
+    ../container-images
   ];
 
   services.cloudflare-dns.enable = true;
@@ -27,7 +28,7 @@ in
 
     containers.copyparty = {
       definition = {
-        image = "copyparty/ac:1.20.6";
+        image = config.myContainerImages.copyparty;
         ports = [ "127.0.0.1:3923:3923" ];
         volumes = [
           "/mnt/copyparty/data:/w"

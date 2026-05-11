@@ -4,6 +4,7 @@
         ../nas-oci
         ../nginx-multi-proxy
         ../dns
+        ../container-images
     ];
 
     services.cloudflare-dns.enable = true;
@@ -24,7 +25,7 @@
 
         containers.jellyfin = {
             definition = {
-                image = "lscr.io/linuxserver/jellyfin:latest";
+                image = config.myContainerImages.jellyfin;
                 ports = [ "127.0.0.1:8096:8096" ];
                 volumes = [
                     "/mnt/jellyfin/config:/config"

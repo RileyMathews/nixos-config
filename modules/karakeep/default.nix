@@ -3,7 +3,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns ../restic-backup];
+    imports = [../caddy-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["karakeep.rileymathews.com" "chrome-karakeep.rileymathews.com"];
 
@@ -35,7 +35,7 @@
     virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
 
     virtualisation.oci-containers.containers.karakeep = {
-        image = "ghcr.io/karakeep-app/karakeep:0.31.0";
+        image = config.myContainerImages.karakeep;
         ports = ["3000:3000"];
         volumes = ["/var/lib/appdata/karakeep/data:/data"];
         environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];
@@ -53,7 +53,7 @@
     };
 
     virtualisation.oci-containers.containers.chrome = {
-        image = "gcr.io/zenika-hub/alpine-chrome:124";
+        image = config.myContainerImages.karakeep-chrome;
         networks = [ "podman" ];
         cmd = [
             "--no-sandbox"
@@ -66,7 +66,7 @@
     };
 
     virtualisation.oci-containers.containers.meilisearch = {
-        image = "getmeili/meilisearch:v1.13.3";
+        image = config.myContainerImages.karakeep-meilisearch;
         environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];
         networks = [ "podman" ];
         environment = {

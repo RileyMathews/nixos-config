@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-backup];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["homebridge.rileymathews.com"];
 
@@ -27,7 +27,7 @@
 
     virtualisation.oci-containers.containers = {
         homebridge = {
-            image = "docker.io/homebridge/homebridge:latest";
+            image = config.myContainerImages.homebridge;
             extraOptions = [ 
                 "--network=host" 
                 "--label" 

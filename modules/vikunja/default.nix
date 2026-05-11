@@ -4,6 +4,7 @@
         ../nginx-multi-proxy
         ../dns
         ../restic-backup
+        ../container-images
     ];
 
     services.cloudflare-dns.enable = true;
@@ -31,7 +32,7 @@
 
     virtualisation.oci-containers.containers = {
         vikunja = {
-            image = "vikunja/vikunja:2.3.0";
+            image = config.myContainerImages.vikunja;
             ports = [ "3456:3456" ];
             volumes = [ "/var/lib/appdata/vikunja/files:/app/vikunja/files" ];
             user = "1000:1000";

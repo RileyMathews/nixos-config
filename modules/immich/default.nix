@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nas-oci ../nginx-multi-proxy ../dns];
+    imports = [../nas-oci ../nginx-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["immich.rileymathews.com"];
 
@@ -28,7 +28,7 @@
 
         containers.immich = {
             definition = {
-                image = "ghcr.io/immich-app/immich-server:v2.7.5";
+                image = config.myContainerImages.immich-server;
                 ports = ["2283:2283"];
                 volumes = [
                     "/mnt/immich/uploads:/usr/src/app/upload"

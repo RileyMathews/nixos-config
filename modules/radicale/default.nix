@@ -4,6 +4,7 @@
     ../nginx-multi-proxy
     ../dns
     ../restic-backup
+    ../container-images
   ];
 
   services.cloudflare-dns.enable = true;
@@ -65,7 +66,7 @@
   };
 
   virtualisation.oci-containers.containers.radicale = {
-    image = "registry.rileymathews.com/rileymathews/radicale:test2";
+    image = config.myContainerImages.radicale;
     ports = [ "5232:5232" ];
     volumes = [
       "/etc/radicale/config:/etc/radicale/config:ro"

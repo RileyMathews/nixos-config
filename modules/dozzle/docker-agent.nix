@@ -1,12 +1,14 @@
 { config, ... }:
 
 {
+  imports = [ ../container-images ];
+
   virtualisation.oci-containers.backend = "docker";
 
   networking.firewall.allowedTCPPorts = [ 7007 ];
 
   virtualisation.oci-containers.containers.dozzle-agent = {
-    image = "docker.io/amir20/dozzle:v10.5.1";
+    image = config.myContainerImages.dozzle;
     cmd = [ "agent" ];
     ports = [ "7007:7007" ];
     volumes = [ "/var/run/docker.sock:/var/run/docker.sock:ro" ];

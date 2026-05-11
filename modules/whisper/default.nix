@@ -3,6 +3,7 @@
     imports = [
         ../nginx-multi-proxy
         ../dns
+        ../container-images
     ];
 
     services.cloudflare-dns.enable = true;
@@ -16,7 +17,7 @@
     networking.firewall.allowedTCPPorts = [10300];
 
     virtualisation.oci-containers.containers.whisper = {
-        image = "lscr.io/linuxserver/faster-whisper:gpu";
+        image = config.myContainerImages.whisper;
         ports = [ "10300:10300" ];
         volumes = [ "/var/lib/appdata/whisper/config:/config:rw" ];
         environment = {

@@ -3,6 +3,7 @@
     imports = [
         ../nginx-multi-proxy
         ../dns
+        ../container-images
     ];
 
     services.cloudflare-dns.enable = true;
@@ -14,7 +15,7 @@
     };
 
     virtualisation.oci-containers.containers.ollama = {
-        image = "ollama/ollama:0.21.3";
+        image = config.myContainerImages.ollama;
         ports = [ "11434:11434" ];
         volumes = [ "ollama_data:/root/.ollama" ];
         environment = {

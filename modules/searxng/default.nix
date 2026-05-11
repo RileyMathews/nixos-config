@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
+    imports = [../nginx-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["search.rileymathews.com"];
 
@@ -18,7 +18,7 @@
 
     virtualisation.oci-containers.containers = {
         searxng = {
-            image = "docker.io/searxng/searxng:latest";
+            image = config.myContainerImages.searxng;
             ports = ["8000:8080"];
             volumes = ["/etc/searxng/settings.yml:/etc/searxng/settings.yml:ro"];
             extraOptions = [

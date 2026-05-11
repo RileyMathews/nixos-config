@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  imports = [ ../nginx-multi-proxy ../dns ];
+  imports = [ ../nginx-multi-proxy ../dns ../container-images ];
 
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "dozzle.rileymathews.com" ];
@@ -18,7 +18,7 @@
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
   virtualisation.oci-containers.containers.dozzle = {
-    image = "docker.io/amir20/dozzle:v10.5.1";
+    image = config.myContainerImages.dozzle;
     ports = [ "127.0.0.1:8088:8080" ];
     volumes = [ "/var/lib/appdata/dozzle:/data" ];
     environment = {

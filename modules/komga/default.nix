@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["komga.rileymathews.com"];
 
@@ -21,7 +21,7 @@
 
     virtualisation.oci-containers.containers = {
         komga = {
-            image = "gotson/komga";
+            image = config.myContainerImages.komga;
             ports = ["25600:25600"];
             user = "1000:1000";
             volumes = [

@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["scraper.rileymathews.com"];
 
@@ -16,7 +16,7 @@
 
     virtualisation.oci-containers.containers = {
         scraper = {
-            image = "registry.rileymathews.com/rileymathews/scraper:0.0.2";
+            image = config.myContainerImages.scraper;
             ports = ["3948:8080"];
             user = "1000:1000";
         };

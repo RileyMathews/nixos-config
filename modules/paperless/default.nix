@@ -3,7 +3,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-backup];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["paperless.rileymathews.com"];
 
@@ -18,7 +18,7 @@
 
     virtualisation.oci-containers.containers = {
         paperless = {
-            image = "ghcr.io/paperless-ngx/paperless-ngx:2.20.14";
+            image = config.myContainerImages.paperless;
             ports = ["8008:8000"];
             volumes = [ 
                 "/var/lib/appdata/paperless/data:/usr/src/paperless/data"

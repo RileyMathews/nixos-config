@@ -6,7 +6,7 @@
 }:
 {
 
-    imports = [../nas-oci];
+    imports = [../nas-oci ../container-images];
 
     age.secrets.immich-credentials-file = {
         file =  ../../secrets/immich-credentials-file.age;
@@ -21,7 +21,7 @@
         };
 
         containers.immich.definition = {
-            image = "ghcr.io/immich-app/immich-server:v2.7.5";
+            image = config.myContainerImages.immich-server;
             volumes = [ 
                 "/mnt/immich/uploads:/usr/src/app/upload" 
             ];

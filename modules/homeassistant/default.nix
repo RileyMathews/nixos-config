@@ -7,7 +7,7 @@ let
     haConfigFile = pkgs.writeText "configuration.yaml" (builtins.readFile ./configuration.yaml);
 in
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-backup];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["home.rileymathews.com"];
 
@@ -26,7 +26,7 @@ in
 
     virtualisation.oci-containers.containers = {
         homeassistant = {
-            image = "linuxserver/homeassistant:version-2026.4.4";
+            image = config.myContainerImages.homeassistant;
             extraOptions = [ "--network=host" ];
             volumes = [ 
                 "/var/lib/appdata/homeassistant/config:/config"

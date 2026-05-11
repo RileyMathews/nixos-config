@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
+    imports = [../nginx-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["rhc.rileymathews.com"];
 
@@ -16,7 +16,7 @@
 
     virtualisation.oci-containers.containers = {
         reverse-health-check = {
-            image = "registry.rileymathews.com/rileymathews/reverse-health-check:0.0.1-alpha";
+            image = config.myContainerImages.reverse-health-check;
             ports = ["8081:8080"];
         };
     };

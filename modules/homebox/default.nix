@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-backup];
+    imports = [../nginx-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["homebox.rileymathews.com"];
 
@@ -29,7 +29,7 @@
 
     virtualisation.oci-containers.containers = {
         homebox = {
-            image = "ghcr.io/sysadminsmedia/homebox:0.25.0";
+            image = config.myContainerImages.homebox;
             ports = ["7745:7745"];
             volumes = [ "/var/lib/appdata/homebox/data:/data" ];
             user = "1000:1000";

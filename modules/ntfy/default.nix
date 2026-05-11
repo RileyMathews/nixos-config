@@ -5,7 +5,7 @@ lib,
 ...
 }:
 {
-  imports = [../nginx-multi-proxy ../dns];
+  imports = [../nginx-multi-proxy ../dns ../container-images];
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = ["ntfy.rileymathews.com"];
 
@@ -20,7 +20,7 @@ lib,
   '';
 
   virtualisation.oci-containers.containers.ntfy = {
-    image = "binwiederhier/ntfy:v2.22.0";
+    image = config.myContainerImages.ntfy;
     volumes = [ "/etc/ntfy/server.yml:/etc/ntfy/server.yml:ro" ];
     ports = [ "8021:8021" ];
     cmd = ["serve"];

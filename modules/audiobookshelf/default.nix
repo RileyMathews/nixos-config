@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nas-oci ../nginx-multi-proxy ../dns];
+    imports = [../nas-oci ../nginx-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["audiobookshelf.rileymathews.com"];
 
@@ -24,7 +24,7 @@
 
         containers.audiobookshelf = {
             definition = {
-                image = "ghcr.io/advplyr/audiobookshelf:2.33.2";
+                image = config.myContainerImages.audiobookshelf;
                 ports = ["13378:80"];
                 volumes = [
                     "/mnt/audiobookshelf/audiobooks:/audiobooks"

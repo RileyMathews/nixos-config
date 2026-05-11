@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["buffer.rileymathews.com"];
 
@@ -20,7 +20,7 @@
 
     virtualisation.oci-containers.containers = {
         buffer = {
-            image = "registry.rileymathews.com/rileymathews/buffer:0.0.27-alpha";
+            image = config.myContainerImages.buffer;
             ports = ["3999:3000"];
             user = "1000:1000";
             environmentFiles = [ config.age.secrets.buffer-credentials-file.path ];

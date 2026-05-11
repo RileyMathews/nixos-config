@@ -4,6 +4,7 @@
         ../nginx-multi-proxy
         ../dns
         ../restic-backup
+        ../container-images
     ];
 
     services.cloudflare-dns.enable = true;
@@ -31,7 +32,7 @@
 
     virtualisation.oci-containers.containers = {
         mealie = {
-            image = "ghcr.io/mealie-recipes/mealie:v3.16.0";
+            image = config.myContainerImages.mealie;
             ports = [ "9000:9000" ];
             volumes = [ "/var/lib/appdata/mealie/app/data:/app/data" ];
             user = "1000:1000";

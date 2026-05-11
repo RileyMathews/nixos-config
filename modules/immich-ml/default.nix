@@ -5,13 +5,15 @@
     ...
 }:
 {
+    imports = [../container-images];
+
     age.secrets.immich-credentials-file = {
         file =  ../../secrets/immich-credentials-file.age;
     };
 
     virtualisation.oci-containers.containers = {
         machine-learning = {
-            image = "ghcr.io/immich-app/immich-machine-learning:v2.7.5-cuda";
+            image = config.myContainerImages.immich-machine-learning;
             environment = {
                 IMMICH_VERSION = "release";
                 # password in secrets file

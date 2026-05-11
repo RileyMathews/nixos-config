@@ -3,6 +3,7 @@
     imports = [
         ../caddy-multi-proxy
         ../dns
+        ../container-images
     ];
 
     services.cloudflare-dns.enable = true;
@@ -18,7 +19,7 @@
     };
 
     virtualisation.oci-containers.containers.joplin = {
-        image = "docker.io/joplin/server:latest";
+        image = config.myContainerImages.joplin;
         ports = [ "22300:22300" ];
         environment = {
             DB_CLIENT = "pg";

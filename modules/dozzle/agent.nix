@@ -11,6 +11,8 @@ let
   ];
 in
 {
+  imports = [ ../container-images ];
+
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
 
@@ -34,7 +36,7 @@ in
   };
 
   virtualisation.oci-containers.containers.dozzle-agent = {
-    image = "docker.io/amir20/dozzle:v10.5.1";
+    image = config.myContainerImages.dozzle;
     cmd = [ "agent" ];
     ports = [ "7007:7007" ];
     volumes = [ "/run/podman/podman.sock:/var/run/docker.sock:ro" ];

@@ -3,6 +3,7 @@
     imports = [
         ../nginx-multi-proxy
         ../dns
+        ../container-images
     ];
 
     networking.firewall.allowedTCPPorts = [10200];
@@ -10,7 +11,7 @@
     virtualisation.oci-containers.backend = "podman";
 
     virtualisation.oci-containers.containers.piper = {
-        image = "lscr.io/linuxserver/piper:latest";
+        image = config.myContainerImages.piper;
         ports = [ "10200:10200" ];
         volumes = [ "/var/lib/appdata/piper/config:/config:rw" ];
         environment = {

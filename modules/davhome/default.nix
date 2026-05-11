@@ -3,7 +3,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["davhome.rileymathews.com"];
 
@@ -18,7 +18,7 @@
 
     virtualisation.oci-containers.containers = {
         davhome = {
-            image = "registry.rileymathews.com/rileymathews/davhome:0.0.18-alpha";
+            image = config.myContainerImages.davhome;
             ports = ["4010:8000"];
             user = "1000:1000";
             environmentFiles = [ config.age.secrets.davhome-credentials-file.path ];

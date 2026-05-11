@@ -1,10 +1,11 @@
 { config, ... }:
 {
-  imports = [
+    imports = [
     ../nas-oci
     ../restic-backup
     ../nginx-multi-proxy
     ../dns
+    ../container-images
   ];
 
   services.cloudflare-dns.enable = true;
@@ -35,7 +36,7 @@
 
     containers.pinchflat = {
       definition = {
-        image = "ghcr.io/kieraneglin/pinchflat:v2025.6.6";
+        image = config.myContainerImages.pinchflat;
         ports = [ "127.0.0.1:8945:8945" ];
         user = "1000:1000";
         environment = {

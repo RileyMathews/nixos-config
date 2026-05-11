@@ -1,8 +1,9 @@
 {
+    config,
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["registry.rileymathews.com"];
 
@@ -13,7 +14,7 @@
 
     virtualisation.oci-containers.containers = {
         registry = {
-            image = "registry:3.0.0";
+            image = config.myContainerImages.docker-registry;
             ports = ["5000:5000"];
             volumes = [ "/var/lib/appdata/docker-registry:/var/lib/registry" ];
         };

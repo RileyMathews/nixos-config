@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../caddy-multi-proxy ../dns];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["freshrss.rileymathews.com"];
 
@@ -24,7 +24,7 @@
 
     virtualisation.oci-containers.containers = {
         freshrss = {
-            image = "freshrss/freshrss:1.28.1";
+            image = config.myContainerImages.freshrss;
             ports = ["9733:80"];
             volumes = [ "/var/www/FreshRSS/data:/var/www/FreshRSS/data" ];
             environment = {

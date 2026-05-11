@@ -5,7 +5,7 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns];
+    imports = [../nginx-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["openwebui.rileymathews.com"];
 
@@ -20,7 +20,7 @@
 
     virtualisation.oci-containers.containers = {
         open-webui = {
-            image = "ghcr.io/open-webui/open-webui:0.9.2";
+            image = config.myContainerImages.open-webui;
             ports = ["8080:8080"];
             volumes = [ "openwebui_data:/app/backend/data" ];
             environment = {
