@@ -15,6 +15,9 @@
     virtualisation.oci-containers.containers = {
         registry = {
             image = config.myContainerImages.docker-registry;
+            environment = {
+                REGISTRY_STORAGE_DELETE_ENABLED = "true";
+            };
             ports = ["5000:5000"];
             volumes = [ "/var/lib/appdata/docker-registry:/var/lib/registry" ];
         };
