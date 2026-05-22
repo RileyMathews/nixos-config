@@ -5,7 +5,7 @@
     type = lib.types.attrsOf lib.types.str;
     default = {
       audiobookshelf = "ghcr.io/advplyr/audiobookshelf:2.34.0";
-      bookshelf = "ghcr.io/rileymathews/papyrd-server:alpha-6";
+      bookshelf = "ghcr.io/rileymathews/papyrd-server:alpha-9";
       buffer = "registry.rileymathews.com/rileymathews/buffer:0.0.27-alpha";
       copyparty = "copyparty/ac:1.20.6";
       davhome = "registry.rileymathews.com/rileymathews/davhome:0.0.18-alpha";
