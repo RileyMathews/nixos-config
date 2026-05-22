@@ -39,4 +39,9 @@
     backendHost = "http://thegenerosityco-staging:8080";
     proxyProtocol = true;
   };
+  myNginx.proxies.papyrd-demo = {
+    listenHost = "papyrd-demo.rileymathews.com";
+    backendHost = "http://discovery:3847";
+    proxyProtocol = true;
+  };
 }
