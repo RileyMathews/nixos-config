@@ -143,6 +143,15 @@
           ];
         };
 
+        thegenerosityco = lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/linode/configuration.nix
+            inputs.agenix.nixosModules.default
+          ];
+        };
+
         iso = lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
