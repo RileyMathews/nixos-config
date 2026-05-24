@@ -5,9 +5,11 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/tailscale
+      ../../modules/caddy-multi-proxy
     ];
 
   myTailscale.enable = true;
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -56,7 +58,7 @@
     isNormalUser = true;
     home = "/home/riley";
     description = "Riley Mathews";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
     openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFgBrMhlYyFQuzLE2dEIJ/vEEN769EiPrpKYVzBKERoe rileymathews80@gmail.com"];
   };
 
@@ -74,4 +76,22 @@
   networking.interfaces.eth0.useDHCP = true;
 
   system.stateVersion = "25.11"; # Did you read the comment?
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.logDriver = "json-file";
+  myCaddy.proxies.komga = {
+      listenHost = "thegenerosityco-production.rileymathews.com";
+      backendHost = "http://127.0.0.1:8080";
+  };
+  # services.resticBackup = {
+  #   enable = true;
+  #   backups.thegenerosityco-database = {
+  #     type = "sqlite-live-copy";
+  #     gatusHealthcheckId = "backups_thegenerosityco-staging-backup";
+  #     databases = [
+  #       "/var/lib/thegenerosityco/database/db.sqlite3"
+  #     ];
+  #   };
+  # };
+  networking.firewall.allowedTCPPorts = [80 443];
 }
