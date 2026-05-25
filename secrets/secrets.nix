@@ -15,8 +15,9 @@ let
   all = [local riley] ++ hostKeys;
 in
 {
-  # Cloudflare credentials for ACME DNS challenge
+  # DNS provider credentials for ACME DNS challenges
   "cloudflare-credentials.age".publicKeys = all;
+  "godaddy-credentials.age".publicKeys = all;
   "tailscale-credentials.age".publicKeys = all;
   "cloudflare-api-key.age".publicKeys = all;
   "forgejo-database-password.age".publicKeys = [hostKeysByName.forgejo riley hostKeysByName."backup-server"];
