@@ -69,8 +69,17 @@
   ];
 
 
-  services.openssh.enable = true;
-  services.openssh.settings.PermitRootLogin = "yes";
+  services.openssh = {
+    enable = true;
+    openFirewall = false;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      AllowUsers = [ "riley" ];
+      MaxAuthTries = 3;
+    };
+  };
 
   networking.usePredictableInterfaceNames = false;
   networking.useDHCP = false;
@@ -100,4 +109,5 @@
     };
   };
   networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [22];
 }
