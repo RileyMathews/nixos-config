@@ -3,43 +3,52 @@
 with lib;
 
 let
-  enabledProxies = filterAttrs (_: proxyConfig: proxyConfig.enable) config.myCaddy.proxies;
+  cfg = config.myCaddy;
+  enabledProxies = filterAttrs (_: proxyConfig: proxyConfig.enable) cfg.proxies;
   proxyProtocolValues = unique (mapAttrsToList (_: proxyConfig: proxyConfig.proxyProtocol) enabledProxies);
   useProxyProtocol = if enabledProxies == {} then false else head proxyProtocolValues;
 in
 {
   imports = [ ../acme-cloudflare ];
 
-  options.myCaddy.proxies = mkOption {
-    type = types.attrsOf (types.submodule ({ ... }: {
-      options = {
-        enable = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Whether to enable the service.";
-        };
+  options.myCaddy = {
+    proxies = mkOption {
+      type = types.attrsOf (types.submodule ({ ... }: {
+        options = {
+          enable = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Whether to enable the service.";
+          };
 
-        listenHost = mkOption {
-          type = types.str;
-          default = "localhost";
-          description = "Host to listen on.";
-        };
+          listenHost = mkOption {
+            type = types.str;
+            default = "localhost";
+            description = "Host to listen on.";
+          };
 
-        backendHost = mkOption {
-          type = types.str;
-          default = "http://localhost:8080";
-          description = "Backend host to proxy to.";
-        };
+          backendHost = mkOption {
+            type = types.str;
+            default = "http://localhost:8080";
+            description = "Backend host to proxy to.";
+          };
 
-        proxyProtocol = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Whether to enable proxy protocol.";
+          proxyProtocol = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable proxy protocol.";
+          };
+
+          useGodaddyAcme = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Use GoDaddy DNS for ACME certificate provisioning instead of Cloudflare.";
+          };
         };
-      };
-    }));
-    default = {};
-    description = "Caddy proxies configuration.";
+      }));
+      default = {};
+      description = "Caddy proxies configuration.";
+    };
   };
 
   config = {
@@ -82,6 +91,7 @@ in
         (_: proxyConfig: nameValuePair proxyConfig.listenHost {
           hostName = proxyConfig.listenHost;
           group = "caddy";
+          dnsProvider = if proxyConfig.useGodaddyAcme then "godaddy" else "cloudflare";
         })
         enabledProxies;
     };

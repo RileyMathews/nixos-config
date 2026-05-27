@@ -39,6 +39,12 @@
     backendHost = "http://thegenerosityco-staging:8080";
     proxyProtocol = true;
   };
+  myCaddy.proxies.staging-thegenerosityco = {
+    listenHost = "staging.thegenerosityco.com";
+    backendHost = "http://thegenerosityco-staging:8080";
+    proxyProtocol = true;
+    useGodaddyAcme = true;
+  };
   myCaddy.proxies.papyrd-demo = {
     listenHost = "papyrd-demo.rileymathews.com";
     backendHost = "http://discovery:3847";
