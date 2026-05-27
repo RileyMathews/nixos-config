@@ -5,6 +5,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/tailscale
+      ../../modules/restic-backup
       ../../modules/caddy-multi-proxy
     ];
 
