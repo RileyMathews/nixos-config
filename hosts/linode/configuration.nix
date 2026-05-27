@@ -80,9 +80,14 @@
 
   virtualisation.docker.enable = true;
   virtualisation.docker.logDriver = "json-file";
-  myCaddy.proxies.komga = {
+  myCaddy.proxies.thegenerosityco-production = {
       listenHost = "thegenerosityco-production.rileymathews.com";
       backendHost = "http://127.0.0.1:8080";
+  };
+  myCaddy.proxies.thegenerosityco = {
+      listenHost = "thegenerosityco.com";
+      backendHost = "http://127.0.0.1:8080";
+      useGodaddyAcme = true;
   };
   services.resticBackup = {
     enable = true;

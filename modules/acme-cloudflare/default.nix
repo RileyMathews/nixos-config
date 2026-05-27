@@ -80,7 +80,7 @@ in
             dnsProvider = certCfg.dnsProvider;
             group = certCfg.group;
             environmentFile = config.age.secrets.${provider.credentialsSecret}.path;
-            extraLegoFlags = optionals (certCfg.dnsProvider == "godaddy") [
+            extraLegoFlags = [
               "--dns.propagation-wait"
               "180s"
             ];
