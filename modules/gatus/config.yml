@@ -124,6 +124,12 @@ external-endpoints:
     heartbeat:
       interval: 25h
 
+  - name: thegenerosityco-production-backup
+    group: Backups
+    token: "$GATUS_PUSH_TOKEN"
+    heartbeat:
+      interval: 25h
+
   - name: forgejo-backup
     group: Backups
     token: "$GATUS_PUSH_TOKEN"

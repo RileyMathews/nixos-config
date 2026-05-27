@@ -83,15 +83,15 @@
       listenHost = "thegenerosityco-production.rileymathews.com";
       backendHost = "http://127.0.0.1:8080";
   };
-  # services.resticBackup = {
-  #   enable = true;
-  #   backups.thegenerosityco-database = {
-  #     type = "sqlite-live-copy";
-  #     gatusHealthcheckId = "backups_thegenerosityco-staging-backup";
-  #     databases = [
-  #       "/var/lib/thegenerosityco/database/db.sqlite3"
-  #     ];
-  #   };
-  # };
+  services.resticBackup = {
+    enable = true;
+    backups.thegenerosityco-database = {
+      type = "sqlite-live-copy";
+      gatusHealthcheckId = "backups_thegenerosityco-production-backup";
+      databases = [
+        "/var/lib/thegenerosityco/database/db.sqlite3"
+      ];
+    };
+  };
   networking.firewall.allowedTCPPorts = [80 443];
 }
