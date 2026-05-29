@@ -117,9 +117,13 @@ endpoints:
     <<: *defaults
     url: "https://copyparty.rileymathews.com"
 
-  # - name: thegenerosityco
-  #   <<: *defaults
-  #   url: "https://thegenerosityco.com"
+  - name: thegenerosityco
+    <<: *defaults
+    url: "https://thegenerosityco.com"
+    alerts:
+      - type: ntfy
+        provider-override:
+          priority: 5
 
 external-endpoints:
   - name: thegenerosityco-staging-backup
