@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
     imports = [
-        ../nginx-multi-proxy
+        ../caddy-multi-proxy
         ../dns
         ../container-images
     ];
@@ -9,7 +9,7 @@
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = [ "whisper.rileymathews.com" ];
 
-    myNginx.proxies.whisper = {
+    myCaddy.proxies.whisper = {
         listenHost = "whisper.rileymathews.com";
         backendHost = "http://127.0.0.1:10300";
     };

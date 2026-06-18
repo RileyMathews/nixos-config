@@ -2,7 +2,7 @@
 {
     imports = [
         ../nas-oci
-        ../nginx-multi-proxy
+        ../caddy-multi-proxy
         ../dns
         ../container-images
     ];
@@ -10,7 +10,7 @@
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = [ "jellyfin.rileymathews.com" ];
 
-    myNginx.proxies.jellyfin = {
+    myCaddy.proxies.jellyfin = {
         listenHost = "jellyfin.rileymathews.com";
         backendHost = "http://127.0.0.1:8096";
     };

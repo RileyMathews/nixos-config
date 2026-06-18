@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
     imports = [
-        ../nginx-multi-proxy
+        ../caddy-multi-proxy
         ../dns
         ../container-images
     ];
@@ -9,7 +9,7 @@
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = [ "ollama.rileymathews.com" ];
 
-    myNginx.proxies.ollama = {
+    myCaddy.proxies.ollama = {
         listenHost = "ollama.rileymathews.com";
         backendHost = "http://127.0.0.1:11434";
     };

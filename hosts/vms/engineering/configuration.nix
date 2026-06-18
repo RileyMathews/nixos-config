@@ -11,11 +11,17 @@ let
   caddyMetricsPort = 2019;
   caddyScrapeTargets = map (host: "${host}:${toString caddyMetricsPort}") [
     "discovery"
+    "defiant"
+    "bridge"
+    "data"
+    "enterprise"
+    "engineering"
     "familiar"
     "forgejo"
     "relay"
     "nas"
     "thegenerosityco"
+    "yamato"
   ];
 in
 {
@@ -26,7 +32,7 @@ in
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
     ./../../../modules/dns
-    ./../../../modules/nginx-multi-proxy
+    ./../../../modules/caddy-multi-proxy
     ./../../../modules/dozzle
   ];
   networking.hostName = "engineering";
@@ -36,7 +42,7 @@ in
   services.cloudflare-dns.domains = [ "grafana.rileymathews.com" ];
   networking.firewall.allowedTCPPorts = [80 443];
 
-  myNginx.proxies.grafana = {
+  myCaddy.proxies.grafana = {
     listenHost = "grafana.rileymathews.com";
     backendHost = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";
   };

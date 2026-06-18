@@ -5,11 +5,11 @@ lib,
 ...
 }:
 {
-  imports = [../nginx-multi-proxy ../dns];
+  imports = [../caddy-multi-proxy ../dns];
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = ["gatus.rileymathews.com"];
 
-  myNginx.proxies.gatus = {
+  myCaddy.proxies.gatus = {
     listenHost = "gatus.rileymathews.com";
     backendHost = "http://127.0.0.1:8020";
   };

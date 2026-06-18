@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
     imports = [
-        ../nginx-multi-proxy
+        ../caddy-multi-proxy
         ../dns
         ../container-images
     ];

@@ -5,11 +5,11 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../container-images];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["rhc.rileymathews.com"];
 
-    myNginx.proxies.reverse-health-check = {
+    myCaddy.proxies.reverse-health-check = {
         listenHost = "rhc.rileymathews.com";
         backendHost = "http://127.0.0.1:8081";
     };

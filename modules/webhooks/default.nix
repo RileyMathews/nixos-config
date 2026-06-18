@@ -5,11 +5,11 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../container-images];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["webhooks.rileymathews.com"];
 
-    myNginx.proxies.webhooks = {
+    myCaddy.proxies.webhooks = {
         listenHost = "webhooks.rileymathews.com";
         backendHost = "http://127.0.0.1:8798";
     };

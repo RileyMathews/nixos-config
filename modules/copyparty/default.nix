@@ -5,7 +5,7 @@ in
 {
   imports = [
     ../nas-oci
-    ../nginx-multi-proxy
+    ../caddy-multi-proxy
     ../dns
     ../container-images
   ];
@@ -13,7 +13,7 @@ in
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "copyparty.rileymathews.com" ];
 
-  myNginx.proxies.copyparty = {
+  myCaddy.proxies.copyparty = {
     listenHost = "copyparty.rileymathews.com";
     backendHost = "http://127.0.0.1:3923";
   };

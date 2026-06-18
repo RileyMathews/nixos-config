@@ -1,12 +1,12 @@
 { config, ... }:
 
 {
-  imports = [ ../nginx-multi-proxy ../dns ../container-images ];
+  imports = [ ../caddy-multi-proxy ../dns ../container-images ];
 
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "dozzle.rileymathews.com" ];
 
-  myNginx.proxies.dozzle = {
+  myCaddy.proxies.dozzle = {
     listenHost = "dozzle.rileymathews.com";
     backendHost = "http://127.0.0.1:8088";
   };

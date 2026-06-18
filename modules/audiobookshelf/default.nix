@@ -5,11 +5,11 @@
     ...
 }:
 {
-    imports = [../nas-oci ../nginx-multi-proxy ../dns ../container-images];
+    imports = [../nas-oci ../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["audiobookshelf.rileymathews.com"];
 
-    myNginx.proxies.audiobookshelf = {
+    myCaddy.proxies.audiobookshelf = {
         listenHost = "audiobookshelf.rileymathews.com";
         backendHost = "http://127.0.0.1:13378";
     };

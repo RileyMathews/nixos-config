@@ -7,11 +7,11 @@ let
     haConfigFile = pkgs.writeText "configuration.yaml" (builtins.readFile ./configuration.yaml);
 in
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-backup ../container-images];
+    imports = [../caddy-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["home.rileymathews.com"];
 
-    myNginx.proxies.homeassistant = {
+    myCaddy.proxies.homeassistant = {
         listenHost = "home.rileymathews.com";
         backendHost = "http://127.0.0.1:8123";
     };

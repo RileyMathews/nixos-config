@@ -3,7 +3,7 @@
   imports = [
     ../nas-oci
     ../restic-backup
-    ../nginx-multi-proxy
+    ../caddy-multi-proxy
     ../dns
     ../container-images
   ];
@@ -11,7 +11,7 @@
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "pinchflat.rileymathews.com" ];
 
-  myNginx.proxies.pinchflat = {
+  myCaddy.proxies.pinchflat = {
     listenHost = "pinchflat.rileymathews.com";
     backendHost = "http://127.0.0.1:8945";
   };

@@ -5,11 +5,11 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../container-images];
+    imports = [../caddy-multi-proxy ../dns ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["openwebui.rileymathews.com"];
 
-    myNginx.proxies.openwebui = {
+    myCaddy.proxies.openwebui = {
         listenHost = "openwebui.rileymathews.com";
         backendHost = "http://127.0.0.1:8080";
     };

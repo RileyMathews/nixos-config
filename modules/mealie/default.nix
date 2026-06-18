@@ -1,7 +1,7 @@
 { config, ... }:
 {
     imports = [
-        ../nginx-multi-proxy
+        ../caddy-multi-proxy
         ../dns
         ../restic-backup
         ../container-images
@@ -10,7 +10,7 @@
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = [ "mealie.rileymathews.com" ];
 
-    myNginx.proxies.mealie = {
+    myCaddy.proxies.mealie = {
         listenHost = "mealie.rileymathews.com";
         backendHost = "http://127.0.0.1:9000";
     };

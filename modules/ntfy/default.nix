@@ -5,11 +5,11 @@ lib,
 ...
 }:
 {
-  imports = [../nginx-multi-proxy ../dns ../container-images];
+  imports = [../caddy-multi-proxy ../dns ../container-images];
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = ["ntfy.rileymathews.com"];
 
-  myNginx.proxies.ntfy = {
+  myCaddy.proxies.ntfy = {
     listenHost = "ntfy.rileymathews.com";
     backendHost = "http://127.0.0.1:8021";
   };

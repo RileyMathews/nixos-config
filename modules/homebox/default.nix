@@ -5,11 +5,11 @@
     ...
 }:
 {
-    imports = [../nginx-multi-proxy ../dns ../restic-backup ../container-images];
+    imports = [../caddy-multi-proxy ../dns ../restic-backup ../container-images];
     services.cloudflare-dns.enable = true;
     services.cloudflare-dns.domains = ["homebox.rileymathews.com"];
 
-    myNginx.proxies.homebox = {
+    myCaddy.proxies.homebox = {
         listenHost = "homebox.rileymathews.com";
         backendHost = "http://127.0.0.1:7745";
     };
