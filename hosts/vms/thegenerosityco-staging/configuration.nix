@@ -17,6 +17,7 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
   virtualisation.docker.enable = true;
+  virtualisation.docker.package = pkgs.docker_29;
   virtualisation.docker.logDriver = "json-file";
   services.resticBackup = {
     enable = true;

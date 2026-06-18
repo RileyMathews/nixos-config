@@ -5,6 +5,19 @@
   pkgs,
   ...
 }:
+let
+  lokiHttpPort = 3100;
+  prometheusDatasourceUid = "PBFA97CFB590B2093";
+  caddyMetricsPort = 2019;
+  caddyScrapeTargets = map (host: "${host}:${toString caddyMetricsPort}") [
+    "discovery"
+    "familiar"
+    "forgejo"
+    "relay"
+    "nas"
+    "thegenerosityco"
+  ];
+in
 {
   imports = [
     ./../../../modules/vms/basic-disk-config.nix
@@ -42,10 +55,18 @@
       datasources.settings.datasources = [
         {
           name = "Prometheus";
+          uid = prometheusDatasourceUid;
           type = "prometheus";
           access = "proxy";
           url = "http://127.0.0.1:${toString config.services.prometheus.port}";
           isDefault = true;
+        }
+        {
+          name = "Loki";
+          uid = "Loki";
+          type = "loki";
+          access = "proxy";
+          url = "http://127.0.0.1:${toString lokiHttpPort}";
         }
       ];
       dashboards.settings.providers = [
@@ -59,6 +80,52 @@
 
   environment.etc."grafana-dashboards/podman.json".source = ./podman-dashboard.json;
   environment.etc."grafana-dashboards/node-exporter.json".source = ./node-exporter-dashboard.json;
+  environment.etc."grafana-dashboards/caddy.json".source = ./caddy-dashboard.json;
+
+  services.loki = {
+    enable = true;
+    configuration = {
+      auth_enabled = false;
+
+      server = {
+        http_listen_address = "0.0.0.0";
+        http_listen_port = lokiHttpPort;
+        grpc_listen_port = 9096;
+      };
+
+      common = {
+        path_prefix = config.services.loki.dataDir;
+        replication_factor = 1;
+        ring.kvstore.store = "inmemory";
+        storage.filesystem = {
+          chunks_directory = "${config.services.loki.dataDir}/chunks";
+          rules_directory = "${config.services.loki.dataDir}/rules";
+        };
+      };
+
+      schema_config.configs = [{
+        from = "2024-01-01";
+        store = "tsdb";
+        object_store = "filesystem";
+        schema = "v13";
+        index = {
+          prefix = "index_";
+          period = "24h";
+        };
+      }];
+
+      compactor = {
+        working_directory = "${config.services.loki.dataDir}/compactor";
+        retention_enabled = true;
+        delete_request_store = "filesystem";
+      };
+
+      limits_config.retention_period = "30d";
+      analytics.reporting_enabled = false;
+    };
+  };
+
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ lokiHttpPort ];
 
   services.prometheus = {
     enable = true;
@@ -92,6 +159,12 @@
             "yamato:9002"
             "lab:9002"
           ];
+        }];
+      }
+      {
+        job_name = "caddy";
+        static_configs = [{
+          targets = caddyScrapeTargets;
         }];
       }
       {

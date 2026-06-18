@@ -73,10 +73,10 @@
     enable = true;
     openFirewall = false;
     settings = {
-      PermitRootLogin = "no";
+      PermitRootLogin = "prohibit-password";
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
-      AllowUsers = [ "riley" ];
+      AllowUsers = [ "riley" "root" ];
       MaxAuthTries = 3;
     };
   };
@@ -88,6 +88,7 @@
   system.stateVersion = "25.11"; # Did you read the comment?
 
   virtualisation.docker.enable = true;
+  virtualisation.docker.package = pkgs.docker_29;
   virtualisation.docker.logDriver = "json-file";
   myCaddy.proxies.thegenerosityco-production = {
       listenHost = "thegenerosityco-production.rileymathews.com";

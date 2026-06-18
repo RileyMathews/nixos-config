@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.myCaddy;
+  caddyMetricsPort = 2019;
   enabledProxies = filterAttrs (_: proxyConfig: proxyConfig.enable) cfg.proxies;
   proxyProtocolValues = unique (mapAttrsToList (_: proxyConfig: proxyConfig.proxyProtocol) enabledProxies);
   useProxyProtocol = if enabledProxies == {} then false else head proxyProtocolValues;
@@ -61,15 +62,32 @@ in
 
     services.caddy = {
       enable = true;
+      enableReload = false;
       virtualHosts = mapAttrs'
         (_: proxyConfig: nameValuePair proxyConfig.listenHost {
           useACMEHost = proxyConfig.listenHost;
+          logFormat = ''
+            output file ${config.services.caddy.logDir}/access-${replaceStrings [ "/" " " ] [ "_" "_" ] proxyConfig.listenHost}.log {
+              mode 0640
+              roll_size 100MiB
+              roll_keep 5
+              roll_keep_for 30d
+            }
+            format json
+          '';
           extraConfig = ''
             reverse_proxy ${proxyConfig.backendHost}
           '';
         })
         enabledProxies;
-      globalConfig = mkIf useProxyProtocol ''
+      globalConfig = ''
+        admin :${toString caddyMetricsPort}
+
+        metrics {
+          per_host
+        }
+      '' + optionalString useProxyProtocol ''
+
         servers :80 {
           listener_wrappers {
             proxy_protocol
@@ -84,6 +102,59 @@ in
         }
       '';
     };
+
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ caddyMetricsPort ];
+
+    services.alloy.enable = true;
+
+    environment.etc."alloy/caddy.alloy".text = ''
+      loki.source.file "caddy" {
+        targets = [{
+          __path__ = "${config.services.caddy.logDir}/access-*.log",
+          job = "caddy",
+          instance = "${config.networking.hostName}",
+        }]
+        forward_to = [loki.process.caddy.receiver]
+        tail_from_end = true
+
+        file_match {
+          enabled = true
+          sync_period = "10s"
+        }
+      }
+
+      loki.process "caddy" {
+        forward_to = [loki.write.engineering.receiver]
+
+        stage.json {
+          expressions = {
+            host = "request.host",
+            method = "request.method",
+            status = "status",
+          }
+        }
+
+        stage.labels {
+          values = {
+            host = "",
+            method = "",
+            status = "",
+          }
+        }
+      }
+
+      loki.write "engineering" {
+        endpoint {
+          url = "http://engineering:3100/loki/api/v1/push"
+        }
+      }
+    '';
+
+    systemd.services.alloy.serviceConfig.SupplementaryGroups = mkAfter [ "caddy" ];
+
+    systemd.tmpfiles.rules = [
+      "z ${config.services.caddy.logDir}/access-*.log 0640 caddy caddy - -"
+    ];
 
     myAcme = {
       enable = true;
