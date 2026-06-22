@@ -19,7 +19,7 @@
   services.redis.servers."main-redis" = {
     enable = true;
     port = 6379;
-    bind = "redis8.tailscale.rileymathews.com";
+    bind = "0.0.0.0";
     settings = {
       protected-mode = "no";
     };
