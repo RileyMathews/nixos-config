@@ -13,7 +13,6 @@
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
     ./../../../modules/docker-registry
-    ./../../../modules/miniflux
     ./../../../modules/freshrss
     ./../../../modules/karakeep
     ./../../../modules/joplin

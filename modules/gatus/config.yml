@@ -53,10 +53,6 @@ endpoints:
     <<: *defaults
     url: "https://karakeep.rileymathews.com"
 
-  - name: miniflux
-    <<: *defaults
-    url: "https://miniflux.rileymathews.com"
-
   - name: searxng
     <<: *defaults
     url: "https://search.rileymathews.com"
