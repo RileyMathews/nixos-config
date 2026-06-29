@@ -36,6 +36,7 @@ in
   "homebox-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "immich-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
   "joplin-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "litellm-env-file.age".publicKeys = [riley hostKeysByName.yamato];
   "vikunja-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.yamato];

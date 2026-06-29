@@ -46,6 +46,7 @@
                 POSTGRES_SERVER = "pg17.tailscale.rileymathews.com";
                 POSTGRES_PORT = "5432";
                 POSTGRES_DB = "mealie";
+                OPENAI_MODEL = "gpt-5";
                 MAX_WORKERS = "1";
                 WEB_CONCURRENCY = "1";
                 BASE_URL = "mealie.rileymathews.com";

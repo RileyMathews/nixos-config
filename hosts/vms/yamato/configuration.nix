@@ -13,6 +13,7 @@
     ./../../../modules/tailscale
     ./../../../modules/podman-exporter
     ./../../../modules/dozzle/agent.nix
+    ./../../../modules/litellm
     ./../../../modules/open-webui
     # ./../../../modules/jellyfin
     ./../../../modules/immich

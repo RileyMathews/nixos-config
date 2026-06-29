@@ -24,6 +24,7 @@
       karakeep-chrome = "gcr.io/zenika-hub/alpine-chrome:124";
       karakeep-meilisearch = "getmeili/meilisearch:v1.13.3";
       komga = "gotson/komga";
+      litellm = "docker.litellm.ai/berriai/litellm:v1.90.0@sha256:a50b02a6056095da29308310bb608f0509e08ddcd1d105bae9c21007d82b0e95";
       mealie = "ghcr.io/mealie-recipes/mealie:v3.17.0";
       miniflux = "miniflux/miniflux:2.2.17";
       ntfy = "binwiederhier/ntfy:v2.22.0";
