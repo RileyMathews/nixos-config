@@ -1,5 +1,6 @@
 ---
 description: Update the docker containers in this repository with their latest versions.
+agent: build
 ---
 
 Update the docker containers defined in this repository in modules/container-images/default.nix.
