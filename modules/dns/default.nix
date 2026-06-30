@@ -76,6 +76,8 @@ in
         User = "tailscale-ddns";
         Group = "tailscale-ddns";
         ExecStart = "${pythonEnv}/bin/python3 ${updateScript}";
+        Restart = "on-failure";
+        RestartSec = "2s";
         
         # Security settings
         PrivateTmp = true;
@@ -92,6 +94,7 @@ in
 
       # Ensure dependencies are available
       after = [ "tailscaled.service" "tailscale-ready.service" ];
+      requires = [ "tailscale-ready.service" ];
       wants = [ "tailscaled.service" "tailscale-ready.service" ];
       wantedBy = [ "multi-user.target" ];
     };

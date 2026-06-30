@@ -4,7 +4,31 @@ import subprocess
 import sys
 import requests
 import os
-from typing import List, Optional
+import time
+from typing import Optional
+
+RETRY_DELAYS = [1, 3, 5]
+
+def cloudflare_request(method: str, url: str, **kwargs) -> requests.Response:
+    """Make a Cloudflare API request with short retries for transient failures."""
+    for attempt in range(len(RETRY_DELAYS) + 1):
+        try:
+            response = requests.request(method, url, timeout=30, **kwargs)
+            if response.status_code not in [429, 500, 502, 503, 504]:
+                return response
+
+            error = f"HTTP {response.status_code}"
+        except requests.RequestException as e:
+            error = str(e)
+
+        if attempt == len(RETRY_DELAYS):
+            raise RuntimeError(error)
+
+        delay = RETRY_DELAYS[attempt]
+        print(f"Cloudflare API request failed ({error}); retrying in {delay}s")
+        time.sleep(delay)
+
+    raise RuntimeError("unreachable")
 
 def get_tailscale_ip() -> Optional[str]:
     """Get the current Tailscale IPv4 address."""
@@ -47,7 +71,7 @@ def test_api_connection(zone_id: str, api_token: str) -> bool:
     }
 
     try:
-        response = requests.get(url, headers=headers, timeout=30)
+        response = cloudflare_request("GET", url, headers=headers)
         
         if response.status_code == 200:
             data = response.json()
@@ -69,7 +93,7 @@ def test_api_connection(zone_id: str, api_token: str) -> bool:
                 print(f"Raw response: {response.text}")
             return False
             
-    except requests.RequestException as e:
+    except RuntimeError as e:
         print(f"✗ Network error testing API: {e}")
         return False
 
@@ -83,7 +107,7 @@ def get_dns_record(domain: str, zone_id: str, api_token: str) -> Optional[dict]:
     params = {"name": domain, "type": "A"}
 
     try:
-        response = requests.get(url, headers=headers, params=params, timeout=30)
+        response = cloudflare_request("GET", url, headers=headers, params=params)
         
         if response.status_code == 200:
             data = response.json()
@@ -91,10 +115,12 @@ def get_dns_record(domain: str, zone_id: str, api_token: str) -> Optional[dict]:
                 records = data.get("result", [])
                 return records[0] if records else None
             else:
+                error_messages = []
                 print(f"Cloudflare API error for {domain}:")
                 for error in data.get("errors", []):
                     print(f"  {error}")
-                return None
+                    error_messages.append(str(error))
+                raise RuntimeError("; ".join(error_messages) or "Cloudflare API returned success=false")
         else:
             print(f"HTTP {response.status_code} error getting DNS record for {domain}:")
             try:
@@ -102,11 +128,11 @@ def get_dns_record(domain: str, zone_id: str, api_token: str) -> Optional[dict]:
                 print(f"  {json.dumps(error_data, indent=2)}")
             except:
                 print(f"  Raw response: {response.text}")
-            return None
+            raise RuntimeError(f"HTTP {response.status_code}")
         
-    except requests.RequestException as e:
+    except RuntimeError as e:
         print(f"Network error getting DNS record for {domain}: {e}")
-        return None
+        raise
 
 def create_dns_record(domain: str, ip: str, zone_id: str, api_token: str) -> bool:
     """Create a new DNS A record."""
@@ -125,7 +151,7 @@ def create_dns_record(domain: str, ip: str, zone_id: str, api_token: str) -> boo
     print(f"Creating DNS record: {json.dumps(data, indent=2)}")
 
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=30)
+        response = cloudflare_request("POST", url, headers=headers, json=data)
         
         if response.status_code == 200:
             result = response.json()
@@ -136,17 +162,24 @@ def create_dns_record(domain: str, ip: str, zone_id: str, api_token: str) -> boo
                 print(f"Error creating DNS record for {domain}:")
                 for error in result.get("errors", []):
                     print(f"  {error}")
+                    if error.get("code") == 81058:
+                        print(f"DNS record for {domain} already exists; treating as success")
+                        return True
                 return False
         else:
             print(f"HTTP {response.status_code} error creating DNS record for {domain}:")
             try:
                 error_data = response.json()
                 print(f"  {json.dumps(error_data, indent=2)}")
+                for error in error_data.get("errors", []):
+                    if error.get("code") == 81058:
+                        print(f"DNS record for {domain} already exists; treating as success")
+                        return True
             except:
                 print(f"  Raw response: {response.text}")
             return False
             
-    except requests.RequestException as e:
+    except RuntimeError as e:
         print(f"Network error creating DNS record for {domain}: {e}")
         return False
 
@@ -160,7 +193,7 @@ def update_dns_record(domain: str, record_id: str, new_ip: str, zone_id: str, ap
     data = {"content": new_ip}
 
     try:
-        response = requests.patch(url, headers=headers, json=data, timeout=30)
+        response = cloudflare_request("PATCH", url, headers=headers, json=data)
         
         if response.status_code == 200:
             result = response.json()
@@ -181,7 +214,7 @@ def update_dns_record(domain: str, record_id: str, new_ip: str, zone_id: str, ap
                 print(f"  Raw response: {response.text}")
             return False
             
-    except requests.RequestException as e:
+    except RuntimeError as e:
         print(f"Network error updating {domain}: {e}")
         return False
 
@@ -190,7 +223,10 @@ def update_domain(domain: str, tailscale_ip: str, zone_id: str, api_token: str) 
     print(f"Processing domain: {domain}")
     
     # Get current DNS record
-    record = get_dns_record(domain, zone_id, api_token)
+    try:
+        record = get_dns_record(domain, zone_id, api_token)
+    except RuntimeError:
+        return False
     
     if record is None:
         # No existing record, create a new one
@@ -200,6 +236,9 @@ def update_domain(domain: str, tailscale_ip: str, zone_id: str, api_token: str) 
     # Record exists, check if update is needed
     record_id = record.get("id")
     current_ip = record.get("content")
+    if not record_id:
+        print(f"Error: DNS record for {domain} is missing an id")
+        return False
     
     if current_ip == tailscale_ip:
         print(f"IP for {domain} is already up to date ({current_ip})")
