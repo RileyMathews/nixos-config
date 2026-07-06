@@ -93,10 +93,6 @@ endpoints:
     <<: *defaults
     url: "https://buffer.rileymathews.com"
 
-  - name: davhome
-    <<: *defaults
-    url: "https://davhome.rileymathews.com"
-
   - name: homebox
     <<: *defaults
     url: "https://homebox.rileymathews.com"
@@ -193,8 +189,3 @@ external-endpoints:
     heartbeat:
       interval: 25h
 
-  - name: pinchflat-backup
-    group: Backups
-    token: "$GATUS_PUSH_TOKEN"
-    heartbeat:
-      interval: 25h

@@ -26,7 +26,7 @@
       DOZZLE_NO_ANALYTICS = "true";
       DOZZLE_ENABLE_ACTIONS = "false";
       DOZZLE_ENABLE_SHELL = "false";
-      DOZZLE_REMOTE_AGENT = "enterprise:7007|enterprise|Homelab,discovery:7007|discovery|Homelab,yamato:7007|yamato|Homelab,data:7007|data|Homelab,defiant:7007|defiant|Homelab,bridge:7007|bridge|Homelab,worf:7007|worf|Homelab,immichdb:7007|immichdb|Homelab,thegenerosityco-staging:7007|thegenerosityco-staging|Homelab,lab:7007|lab|Homelab";
+      DOZZLE_REMOTE_AGENT = "enterprise:7007|enterprise|Homelab,yamato:7007|yamato|Homelab,data:7007|data|Homelab,defiant:7007|defiant|Homelab,bridge:7007|bridge|Homelab,worf:7007|worf|Homelab,immichdb:7007|immichdb|Homelab,thegenerosityco-staging:7007|thegenerosityco-staging|Homelab,lab:7007|lab|Homelab";
     };
   };
 

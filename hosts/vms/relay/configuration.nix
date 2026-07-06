@@ -47,7 +47,7 @@
   };
   myCaddy.proxies.papyrd-demo = {
     listenHost = "papyrd-demo.rileymathews.com";
-    backendHost = "http://discovery:3847";
+    backendHost = "http://defiant:3847";
     proxyProtocol = true;
   };
 }

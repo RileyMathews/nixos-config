@@ -25,7 +25,6 @@ in
   "karakeep-env.age".publicKeys = [hostKeysByName.borg riley hostKeysByName.defiant];
   "aws-access-key.age".publicKeys = all;
   "gatus-database-password.age".publicKeys = [riley hostKeysByName."backup-server"];
-  "miniflux-env-file.age".publicKeys = [riley hostKeysByName.discovery];
   "vaultwarden-env-file.age".publicKeys = [riley hostKeysByName.worf];
   "pg17-admin-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
   "mealie-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
@@ -46,7 +45,6 @@ in
   "opecde-test-secrets-file.age".publicKeys = [riley];
   "restic-password.age".publicKeys = all;
   "forgejo-runner-token-file.age".publicKeys = [riley hostKeysByName.forgejo hostKeysByName.lab];
-  "davhome-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
   "github-token-file.age".publicKeys = [riley];
   "forgejo-token-file.age".publicKeys = [riley];
   "gatus-push-token.age".publicKeys = all;

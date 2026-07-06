@@ -10,7 +10,6 @@ let
   prometheusDatasourceUid = "PBFA97CFB590B2093";
   caddyMetricsPort = 2019;
   caddyScrapeTargets = map (host: "${host}:${toString caddyMetricsPort}") [
-    "discovery"
     "defiant"
     "bridge"
     "data"
@@ -155,7 +154,6 @@ in
         static_configs = [{
           targets = [ 
             "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" 
-            "discovery:9002"
             "data:9002"
             "defiant:9002"
             "borg:9002"
@@ -186,7 +184,6 @@ in
             "data:9882"
             "defiant:9882"
             "bridge:9882"
-            "discovery:9882"
             "enterprise:9882"
             "yamato:9882"
           ];
