@@ -12,8 +12,6 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
-    ./../../../modules/gatus
-    ./../../../modules/ntfy
     ./../../../modules/docker-registry
     ./../../../modules/freshrss
     ./../../../modules/karakeep
