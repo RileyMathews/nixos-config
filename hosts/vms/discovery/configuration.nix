@@ -17,8 +17,6 @@
     ./../../../modules/karakeep
     ./../../../modules/joplin
     ./../../../modules/buffer
-    ./../../../modules/scraper
-    ./../../../modules/davhome
     ./../../../modules/podman-exporter
     ./../../../modules/dozzle/agent.nix
     ./../../../modules/bookshelf
