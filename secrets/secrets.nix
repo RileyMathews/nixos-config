@@ -21,7 +21,7 @@ in
   "tailscale-credentials.age".publicKeys = all;
   "cloudflare-api-key.age".publicKeys = all;
   "forgejo-database-password.age".publicKeys = [hostKeysByName.forgejo riley hostKeysByName."backup-server"];
-  "gatus-credentials.age".publicKeys = [hostKeysByName.defiant riley];
+  "gatus-credentials.age".publicKeys = [hostKeysByName.defiant hostKeysByName.engineering riley];
   "karakeep-env.age".publicKeys = [hostKeysByName.borg riley hostKeysByName.defiant];
   "aws-access-key.age".publicKeys = all;
   "gatus-database-password.age".publicKeys = [riley hostKeysByName."backup-server"];
@@ -31,14 +31,14 @@ in
   "mealie-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "radicale-users.age".publicKeys = [riley hostKeysByName.enterprise];
   "immich-credentials-file.age".publicKeys = [riley hostKeysByName.yamato hostKeysByName.data hostKeysByName.immichdb];
-  "karakeep-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "karakeep-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "paperless-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "homebox-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
   "immich-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
-  "joplin-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "joplin-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "litellm-env-file.age".publicKeys = [riley hostKeysByName.yamato];
   "vikunja-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
-  "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.yamato];
   "pinchflat-env-file.age".publicKeys = [riley hostKeysByName.yamato];
   "homeassistant-secrets-file.age".publicKeys = [riley hostKeysByName.bridge];
@@ -51,8 +51,8 @@ in
   "forgejo-token-file.age".publicKeys = [riley];
   "gatus-push-token.age".publicKeys = all;
   "forgebot-credentials-file.age".publicKeys = [riley hostKeysByName.forgebot];
-  "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "openai-personal-api-token-file.age".publicKeys = [riley];
-  "bookshelf-credentials-file.age".publicKeys = [riley hostKeysByName.discovery];
+  "bookshelf-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "familiar-env-file.age".publicKeys = [riley hostKeysByName.familiar];
 }

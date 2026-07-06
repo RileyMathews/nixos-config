@@ -14,12 +14,19 @@
     ./../../../modules/tailscale
     ./../../../modules/gatus
     ./../../../modules/ntfy
+    ./../../../modules/docker-registry
+    ./../../../modules/freshrss
+    ./../../../modules/karakeep
+    ./../../../modules/joplin
+    ./../../../modules/buffer
+    ./../../../modules/bookshelf
     ./../../../modules/podman-exporter
     ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "defiant";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+  networking.firewall.allowedTCPPorts = [80 443];
   virtualisation.podman.enable = true;
   systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
 }

@@ -29,4 +29,9 @@
             };
         };
     };
+
+    systemd.services."podman-buffer" = {
+        after = [ "podman-registry.service" "caddy.service" ];
+        wants = [ "podman-registry.service" "caddy.service" ];
+    };
 }

@@ -32,6 +32,8 @@ in
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
     ./../../../modules/dns
+    ./../../../modules/gatus
+    ./../../../modules/ntfy
     ./../../../modules/caddy-multi-proxy
     ./../../../modules/dozzle
   ];
@@ -41,6 +43,9 @@ in
   services.cloudflare-dns.enable = true;
   services.cloudflare-dns.domains = [ "grafana.rileymathews.com" ];
   networking.firewall.allowedTCPPorts = [80 443];
+
+  virtualisation.podman.enable = true;
+  systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
 
   myCaddy.proxies.grafana = {
     listenHost = "grafana.rileymathews.com";

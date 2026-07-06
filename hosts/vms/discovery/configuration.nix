@@ -12,14 +12,8 @@
     ./../../../modules/vms/basic-config.nix
     ./../../../modules/vms/swap-config.nix
     ./../../../modules/tailscale
-    ./../../../modules/docker-registry
-    ./../../../modules/freshrss
-    ./../../../modules/karakeep
-    ./../../../modules/joplin
-    ./../../../modules/buffer
     ./../../../modules/podman-exporter
     ./../../../modules/dozzle/agent.nix
-    ./../../../modules/bookshelf
   ];
   networking.hostName = "discovery";
   nix.settings.experimental-features = ["nix-command" "flakes"];
