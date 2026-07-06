@@ -15,7 +15,6 @@ let
     "data"
     "enterprise"
     "engineering"
-    "familiar"
     "forgejo"
     "relay"
     "nas"
