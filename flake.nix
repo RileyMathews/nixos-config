@@ -19,45 +19,6 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    kolide = {
-      url = "github:kolide/nix-agent/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    opencode = {
-      url = "github:anomalyco/opencode?ref=v1.2.27";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    worktrunk = {
-      url = "github:max-sixty/worktrunk?ref=v0.29.4";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    forgebot = {
-      url = "github:rileymathews/forgebot";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    familiar = {
-      url = "git+ssh://git@git.rileymathews.com/riley/familiar.git";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    tree-sitter = {
-      url = "github:tree-sitter/tree-sitter?ref=v0.26.7";
-    };
-    television = {
-      url = "github:alexpasmantier/television?ref=0.15.3";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

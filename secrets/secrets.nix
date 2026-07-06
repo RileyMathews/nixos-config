@@ -52,5 +52,4 @@ in
   "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "openai-personal-api-token-file.age".publicKeys = [riley];
   "bookshelf-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
-  "familiar-env-file.age".publicKeys = [riley hostKeysByName.familiar];
 }
