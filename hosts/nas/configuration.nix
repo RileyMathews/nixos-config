@@ -72,7 +72,31 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 2049 5432 ];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+    config.services.prometheus.exporters.node.port
+    config.services.prometheus.exporters.postgres.port
+    config.services.prometheus.exporters.smartctl.port
+    config.services.prometheus.exporters.zfs.port
+  ];
   services.zfs.autoScrub.enable = true;
+
+  services.smartd.enable = true;
+  services.prometheus.exporters = {
+    node = {
+      enable = true;
+      port = 9002;
+      enabledCollectors = [ "systemd" ];
+    };
+    postgres = {
+      enable = true;
+      runAsLocalSuperUser = true;
+    };
+    smartctl.enable = true;
+    zfs = {
+      enable = true;
+      pools = [ "main" ];
+    };
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.riley = {
