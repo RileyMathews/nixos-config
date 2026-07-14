@@ -69,8 +69,6 @@ let
   # Validate a single backup configuration
   validateBackup = name: backup:
     let
-      typeValid = true;  # Type is already validated by enum
-
       pathListValid = backup.type != "path-list" || (backup.paths != [] && all (p: hasPrefix "/" p) backup.paths);
       pathListMsg = ''
         Backup "${name}" has type "path-list" but invalid paths configuration.
@@ -220,7 +218,7 @@ in
       }
     ) cfg.backups;
 
-    systemd.timers = mapAttrs' (name: backup:
+    systemd.timers = mapAttrs' (name: _:
       nameValuePair "restic-backup-${name}" {
         description = "Timer for restic backup: ${name}";
         wantedBy = [ "timers.target" ];

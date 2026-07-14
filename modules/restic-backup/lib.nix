@@ -1,10 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
 let
-  cfg = config.services.resticBackup;
-
   # Create a derivation that installs the scripts to the nix store
   backupScripts = pkgs.stdenv.mkDerivation {
     name = "restic-backup-scripts";

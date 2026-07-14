@@ -22,9 +22,7 @@ in
   "cloudflare-api-key.age".publicKeys = all;
   "forgejo-database-password.age".publicKeys = [hostKeysByName.forgejo riley hostKeysByName."backup-server"];
   "gatus-credentials.age".publicKeys = [hostKeysByName.defiant hostKeysByName.engineering riley];
-  "karakeep-env.age".publicKeys = [hostKeysByName.borg riley hostKeysByName.defiant];
   "aws-access-key.age".publicKeys = all;
-  "gatus-database-password.age".publicKeys = [riley hostKeysByName."backup-server"];
   "vaultwarden-env-file.age".publicKeys = [riley hostKeysByName.worf];
   "pg17-admin-password-file.age".publicKeys = [riley hostKeysByName."backup-server"];
   "mealie-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
@@ -41,15 +39,9 @@ in
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.yamato];
   "pinchflat-env-file.age".publicKeys = [riley hostKeysByName.yamato];
   "homeassistant-secrets-file.age".publicKeys = [riley hostKeysByName.bridge];
-  "openclaw-credentials-file.age".publicKeys = [riley hostKeysByName.openclaw];
-  "opecde-test-secrets-file.age".publicKeys = [riley];
   "restic-password.age".publicKeys = all;
   "forgejo-runner-token-file.age".publicKeys = [riley hostKeysByName.forgejo hostKeysByName.lab];
-  "github-token-file.age".publicKeys = [riley];
-  "forgejo-token-file.age".publicKeys = [riley];
   "gatus-push-token.age".publicKeys = all;
-  "forgebot-credentials-file.age".publicKeys = [riley hostKeysByName.forgebot];
   "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
-  "openai-personal-api-token-file.age".publicKeys = [riley];
   "bookshelf-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
 }
