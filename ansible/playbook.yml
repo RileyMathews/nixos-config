@@ -1,8 +1,0 @@
----
-- name: Configure NAS ZFS datasets and NFS exports
-  hosts: nas
-  become: true
-  roles:
-    - zfs
-    - nas-directories
-    - nfs
