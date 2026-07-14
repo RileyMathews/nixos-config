@@ -208,7 +208,10 @@ in
       {
         job_name = "postgres";
         static_configs = [{
-          targets = [ "nas:9187" ];
+          targets = [
+            "nas:9187"
+            "pg17:9187"
+          ];
         }];
       }
     ];
