@@ -90,6 +90,8 @@ in
   environment.etc."grafana-dashboards/podman.json".source = ./podman-dashboard.json;
   environment.etc."grafana-dashboards/node-exporter.json".source = ./node-exporter-dashboard.json;
   environment.etc."grafana-dashboards/caddy.json".source = ./caddy-dashboard.json;
+  environment.etc."grafana-dashboards/postgres.json".source = ./postgres-dashboard.json;
+  environment.etc."grafana-dashboards/nas-zfs.json".source = ./nas-zfs-dashboard.json;
 
   services.loki = {
     enable = true;
