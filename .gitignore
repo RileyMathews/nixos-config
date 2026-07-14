@@ -8,3 +8,4 @@ secrets/keys/agenix-master.agekey
 __pycache__
 .plans
 tmp
+AGENTS.local.md
