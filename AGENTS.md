@@ -46,6 +46,9 @@ whos sole purpose is to run this database container.
 ## lab
 Lab is my personal playground for testing things. You shouldn't have to deal with it much
 
+## agent-dev
+agent-dev is an Arch Linux Proxmox VM for persistent autonomous coding agent tooling and web UIs. It is managed imperatively rather than through this NixOS configuration and should be accessed as the `riley` user over Tailscale.
+
 ## defiant
 defiant runs homelab apps that are more personal to me and not used by anyone else. For this reason you can be a little more carefree with dealing with this
 VM but still don't do anything stupid here.
