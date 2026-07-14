@@ -14,7 +14,11 @@
     ./../../../modules/dns
   ];
   services.cloudflare-dns.enable = true;
-  services.cloudflare-dns.domains = [ "pve.rileymathews.com" ];
+  services.cloudflare-dns.domains = [
+    "pve.rileymathews.com"
+    "t3code.rileymathews.com"
+    "opencode.rileymathews.com"
+  ];
   networking.hostName = "relay";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
@@ -49,5 +53,15 @@
     listenHost = "papyrd-demo.rileymathews.com";
     backendHost = "http://defiant:3847";
     proxyProtocol = true;
+  };
+  myCaddy.proxies.t3code = {
+    listenHost = "t3code.rileymathews.com";
+    backendHost = "http://agent-dev:3773";
+    proxyProtocol = false;
+  };
+  myCaddy.proxies.opencode = {
+    listenHost = "opencode.rileymathews.com";
+    backendHost = "http://agent-dev:4096";
+    proxyProtocol = false;
   };
 }

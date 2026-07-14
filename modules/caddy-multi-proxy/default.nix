@@ -6,8 +6,7 @@ let
   cfg = config.myCaddy;
   caddyMetricsPort = 2019;
   enabledProxies = filterAttrs (_: proxyConfig: proxyConfig.enable) cfg.proxies;
-  proxyProtocolValues = unique (mapAttrsToList (_: proxyConfig: proxyConfig.proxyProtocol) enabledProxies);
-  useProxyProtocol = if enabledProxies == {} then false else head proxyProtocolValues;
+  useProxyProtocol = any (proxyConfig: proxyConfig.proxyProtocol) (attrValues enabledProxies);
 in
 {
   imports = [ ../acme-cloudflare ];
@@ -53,13 +52,6 @@ in
   };
 
   config = {
-    assertions = [
-      {
-        assertion = length proxyProtocolValues <= 1;
-        message = "All enabled myCaddy.proxies entries must use the same proxyProtocol value because Caddy configures proxy protocol per listener, not per virtual host.";
-      }
-    ];
-
     services.caddy = {
       enable = true;
       enableReload = false;

@@ -48,6 +48,7 @@ Lab is my personal playground for testing things. You shouldn't have to deal wit
 
 ## agent-dev
 agent-dev is an Arch Linux Proxmox VM for persistent autonomous coding agent tooling and web UIs. It is managed imperatively rather than through this NixOS configuration and should be accessed as the `riley` user over Tailscale.
+OpenCode runs as `opencode-web.service` on port 4096, and T3 Code runs as `t3code.service` on port 3773. Relay exposes them internally at `opencode.rileymathews.com` and `t3code.rileymathews.com`.
 
 ## defiant
 defiant runs homelab apps that are more personal to me and not used by anyone else. For this reason you can be a little more carefree with dealing with this
