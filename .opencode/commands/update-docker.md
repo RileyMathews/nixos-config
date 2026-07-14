@@ -9,7 +9,8 @@ To do this follow these steps for each docker container. Use subagents to fan ou
 
 1. Use github releases and skopeo to resolve the latest container version.
 2. Update the definition in the container-images/default.nix file.
-3. Then resolve the changed containers to their hosts and tell me which hosts I need to deploy.
+3. Then resolve the changed containers to their hosts and one by one deploy each host.
+4. Use our monitoring tools and wait a bit to make sure the services are still running.
 
 # Special case immich
 Immich is a special snowflake and they all but require you to run the specific pinned version of
