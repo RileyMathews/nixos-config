@@ -108,7 +108,7 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
-            ./hosts/linode/configuration.nix
+            ./hosts/thegenerosityco/configuration.nix
             inputs.agenix.nixosModules.default
           ];
         };
