@@ -1,4 +1,5 @@
 {
+  config,
   modulesPath,
   lib,
   pkgs,
@@ -33,8 +34,15 @@
     ];
     ensureDatabases = ["riley" "forgejo"];
   };
+  services.prometheus.exporters.postgres = {
+    enable = true;
+    runAsLocalSuperUser = true;
+  };
   myTailscale.enable = true;
   networking.firewall.allowedTCPPorts = [5432];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+    config.services.prometheus.exporters.postgres.port
+  ];
   services.cloudflare-dns = {
     enable = true;
     domains = ["pg17.tailscale.rileymathews.com"];

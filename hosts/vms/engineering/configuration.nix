@@ -90,6 +90,8 @@ in
   environment.etc."grafana-dashboards/podman.json".source = ./podman-dashboard.json;
   environment.etc."grafana-dashboards/node-exporter.json".source = ./node-exporter-dashboard.json;
   environment.etc."grafana-dashboards/caddy.json".source = ./caddy-dashboard.json;
+  environment.etc."grafana-dashboards/postgres.json".source = ./postgres-dashboard.json;
+  environment.etc."grafana-dashboards/nas-zfs.json".source = ./nas-zfs-dashboard.json;
 
   services.loki = {
     enable = true;
@@ -151,21 +153,25 @@ in
       {
         job_name = "engineering_scrape";
         static_configs = [{
-          targets = [ 
-            "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" 
+          targets = [
+            "127.0.0.1:${toString config.services.prometheus.exporters.node.port}"
+            "backup-server:9002"
+            "bridge:9002"
             "data:9002"
             "defiant:9002"
-            "borg:9002"
-            "redis:9002"
-            "worf:9002"
-            "bridge:9002"
+            "enterprise:9002"
             "forgejo:9002"
-            "pg17:9002"
-            "backup-server:9002"
-            "couchdb:9002"
-            "relay:9002"
-            "yamato:9002"
+            "immichdb:9002"
             "lab:9002"
+            "nas:9002"
+            "pg17:9002"
+            "postgres-dev:9002"
+            "rabbitmq:9002"
+            "redis:9002"
+            "relay:9002"
+            "thegenerosityco-staging:9002"
+            "worf:9002"
+            "yamato:9002"
           ];
         }];
       }
@@ -179,12 +185,32 @@ in
         job_name = "podman";
         static_configs = [{
           targets = [
-            "borg:9882"
             "data:9882"
             "defiant:9882"
             "bridge:9882"
             "enterprise:9882"
             "yamato:9882"
+          ];
+        }];
+      }
+      {
+        job_name = "smartctl";
+        static_configs = [{
+          targets = [ "nas:9633" ];
+        }];
+      }
+      {
+        job_name = "zfs";
+        static_configs = [{
+          targets = [ "nas:9134" ];
+        }];
+      }
+      {
+        job_name = "postgres";
+        static_configs = [{
+          targets = [
+            "nas:9187"
+            "pg17:9187"
           ];
         }];
       }
