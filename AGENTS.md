@@ -118,3 +118,6 @@ The VMs also make heavy use of podman so you can also fetch podman logs in this 
 My ssh key also has direct access to the root account on the Nixos VMs so if needed you can also `ssh root@<host> ...` to troubleshoot things.
 When troubleshooting and you want to make changes, prefer to make them declaritavely in the nixos config rather than by one off commands on the hosts.
 
+# Ongoing work
+As we work on this repository you should feel free to update this AGENTS.md file with changes to hosts or other quirks that we run into along the way
+that would be helpful to remember.
