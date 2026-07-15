@@ -18,6 +18,7 @@
     "pve.rileymathews.com"
     "t3code.rileymathews.com"
     "opencode.rileymathews.com"
+    "ds9opencode.rileymathews.com"
   ];
   networking.hostName = "relay";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -62,6 +63,11 @@
   myCaddy.proxies.opencode = {
     listenHost = "opencode.rileymathews.com";
     backendHost = "http://agent-dev:4096";
+    proxyProtocol = false;
+  };
+  myCaddy.proxies.ds9opencode = {
+    listenHost = "ds9opencode.rileymathews.com";
+    backendHost = "http://ds9:4096";
     proxyProtocol = false;
   };
 }
