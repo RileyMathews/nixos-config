@@ -96,6 +96,13 @@
       createDatabase = false;
     };
   };
+
+  # Forgejo's pre-start migration requires the remote PostgreSQL server, whose
+  # tailnet DNS name is unavailable until Tailscale has finished connecting.
+  systemd.services.forgejo = {
+    after = [ "tailscale-ready.service" ];
+    requires = [ "tailscale-ready.service" ];
+  };
   
   services.resticBackup = {
       enable = true;
