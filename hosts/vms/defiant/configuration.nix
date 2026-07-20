@@ -19,6 +19,7 @@
     ./../../../modules/buffer
     ./../../../modules/bookshelf
     ./../../../modules/podman-exporter
+    ./../../../modules/rilib
     ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "defiant";
