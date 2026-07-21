@@ -401,7 +401,8 @@ Grafana is useful interactively but is not the preferred automation interface in
 - The provisioned Prometheus datasource UID is `PBFA97CFB590B2093`.
 - The provisioned Loki datasource UID is `Loki`.
 - Provisioned dashboards cover node exporter, Podman exporter, and Caddy observability.
-- There is no configured Tempo tracing backend, Alertmanager, Prometheus rule set, or Grafana-managed alert provisioning in this repository.
+- Grafana provisions a disk-usage alert from `hosts/vms/engineering/configuration.nix`. It notifies the `home-server-alerts` ntfy topic after a writable filesystem remains above 85% usage for five minutes.
+- There is no configured Tempo tracing backend, external Alertmanager, or Prometheus rule set in this repository.
 
 Query Prometheus and Loki directly unless the task specifically concerns Grafana dashboard definitions, users, folders, or Grafana-managed resources. For dashboard behavior, inspect the JSON files in `hosts/vms/engineering` before requesting credentials.
 

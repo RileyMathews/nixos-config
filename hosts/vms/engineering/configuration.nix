@@ -84,6 +84,134 @@ in
           options.path = "/etc/grafana-dashboards";
         }
       ];
+      alerting = {
+        contactPoints.settings.contactPoints = [{
+          orgId = 1;
+          name = "ntfy";
+          receivers = [{
+            uid = "ntfy-home-server-alerts";
+            type = "webhook";
+            disableResolveMessage = false;
+            settings = {
+              url = "http://127.0.0.1:8021";
+              httpMethod = "POST";
+              payload.template = ''
+                {{ coll.Dict
+                  "topic" "home-server-alerts"
+                  "title" (tmpl.Exec "default.title" .)
+                  "message" (tmpl.Exec "default.message" .)
+                  "priority" 3
+                  | data.ToJSON }}
+              '';
+            };
+          }];
+        }];
+        rules.settings.groups = [{
+          orgId = 1;
+          name = "disk-space";
+          folder = "Infrastructure";
+          interval = "1m";
+          rules = [{
+            uid = "disk-usage-above-85";
+            title = "Disk usage above 85%";
+            condition = "C";
+            data = [
+              {
+                refId = "A";
+                datasourceUid = prometheusDatasourceUid;
+                relativeTimeRange = {
+                  from = 600;
+                  to = 0;
+                };
+                model = {
+                  datasource = {
+                    type = "prometheus";
+                    uid = prometheusDatasourceUid;
+                  };
+                  editorMode = "code";
+                  expr = ''
+                    100 * (1 - node_filesystem_avail_bytes{fstype!~"tmpfs|ramfs|overlay|squashfs",mountpoint!="/nix/store"} / node_filesystem_size_bytes{fstype!~"tmpfs|ramfs|overlay|squashfs",mountpoint!="/nix/store"}) and on(instance, device, mountpoint) node_filesystem_readonly == 0
+                  '';
+                  instant = true;
+                  intervalMs = 1000;
+                  maxDataPoints = 43200;
+                  range = false;
+                  refId = "A";
+                };
+              }
+              {
+                refId = "B";
+                datasourceUid = "__expr__";
+                model = {
+                  conditions = [{
+                    evaluator = {
+                      params = [];
+                      type = "gt";
+                    };
+                    operator.type = "and";
+                    query.params = [ "B" ];
+                    reducer.type = "last";
+                    type = "query";
+                  }];
+                  datasource = {
+                    type = "__expr__";
+                    uid = "__expr__";
+                  };
+                  expression = "A";
+                  intervalMs = 1000;
+                  maxDataPoints = 43200;
+                  reducer = "last";
+                  refId = "B";
+                  type = "reduce";
+                };
+              }
+              {
+                refId = "C";
+                datasourceUid = "__expr__";
+                model = {
+                  conditions = [{
+                    evaluator = {
+                      params = [ 85 ];
+                      type = "gt";
+                    };
+                    operator.type = "and";
+                    query.params = [ "C" ];
+                    reducer.type = "last";
+                    type = "query";
+                  }];
+                  datasource = {
+                    type = "__expr__";
+                    uid = "__expr__";
+                  };
+                  expression = "B";
+                  intervalMs = 1000;
+                  maxDataPoints = 43200;
+                  refId = "C";
+                  type = "threshold";
+                };
+              }
+            ];
+            noDataState = "OK";
+            execErrState = "Error";
+            for = "5m";
+            annotations = {
+              summary = ''Disk usage is {{ printf "%.1f" $values.B.Value }}% on {{ $labels.instance }} ({{ $labels.mountpoint }})'';
+              description = ''Filesystem {{ $labels.device }} mounted at {{ $labels.mountpoint }} on {{ $labels.instance }} has exceeded 85% usage for five minutes.'';
+            };
+            labels = {
+              severity = "warning";
+              service = "filesystem";
+            };
+            notification_settings = {
+              receiver = "ntfy";
+              group_by = [ "grafana_folder" "alertname" "instance" "device" "mountpoint" ];
+              group_wait = "30s";
+              group_interval = "5m";
+              repeat_interval = "4h";
+            };
+          }];
+        }];
+      };
     };
   };
 
