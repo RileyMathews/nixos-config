@@ -20,6 +20,8 @@
     "opencode.rileymathews.com"
     "ds9opencode.rileymathews.com"
     "ds9code.rileymathews.com"
+    "scottyopencode.rileymathews.com"
+    "scottycode.rileymathews.com"
   ];
   networking.hostName = "relay";
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -74,6 +76,16 @@
   myCaddy.proxies.ds9code = {
     listenHost = "ds9code.rileymathews.com";
     backendHost = "http://ds9:3773";
+    proxyProtocol = false;
+  };
+  myCaddy.proxies.scottyopencode = {
+    listenHost = "scottyopencode.rileymathews.com";
+    backendHost = "http://scotty:4096";
+    proxyProtocol = false;
+  };
+  myCaddy.proxies.scottycode = {
+    listenHost = "scottycode.rileymathews.com";
+    backendHost = "http://scotty:3773";
     proxyProtocol = false;
   };
 }
