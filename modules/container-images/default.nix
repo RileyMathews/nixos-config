@@ -35,7 +35,7 @@
       radicale = "registry.rileymathews.com/rileymathews/radicale:test2";
       reverse-health-check = "registry.rileymathews.com/rileymathews/reverse-health-check:0.0.1-alpha";
       searxng = "docker.io/searxng/searxng:2026.7.19-6da6eee26";
-      vaultwarden = "vaultwarden/server:1.36.0";
+      vaultwarden = "vaultwarden/server:1.37.1";
       vikunja = "vikunja/vikunja:2.4.0";
       webhooks = "registry.rileymathews.com/rileymathews/webhook-processor:0.2.0";
       whisper = "lscr.io/linuxserver/faster-whisper:3.5.0-gpu";
