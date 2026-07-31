@@ -25,6 +25,9 @@
   networking.hostName = "defiant";
   nix.settings.experimental-features = ["nix-command" "flakes"];
   myTailscale.enable = true;
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAoPiVN/y4XLQA8DlOF7gXxcEewMra/YLsUK4o0omAdj forgejo-runner@lab"
+  ];
   networking.firewall.allowedTCPPorts = [80 443];
   virtualisation.podman.enable = true;
   systemd.timers."podman-auto-update".wantedBy = ["multi-user.target"];
