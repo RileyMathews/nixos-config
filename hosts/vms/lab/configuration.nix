@@ -18,6 +18,9 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   myTailscale.enable = true;
 
+  programs.ssh.knownHosts.defiant.publicKey =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHYRmmjMCzfaKZv3A9z5Q6MAiE9Xxnel3ScWcmPoMOYC";
+
   users.groups.gitea-runner = { };
   users.users.gitea-runner = {
     isSystemUser = true;
@@ -49,6 +52,7 @@
         gnused
         nodejs
         openssh
+        pnpm
         wget
         rsync
       ];
