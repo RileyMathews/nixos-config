@@ -20,6 +20,7 @@
     ./../../../modules/bookshelf
     ./../../../modules/podman-exporter
     ./../../../modules/tedlib
+    ./../../../modules/agent
     ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "defiant";
