@@ -15,7 +15,10 @@
     ./../../../modules/dozzle/agent.nix
   ];
   networking.hostName = "lab";
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   myTailscale.enable = true;
 
   programs.ssh.knownHosts.defiant.publicKey =
@@ -25,7 +28,22 @@
   users.users.gitea-runner = {
     isSystemUser = true;
     group = "gitea-runner";
+    extraGroups = [ "docker" ];
     home = "/var/lib/gitea-runner/forgejo";
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    package = pkgs.docker_29;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+      flags = [
+        "--all"
+        "--filter"
+        "until=168h"
+      ];
+    };
   };
 
   age.secrets.forgejo-runner-token-file = {
@@ -42,6 +60,7 @@
       tokenFile = config.age.secrets.forgejo-runner-token-file.path;
       labels = [
         "homelab-coordinator:host"
+        "homelab-docker:docker://docker.io/library/ubuntu:24.04@sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90"
       ];
       hostPackages = with pkgs; [
         bash
@@ -59,6 +78,14 @@
       settings = {
         runner.capacity = 1;
         cache.enable = true;
+        container = {
+          docker_host = "automount";
+          network = "";
+          privileged = false;
+          force_pull = false;
+          valid_volumes = [ "/var/lib/gitea-runner/forgejo/.ssh" ];
+          options = "--volume /etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro";
+        };
       };
     };
   };
@@ -100,14 +127,17 @@
       "run-agenix.d.mount"
     ];
     requires = [
+      "docker.service"
       "forgejo-runner-ssh-key.service"
       "run-agenix.d.mount"
     ];
+    environment.DOCKER_HOST = lib.mkForce "unix:///run/docker.sock";
     unitConfig.RequiresMountsFor = [ config.age.secrets.forgejo-runner-token-file.path ];
     serviceConfig = {
       DynamicUser = lib.mkForce false;
       User = "gitea-runner";
       Group = "gitea-runner";
+      SupplementaryGroups = lib.mkForce [ "docker" ];
     };
   };
 }
