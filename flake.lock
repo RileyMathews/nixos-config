@@ -102,11 +102,28 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1786106723,
+        "narHash": "sha256-zDSUbpoeo/9ZmD2+wXnzxoo1+uhL8vxc0b8yuYMKYq0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f13ff45afd1bb73e640eaa08a7066dbed07e3238",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
         "disko": "disko",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "vikunja-project-reset": "vikunja-project-reset"
       }
     },
     "systems": {
@@ -122,6 +139,24 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "vikunja-project-reset": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1786398890,
+        "narHash": "sha256-vcw6BuQjuKkV5BZuAtDua0PQxBFYx8olYIGhu34jwdY=",
+        "ref": "refs/heads/main",
+        "rev": "ef8ce65ef1f167d995191ede5471724e0981bf30",
+        "revCount": 8,
+        "type": "git",
+        "url": "ssh://git@git.rileymathews.com/riley/vikunja-project-reset.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@git.rileymathews.com/riley/vikunja-project-reset.git"
       }
     }
   },

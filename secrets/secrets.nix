@@ -35,6 +35,7 @@ in
   "joplin-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "litellm-env-file.age".publicKeys = [riley hostKeysByName.yamato];
   "vikunja-credentials-file.age".publicKeys = [riley hostKeysByName.enterprise];
+  "vikunja-project-reset.age".publicKeys = [riley hostKeysByName.enterprise];
   "buffer-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "openwebui-credentials-file.age".publicKeys = [riley hostKeysByName.yamato];
   "pinchflat-env-file.age".publicKeys = [riley hostKeysByName.yamato];

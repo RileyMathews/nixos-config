@@ -11,6 +11,9 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vikunja-project-reset = {
+      url = "git+ssh://git@git.rileymathews.com/riley/vikunja-project-reset.git";
+    };
   };
 
   outputs = { nixpkgs, ... }@inputs:
@@ -25,6 +28,7 @@
       mkVmHost = hostName:
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             inputs.disko.nixosModules.disko
             inputs.agenix.nixosModules.default
