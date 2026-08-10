@@ -67,6 +67,7 @@
 
     virtualisation.oci-containers.containers.meilisearch = {
         image = config.myContainerImages.karakeep-meilisearch;
+        cmd = [ "meilisearch" "--upgrade-db" ];
         environmentFiles = [ config.age.secrets.karakeep-credentials-file.path ];
         networks = [ "podman" ];
         environment = {
