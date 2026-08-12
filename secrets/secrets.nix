@@ -45,4 +45,8 @@ in
   "gatus-push-token.age".publicKeys = all;
   "freshrss-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
   "bookshelf-credentials-file.age".publicKeys = [riley hostKeysByName.defiant];
+  "hermes-tailscale-credentials.age".publicKeys = [riley hostKeysByName.hermes];
+  "hermes-cloudflare-api-key.age".publicKeys = [riley hostKeysByName.hermes];
+  "hermes-cloudflare-credentials.age".publicKeys = [riley hostKeysByName.hermes];
+  "hermes-dashboard-env.age".publicKeys = [riley hostKeysByName.hermes];
 }

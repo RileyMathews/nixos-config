@@ -11,6 +11,7 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent.url = "github:NousResearch/hermes-agent";
     vikunja-project-reset = {
       url = "git+ssh://git@git.rileymathews.com/riley/vikunja-project-reset.git";
     };
@@ -33,7 +34,7 @@
             inputs.disko.nixosModules.disko
             inputs.agenix.nixosModules.default
             ./hosts/vms/${hostName}/configuration.nix
-          ];
+          ] ++ lib.optional (hostName == "hermes") inputs.hermes-agent.nixosModules.default;
         };
 
       vmHostNames =
