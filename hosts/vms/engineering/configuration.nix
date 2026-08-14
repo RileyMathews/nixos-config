@@ -18,7 +18,6 @@ let
     "forgejo"
     "relay"
     "nas"
-    "thegenerosityco"
     "yamato"
   ];
 in
@@ -297,7 +296,6 @@ in
             "rabbitmq:9002"
             "redis:9002"
             "relay:9002"
-            "thegenerosityco-staging:9002"
             "worf:9002"
             "yamato:9002"
           ];

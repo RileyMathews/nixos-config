@@ -109,30 +109,7 @@ endpoints:
     <<: *defaults
     url: "https://copyparty.rileymathews.com"
 
-  - name: thegenerosityco
-    <<: *defaults
-    url: "https://thegenerosityco.com"
-    alerts:
-      - type: ntfy
-        provider-override:
-          priority: 5
-
-external-endpoints:
-  - name: thegenerosityco-staging-backup
-    group: Backups
-    token: "$GATUS_PUSH_TOKEN"
-    heartbeat:
-      interval: 25h
-
-  - name: thegenerosityco-production-backup
-    group: Backups
-    token: "$GATUS_PUSH_TOKEN"
-    heartbeat:
-      interval: 25h
-    alerts:
-      - type: ntfy
-        failure-threshold: 1
-        provider-override:
+external-endpoints:        provider-override:
           priority: 5
 
   - name: forgejo-backup

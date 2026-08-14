@@ -42,17 +42,6 @@
     backendHost = "http://worf:8222";
     proxyProtocol = true;
   };
-  myCaddy.proxies.thegenerosityco-staging = {
-    listenHost = "thegenerosityco-staging.rileymathews.com";
-    backendHost = "http://thegenerosityco-staging:8080";
-    proxyProtocol = true;
-  };
-  myCaddy.proxies.staging-thegenerosityco = {
-    listenHost = "staging.thegenerosityco.com";
-    backendHost = "http://thegenerosityco-staging:8080";
-    proxyProtocol = true;
-    useGodaddyAcme = true;
-  };
   myCaddy.proxies.papyrd-demo = {
     listenHost = "papyrd-demo.rileymathews.com";
     backendHost = "http://defiant:3847";
