@@ -57,14 +57,6 @@
           ];
         };
 
-        thegenerosityco = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./hosts/thegenerosityco/configuration.nix
-            inputs.agenix.nixosModules.default
-          ];
-        };
-
         iso = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [

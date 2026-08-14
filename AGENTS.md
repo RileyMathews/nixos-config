@@ -54,9 +54,6 @@ OpenCode runs as `opencode-web.service` on port 4096, and T3 Code runs as `t3cod
 defiant runs homelab apps that are more personal to me and not used by anyone else. For this reason you can be a little more carefree with dealing with this
 VM but still don't do anything stupid here.
 
-## thegenerosityco-staging
-The staging server for a client that I manage the CMS website for. This uses my tailscale funnel method described below to be exposed publically.
-
 ## postgres-dev
 A simple postgres server that I can use for random one off things I want to test with a postgres server. No data here is important
 
@@ -93,14 +90,9 @@ A postgres server used by many apps. I am slowly trying to migrate apps to use m
 ## backup-server
 A server that acts as a control center connecting to my other database instances and running backups from them.
 
-## thegenerosityco
-A server running on linode that runs the production app for a client of mine. Deployed on linode instead of my homelab for obvious reliability benefits.
-It is completely self isolated and while its on my tailnet. It should not depend on any other homelab based services.
-
 ## wormhole
 A server running on linode that proxies traffic to relay via HAProxy TCP proxy mode. More details below.
-Currently runs debian but long term I want to setup a linode nixos machine similar to thegenerosityco server
-that runs the same setup.
+Currently runs Debian.
 
 # backups
 I run most of my backups through a dedicated restic module. When deploying a new app consider if any of the directories may need to be backed
